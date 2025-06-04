@@ -4,7 +4,7 @@ import Image from "next/image";
 
 const SectionHeader = ({ badge, heading, buttonText }) => {
   return (
-    <section className="flex gap-52 items-center p-20 w-full border bg-zinc-900 border-neutral-800 max-md:gap-24 max-md:p-16 max-sm:flex-col max-sm:gap-10 max-sm:p-10">
+    <section className="flex gap-52 items-center py-12 w-full border bg-zinc-900 border-neutral-800 g-px max-md:gap-24 max-sm:flex-col max-sm:gap-10 max-sm:p-4">
       <div className="flex flex-col flex-1 gap-2.5 justify-center items-start max-sm:w-full">
         {badge && <Badge>{badge}</Badge>}
         {heading && (

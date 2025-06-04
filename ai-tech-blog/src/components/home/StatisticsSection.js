@@ -8,7 +8,7 @@ function StatisticsSection() {
   ];
 
   return (
-    <section className="flex relative gap-12 items-start pr-5 pl-40 w-full border border-neutral-800 max-md:gap-8 max-md:pl-20 max-sm:flex-col max-sm:gap-5 max-sm:px-5">
+    <section className="flex relative gap-12 items-start pr-5 pl-40 w-full border border-neutral-800 max-md:gap-8 max-md:pl-20 max-sm:flex-col max-sm:gap-5 max-sm:px-4">
       {statistics.map((stat, index) => (
         <React.Fragment key={index}>
           <StatisticItem
@@ -17,7 +17,7 @@ function StatisticsSection() {
             description={stat.description}
           />
           {index < statistics.length - 1 && (
-            <div className="relative w-px bg-neutral-800 h-[197px] max-md:h-[157px] max-sm:w-full max-sm:h-px" />
+            <div className="relative w-px bg-neutral-800 h-[190px] max-md:h-[150px] max-sm:w-full max-sm:h-px" />
           )}
         </React.Fragment>
       ))}

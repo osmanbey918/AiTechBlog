@@ -42,7 +42,7 @@ const StatsSection = () => {
         );
     };
     return (
-        <section className="flex relative gap-20 items-start px-40 w-full border border-neutral-800 max-md:gap-10 max-md:px-20 max-sm:flex-col max-sm:gap-5 max-sm:px-5">
+        <section className="flex relative gap-20 items-start g-px w-full border border-neutral-800 max-md:gap-10 max-sm:flex-col max-sm:gap-5">
             {statsData.map((stat, index) => (
                 <React.Fragment key={index}>
                     <StatCard
@@ -52,7 +52,7 @@ const StatsSection = () => {
                         description={stat.description}
                         onButtonClick={stat.onClick}
                     />
-                    {index < statsData.length - 1 && <Separator />}
+                    {/* {index < statsData.length - 1 && <Separator />} */}
                 </React.Fragment>
             ))}
         </section>

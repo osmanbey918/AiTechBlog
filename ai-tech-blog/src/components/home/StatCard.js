@@ -84,7 +84,7 @@ const StatCard = ({ iconType, title, subtitle, description, onButtonClick }) => 
     };
 
     return (
-        <article className="flex relative flex-col flex-1 gap-8 items-start py-12 rounded-xl max-md:py-10 max-sm:gap-5 max-sm:py-8">
+        <article className="flex relative flex-col flex-1 gap-8 items-start py-12 rounded-xl max-md:py-8 max-sm:gap-5 max-sm:py-8">
             <div className="flex relative flex-col gap-8 items-start w-full max-sm:gap-5">
                 <div>
                     <Icon type={iconType} className="w-[49.993px] max-sm:w-[40px] h-[50px] max-sm:h-[40px] relative" />

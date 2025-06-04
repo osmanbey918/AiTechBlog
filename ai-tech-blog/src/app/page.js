@@ -9,12 +9,15 @@ import StatsSection from "@/components/home/StatsSection";
 import FutureTechSection from "@/components/home/(futureTech)/FutureTechSection";
 import ItemsContainer from "@/components/home/testimonial/Testimonial";
 import ConnectSection from "@/components/footer/ConnectSection";
+import MainNavBar from "@/components/navbar/MainNavBar";
+import Navbar from "@/components/navbar/MainNavBar";
 
 export default function Home() {
   return (
-    <>
-      <main className="flex relative flex-col flex-1 gap-24 items-start pt-36 max-md:gap-16 max-md:pt-24 max-sm:gap-10 max-sm:pt-16 min-h-screen bg-black text-white">
-        <header className="flex relative flex-col gap-8 items-start px-40 w-full max-md:px-20 max-sm:gap-5 max-sm:px-5">
+    <div>
+    <Navbar/>
+      <main className="flex relative flex-col flex-1 gap-24 items-start pt-36 g-px max-md:gap-16 max-md:pt-24 max-sm:gap-10 max-sm:pt-16 min-h-screen bg-black text-white">
+        <header className="flex relative flex-col gap-8 items-start w-[60%] max-sm:gap-5">
           <p className="relative text-3xl tracking-tighter leading-9 text-stone-500 max-md:text-2xl max-sm:text-xl max-sm:tracking-tight">
             Your Journey to Tomorrow Begins Here
           </p>
@@ -34,10 +37,10 @@ export default function Home() {
       <StatisticsSection />
       <StatsSection />
       <FutureTechSection />
-      <BlogPostSection />
-      <ItemsContainer />
-      <ConnectSection />
-    </>
+      {/* <BlogPostSection /> */}
+      {/* <ItemsContainer />
+      <ConnectSection /> */}
+    </div>
   );
 }
 
