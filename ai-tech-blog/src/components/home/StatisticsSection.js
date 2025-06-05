@@ -17,7 +17,7 @@ function StatisticsSection() {
             description={stat.description}
           />
           {index < statistics.length - 1 && (
-            <div className="relative w-px bg-neutral-800 h-[190px] max-md:h-[150px] max-sm:w-full max-sm:h-px" />
+            <div className="relative w-px bg-neutral-800 h-[200px] max-md:h-[150px] max-sm:w-full max-sm:h-px" />
           )}
         </React.Fragment>
       ))}

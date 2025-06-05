@@ -38,7 +38,7 @@ const StatsSection = () => {
     ];
     const Separator = () => {
         return (
-            <div className="relative w-px bg-neutral-800 h-[301px] max-md:h-[241px] max-sm:w-full max-sm:h-px" />
+            <div className="relative w-px bg-neutral-800 h-[] max-md:h-[241px] max-sm:w-full max-sm:h-px" />
         );
     };
     return (
@@ -52,7 +52,7 @@ const StatsSection = () => {
                         description={stat.description}
                         onButtonClick={stat.onClick}
                     />
-                    {/* {index < statsData.length - 1 && <Separator />} */}
+                    {index < statsData.length - 1 && <Separator />}
                 </React.Fragment>
             ))}
         </section>
