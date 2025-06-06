@@ -11,6 +11,7 @@ import ItemsContainer from "@/components/home/testimonial/Testimonial";
 import ConnectSection from "@/components/footer/ConnectSection";
 import MainNavBar from "@/components/navbar/MainNavBar";
 import Navbar from "@/components/navbar/MainNavBar";
+import Footer from "@/components/footer/Footer";
 
 export default function Home() {
   return (
@@ -37,9 +38,10 @@ export default function Home() {
       <StatisticsSection />
       <StatsSection />
       <FutureTechSection />
-      {/* <BlogPostSection /> */}
-      {/* <ItemsContainer />
-      <ConnectSection /> */}
+      <BlogPostSection />
+      <ItemsContainer />
+      <ConnectSection />
+      
     </div>
   );
 }

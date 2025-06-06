@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
+import Footer from './Footer';
 
 const ConnectSection = () => {
   const features = [
@@ -49,6 +50,7 @@ const ConnectSection = () => {
           />
         ))}
       </div>
+      <Footer/>
     </section>
   );
 };
