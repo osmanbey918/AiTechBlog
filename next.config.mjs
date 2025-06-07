@@ -1,4 +1,11 @@
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  output: 'export',
+  images: {
+    unoptimized: true
+  },
+  trailingSlash: true,
+  basePath: 'https://osmanbey918.github.io/AiTechBlog', 
+};
 
-export default nextConfig;
+module.exports = nextConfig;
