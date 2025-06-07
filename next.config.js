@@ -1,5 +1,4 @@
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+module.exports = {
   output: 'export',
   images: {
     unoptimized: true,
@@ -7,5 +6,3 @@ const nextConfig = {
   trailingSlash: true,
   basePath: '/AiTechBlog',
 };
-
-module.exports = nextConfig;
