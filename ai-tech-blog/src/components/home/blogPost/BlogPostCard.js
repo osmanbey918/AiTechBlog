@@ -83,7 +83,7 @@ function BlogPostCard({
     onViewBlog,
 }) {
     return (
-        <article className="flex gap-10 items-start px-20 py-16 w-full border border-neutral-800 max-md:px-16 max-md:py-10 max-sm:flex-col max-sm:gap-5 max-sm:px-5 max-sm:py-8">
+        <article className="flex gap-10 items-start g-px py-16 w-full border border-neutral-800 max-md:py-10 max-sm:flex-col max-sm:gap-5 max-sm:py-8">
             <AuthorProfile image={authorImage} name={authorName} specialty={authorSpecialty} />
 
             <div className="flex flex-1 gap-10 items-start max-sm:flex-col max-sm:gap-5 max-sm:items-start max-sm:w-full">

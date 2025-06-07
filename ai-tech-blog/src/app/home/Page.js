@@ -1,5 +1,5 @@
 "use client";
-
+import React from "react";
 function StatisticItem({ value, suffix, description }) {
   return (
     <div className="flex relative flex-col flex-1 gap-2.5 items-start py-12 max-md:py-10 max-sm:py-8">

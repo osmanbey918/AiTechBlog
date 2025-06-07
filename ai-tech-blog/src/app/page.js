@@ -16,7 +16,7 @@ import Footer from "@/components/footer/Footer";
 export default function Home() {
   return (
     <div>
-    <Navbar/>
+    {/* <Navbar/> */}
       <main className="flex relative flex-col flex-1 gap-24 items-start pt-36 g-px max-md:gap-16 max-md:pt-24 max-sm:gap-10 max-sm:pt-16 min-h-screen bg-black text-white">
         <header className="flex relative flex-col gap-8 items-start w-[60%] max-sm:gap-5">
           <p className="relative text-3xl tracking-tighter leading-9 text-stone-500 max-md:text-2xl max-sm:text-xl max-sm:tracking-tight">
