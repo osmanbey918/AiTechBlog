@@ -1,4 +1,4 @@
-// File: D:\usman_repositary\AiTechBlog\ai-tech-blog\src\app\news\page.js
+// File: D:\usman_repositary\AiTechBlog\src\app\news\page.js
 import * as entry from '../../../../src/app/news/page.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
