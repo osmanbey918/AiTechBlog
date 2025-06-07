@@ -2,15 +2,14 @@
   "name": "ai-tech-blog",
   "version": "0.1.0",
   "private": true,
- "scripts": {
-  "dev": "next dev --turbopack",
-  "build": "next build",
-  "start": "next start",
-  "lint": "next lint",
- "predeploy": "next build",
-"deploy": "gh-pages -d out"
-}
-,
+  "scripts": {
+    "dev": "next dev --turbopack",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "predeploy": "next build",
+    "deploy": "gh-pages -d out"
+  },
   "dependencies": {
     "next": "15.3.3",
     "react": "^19.0.0",
@@ -26,5 +25,5 @@
     "postcss": "^8.5.4",
     "tailwindcss": "^4.1.8"
   },
-  "homepage":  "https://osmanbey918.github.io/AiTechBlog"
+  "homepage": "https://osmanbey918.github.io/AiTechBlog"
 }
