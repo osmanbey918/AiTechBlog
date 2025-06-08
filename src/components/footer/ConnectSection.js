@@ -34,10 +34,7 @@ const ConnectSection = () => {
             </h1>
           </header>
           <p className="w-full text-base tracking-tight leading-6 text-zinc-500 max-sm:text-sm">
-            Immerse yourself in the world of future technology. Explore our
-            comprehensive resources, connect with fellow tech enthusiasts, and
-            drive innovation in the industry. Join a dynamic community of
-            forward-thinkers.
+            Immerse yourself in the world of future technology. Explore our comprehensive resources.
           </p>
         </div>
       </div>
@@ -50,7 +47,7 @@ const ConnectSection = () => {
           />
         ))}
       </div>
-      <Footer/>
+      {/* <Footer/> */}
     </section>
   );
 };
