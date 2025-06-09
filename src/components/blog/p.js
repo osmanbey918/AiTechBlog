@@ -1,5 +1,6 @@
 "use client";
 import { NewsCard } from '@/components/news/NewsSection';
+import Image from 'next/image';
 import React from 'react';
 
 // BlogHero Component
@@ -76,21 +77,21 @@ export const EngagementMetrics = ({ likes, views, shares }) => {
     return (
         <div className="flex items-center gap-3.5 w-full border-t-[color:var(--Dark-15,#262626)]  max-md:px-16 max-sm:px-4 px-12 pr-20 py-10 border-t border-solid  max-sm:py-[30px]">
             <button className="flex justify-center items-center gap-1 border border-[color:var(--Dark-15,#262626)] bg-[#141414] px-3.5 py-2 rounded-[100px] border-solid hover:bg-[#1a1a1a] transition-colors">
-                <div>+</div>
+                <Image src="/assets/like.svg" width={20} height={20} alt='like'/>
                 <span className="text-[#98989A] text-sm font-normal leading-[21px] tracking-[-0.42px]">
                     {likes}
                 </span>
             </button>
 
             <button className="flex justify-center items-center gap-1 border border-[color:var(--Dark-15,#262626)] bg-[#141414] px-3.5 py-2 rounded-[100px] border-solid hover:bg-[#1a1a1a] transition-colors">
-                <div>+</div>
+                <Image src="/assets/comment.svg" width={20} height={20}/>
                 <span className="text-[#98989A] text-sm font-normal leading-[21px] tracking-[-0.42px]">
                     {views}
                 </span>
             </button>
 
             <button className="flex justify-center items-center gap-1 border border-[color:var(--Dark-15,#262626)] bg-[#141414] px-3.5 py-2 rounded-[100px] border-solid hover:bg-[#1a1a1a] transition-colors">
-                <div>+</div>
+                <Image src="/assets/share.svg" width={20} height={20}/>
                 <span className="text-[#98989A] text-sm font-normal leading-[21px] tracking-[-0.42px]">
                     {shares}
                 </span>

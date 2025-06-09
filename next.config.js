@@ -4,5 +4,5 @@ module.exports = {
     unoptimized: true,
   },
   trailingSlash: true,
-  basePath: '/AiTechBlog',
+  basePath: '',
 };
