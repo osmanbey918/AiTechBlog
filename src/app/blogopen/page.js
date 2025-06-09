@@ -1,7 +1,8 @@
 import React from 'react';
-import { BlogHero, BlogContent, BlogSidebar, SimilarNews } from './p';
+// import { BlogHero, BlogContent, BlogSidebar, SimilarNews } from '../../components/blog/p';
 import ConnectSection from '@/components/footer/ConnectSection';
 import Footer from '@/components/footer/Footer';
+import { BlogContent, BlogHero, BlogSidebar, SimilarNews } from '@/components/blog/p';
 
 const page = () => {
     const tableOfContents = [
@@ -44,12 +45,12 @@ const page = () => {
     ];
 
     return (
-        <div className="flex w-full flex-col items-start text-white bg-black">
-            <BlogHero
+        <div className="flex w-full flex-col items-start text-white bg-black  ">
+            {/* <BlogHero
                 title="The Rise of Artificial Intelligence in Healthcare"
                 backgroundImage="https://placehold.co/1440x439/1a1a1a/1a1a1a"
-            />
-            <div className="flex flex-col md:flex-row-reverse items-start w-full">
+            /> */}
+            <div className="flex flex-col md:flex-row-reverse w-full  border-box border-b border-solid border-neutral-800 ">
                 <BlogSidebar
                     likes="24.5k"
                     views="50k"
