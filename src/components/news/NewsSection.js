@@ -1,98 +1,71 @@
-import React from 'react';
-
-// const NewsCard = ({
-//   image,
-//   title,
-//   category,
-//   likes,
-//   shares,
-//   altText = ""
-// }) => {
-//   return (
-//     <article className="flex flex-col flex-1 gap-4 justify-center items-start max-md:w-full">
-//       <img
-//         src={image}
-//         alt={altText}
-//         className="object-cover w-full rounded-xl h-[185px]"
-//       />
-//       <div className="flex flex-col gap-4 items-start w-full">
-//         <header className="flex flex-col gap-1 items-start w-full">
-//           <h2 className="w-full text-base font-bold tracking-tight leading-6 text-white">
-//             {title}
-//           </h2>
-//           <p className="w-full text-base tracking-tight leading-6 text-neutral-400">
-//             {category}
-//           </p>
-//         </header>
-//         <div className="flex gap-12 items-center w-full max-sm:flex-col max-sm:gap-4">
-//           <div className="flex gap-2 items-start max-sm:justify-center">
-//             <div className="flex gap-1 justify-center items-center px-3.5 py-1.5 border border-solid bg-zinc-900 border-neutral-800 rounded-[100px]">
-//               <span className="text-white">+</span>
-//               <span className="text-sm tracking-tight leading-5 text-neutral-400">
-//                 {likes}
-//               </span>
-//             </div>
-//             <div className="flex gap-1 justify-center items-center px-3.5 py-1.5 border border-solid bg-zinc-900 border-neutral-800 rounded-[100px]">
-//               <span className="text-white">+</span>
-//               <span className="text-sm tracking-tight leading-5 text-neutral-400">
-//                 {shares}
-//               </span>
-//             </div>
-//           </div>
-//           <button className="flex flex-1 gap-1 justify-center items-center px-5 py-3.5 rounded-lg border border-solid bg-neutral-900 border-neutral-800 max-sm:justify-center">
-//             <span className="text-sm tracking-tight leading-5 text-neutral-400">
-//               Read More
-//             </span>
-//             <span className="text-white">→</span>
-//           </button>
-//         </div>
-//       </div>
-//     </article>
-//   );
-// };
+'use client';
+import React, { useEffect, useState } from 'react';
+import { fetchNews } from '@/utils/newsService';
+import Image from 'next/image';
 
 const NewsSection = () => {
-  const newsArticles = [
-    {
-      id: 1,
-      image: "https://placehold.co/400x185/d4a574/d4a574",
-      title: "A Decisive Victory for Progressive Policies",
-      category: "Politics",
-      likes: "2.2k",
-      shares: "60",
-      altText: ""
-    },
-    {
-      id: 2,
-      image: "https://placehold.co/400x185/2a5a7a/2a5a7a",
-      title: "Tech Giants Unveil Cutting-Edge AI Innovations",
-      category: "Technology",
-      likes: "6k",
-      shares: "92",
-      altText: ""
-    },
-    {
-      id: 3,
-      image: "https://placehold.co/400x185/4a8fb8/4a8fb8",
-      title: "COVID-19 Variants",
-      category: "Health",
-      likes: "10k",
-      shares: "124",
-      altText: ""
-    }
-  ];
+  const [newsArticles, setNewsArticles] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadNews = async () => {
+      try {
+        setLoading(true);
+        const data = await fetchNews({ category: 'technology', pageSize: 8 });
+        if (data.articles) {
+          setNewsArticles(data.articles.map((article, index) => ({
+            id: index,
+            image: article.urlToImage || "/assets/news.svg",
+            title: article.title,
+            category: "Technology",
+            description: article.description,
+            source: article.source.name,
+            publishedAt: article.publishedAt,
+            url: article.url,
+            likes: Math.floor(Math.random() * 1000) + "+" ,
+            shares: Math.floor(Math.random() * 100) + "",
+            altText: article.title
+          })));
+        }
+      } catch (err) {
+        setError('Failed to load news');
+        console.error('Error loading news:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadNews();
+  }, []);
+
+  if (loading) {
+    return (
+      <section className="w-full g-px py-8 border-t border-solid border-neutral-800 sm:px-6 sm:py-12 md:py-16">
+        <div className="flex justify-center items-center min-h-[400px]">
+          <div className="text-neutral-400">Loading latest news...</div>
+        </div>
+      </section>
+    );
+  }
+
+  if (error) {
+    return (
+      <section className="w-full g-px py-8 border-t border-solid border-neutral-800 sm:px-6 sm:py-12 md:py-16">
+        <div className="flex justify-center items-center min-h-[400px]">
+          <div className="text-red-400">{error}</div>
+        </div>
+      </section>
+    );
+  }
+
   return (
-    <section className="w-full g-px py-8 border-t border-solid border-neutral-800 sm:px-6 sm:py-12  md:py-16 ">
+    <section className="w-full g-px py-8 border-t border-solid border-neutral-800 sm:px-6 sm:py-12 md:py-16">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {newsArticles.map((article) => (
           <NewsCard
             key={article.id}
-            image={article.image}
-            title={article.title}
-            category={article.category}
-            likes={article.likes}
-            shares={article.shares}
-            altText={article.altText}
+            {...article}
           />
         ))}
       </div>
@@ -104,29 +77,42 @@ export const NewsCard = ({
   image,
   title,
   category,
+  description,
+  source,
+  publishedAt,
+  url,
   likes,
   shares,
   altText = ""
 }) => {
   return (
-    <article className="flex flex-col flex-shrink-0 gap-4 w-[290px] h-[320px] rounded-xl overflow-hidden bg-neutral-950">
-      <div className="aspect-video overflow-hidden rounded-xl">
-        <img
+    <article className="flex flex-col flex-shrink-0 gap-4 w-[290px] h-[420px] rounded-xl overflow-hidden bg-neutral-950">
+      <div className="aspect-video overflow-hidden rounded-xl relative">
+        <Image
           src={image}
           alt={altText}
-          className="object-cover w-full h-full transition-transform duration-500 hover:scale-105"
-          loading="lazy"
+          fill
+          className="object-cover transition-transform duration-500 hover:scale-105"
+          onError={(e) => {
+            e.target.src = '/assets/news.svg';
+          }}
         />
       </div>
 
-      <div className="flex flex-col justify-between flex-grow gap-4 px-2 pb-2">
-        <header className="flex flex-col gap-1 min-h-[60px]">
+      <div className="flex flex-col justify-between flex-grow gap-4 px-4 pb-4">
+        <header className="flex flex-col gap-2">
           <h2 className="text-lg font-bold leading-tight text-white line-clamp-2">
             {title}
           </h2>
-          <p className="text-sm text-neutral-400">
-            {category}
-          </p>
+          <div className="flex justify-between items-center">
+            <p className="text-sm text-neutral-400">
+              {category}
+            </p>
+            <p className="text-xs text-neutral-500">
+              {new Date(publishedAt).toLocaleDateString()}
+            </p>
+          </div>
+          <p className="text-sm text-neutral-300 line-clamp-2">{description}</p>
         </header>
 
         <div className="flex flex-wrap items-center justify-between gap-3 mt-auto">
@@ -141,15 +127,18 @@ export const NewsCard = ({
             </button>
           </div>
 
-          <button className="flex items-center gap-1 px-4 py-2.5 text-sm rounded-lg bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 transition-colors">
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-1 px-4 py-2.5 text-sm rounded-lg bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 transition-colors"
+          >
             <span className="text-neutral-400">Read More</span>
-            <span className="text-neutral-400">+</span>
-          </button>
+            <span className="text-neutral-400">→</span>
+          </a>
         </div>
       </div>
     </article>
-
-
   );
 };
 

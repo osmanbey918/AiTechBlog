@@ -2,6 +2,7 @@ import ConnectSection from "@/components/footer/ConnectSection";
 import BlogNav from "@/components/home/blogPost/BlogNav";
 import BlogPostCard from "@/components/home/blogPost/BlogPostCard";
 import NewsHead from "@/components/news/NewsHead";
+import NewsHero from "@/components/news/NewsHero";
 import NewsSection from "@/components/news/NewsSection";
 import VideoSection from "@/components/news/VideoSection";
 import SectionHeader from "@/components/sectionHeader/SectionHeader";
@@ -9,6 +10,7 @@ import SectionHeader from "@/components/sectionHeader/SectionHeader";
 export default function News() {
     return (
         <>
+            <NewsHero />
             <NewsHead />
             <NewsSection />
             <SectionHeader badge={"Welcome to Our News Hub"} heading={"Discover the World of Headlines"} buttonText={"View All News"} />
@@ -20,10 +22,10 @@ export default function News() {
             </div>
             <SectionHeader badge={"Featured Videos"} heading={"Visual Insights for the Modern Viewer"} buttonText={"View All"} />
             <VideoSection />
-            
+
         </>
     );
-}   
+}
 const blogData = [
     {
         authorImage: "https://randomuser.me/api/portraits/men/1.jpg",
