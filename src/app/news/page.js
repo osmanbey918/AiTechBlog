@@ -20,7 +20,6 @@ export default function News() {
             </div>
             <SectionHeader badge={"Featured Videos"} heading={"Visual Insights for the Modern Viewer"} buttonText={"View All"} />
             <VideoSection />
-            <ConnectSection />
             
         </>
     );

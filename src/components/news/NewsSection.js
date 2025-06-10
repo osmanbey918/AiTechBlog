@@ -81,7 +81,7 @@ const NewsSection = () => {
       altText: ""
     }
   ];
- return (
+  return (
     <section className="w-full g-px py-8 border-t border-solid border-neutral-800 sm:px-6 sm:py-12  md:py-16 ">
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
         {newsArticles.map((article) => (
@@ -109,7 +109,7 @@ export const NewsCard = ({
   altText = ""
 }) => {
   return (
-    <article className="flex flex-col gap-4 w-full h-full rounded-xl overflow-hidden transition-all duration-300 hover:shadow-lg hover:shadow-neutral-900/20">
+    <article className="flex flex-col flex-shrink-0 gap-4 w-[290px] h-[320px] rounded-xl overflow-hidden bg-neutral-950">
       <div className="aspect-video overflow-hidden rounded-xl">
         <img
           src={image}
@@ -118,9 +118,9 @@ export const NewsCard = ({
           loading="lazy"
         />
       </div>
-      
-      <div className="flex flex-col gap-4 px-2 pb-2">
-        <header className="flex flex-col gap-1">
+
+      <div className="flex flex-col justify-between flex-grow gap-4 px-2 pb-2">
+        <header className="flex flex-col gap-1 min-h-[60px]">
           <h2 className="text-lg font-bold leading-tight text-white line-clamp-2">
             {title}
           </h2>
@@ -128,8 +128,8 @@ export const NewsCard = ({
             {category}
           </p>
         </header>
-        
-        <div className="flex flex-wrap items-center justify-between gap-3">
+
+        <div className="flex flex-wrap items-center justify-between gap-3 mt-auto">
           <div className="flex gap-2">
             <button className="flex items-center gap-1 px-3 py-1.5 text-sm rounded-full bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 transition-colors">
               <span className="text-neutral-400">+</span>
@@ -140,7 +140,7 @@ export const NewsCard = ({
               <span className="text-neutral-400">{shares}</span>
             </button>
           </div>
-          
+
           <button className="flex items-center gap-1 px-4 py-2.5 text-sm rounded-lg bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 transition-colors">
             <span className="text-neutral-400">Read More</span>
             <span className="text-neutral-400">+</span>
@@ -148,6 +148,8 @@ export const NewsCard = ({
         </div>
       </div>
     </article>
+
+
   );
 };
 

@@ -1,3 +1,4 @@
+import Image from "next/image";
 
 const StatCard = ({ iconType, title, subtitle, description, onButtonClick }) => {
 
@@ -27,67 +28,11 @@ const StatCard = ({ iconType, title, subtitle, description, onButtonClick }) => 
         );
     };
 
-    const Icon = ({ type, className = "" }) => {
-        const icons = {
-            news: (
-                <svg
-                    width="50"
-                    height="50"
-                    viewBox="0 0 50 50"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className={className}
-                >
-                    <path d="M28.9275 34.4167H21.1219V50H28.9275V34.4167Z" fill="#FFD11A" />
-                    <path d="M28.9275 0H21.1219V15.5833H28.9275V0Z" fill="#FFD11A" />
-                    <path d="M34.4097 21.0945V28.9001H49.993V21.0945H34.4097Z" fill="#FFD11A" />
-                    <path d="M0 21.1016L0 28.9072H15.5833V21.1016H0Z" fill="#FFD11A" />
-                    <path d="M34.4245 28.8769L28.9052 34.3962L39.9241 45.4151L45.4434 39.8958L34.4245 28.8769Z" fill="#404040" />
-                    <path d="M10.0906 4.54558L4.57129 10.0649L15.5903 21.0839L21.1096 15.5646L10.0906 4.54558Z" fill="#404040" />
-                    <path d="M28.886 15.5885L34.4053 21.1078L45.4243 10.0888L39.9049 4.56949L28.886 15.5885Z" fill="#404040" />
-                    <path d="M4.55724 39.9197L10.0765 45.439L21.0955 34.4201L15.5762 28.9008L4.55724 39.9197Z" fill="#404040" />
-                </svg>
-            ),
-            experts: (
-                <svg
-                    width="51"
-                    height="50"
-                    viewBox="0 0 51 50"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className={className}
-                >
-                    <path d="M25.3335 35C25.3335 40.5228 29.8106 45 35.3335 45C40.8563 45 45.3335 40.5228 45.3335 35C45.3335 29.4772 40.8563 25 35.3335 25H25.3335V35Z" fill="#FFD11A" />
-                    <path d="M25.3335 15C25.3335 9.47715 20.8563 5 15.3335 5C9.81065 5 5.3335 9.47715 5.3335 15C5.3335 20.5228 9.81065 25 15.3335 25H25.3335V15Z" fill="#FFD11A" />
-                    <path fillRule="evenodd" clipRule="evenodd" d="M35.3335 5C29.8106 5 25.3335 9.47715 25.3335 15V25H35.3335C40.8563 25 45.3335 20.5228 45.3335 15C45.3335 9.47715 40.8563 5 35.3335 5ZM40.3335 15C40.3335 17.7614 38.0949 20 35.3335 20C32.5721 20 30.3335 17.7614 30.3335 15C30.3335 12.2386 32.5721 10 35.3335 10C38.0949 10 40.3335 12.2386 40.3335 15Z" fill="#404040" />
-                    <path fillRule="evenodd" clipRule="evenodd" d="M15.3335 45C20.8563 45 25.3335 40.5228 25.3335 35V25H15.3335C9.81065 25 5.3335 29.4772 5.3335 35C5.3335 40.5228 9.81065 45 15.3335 45ZM20.3335 35C20.3335 37.7614 18.0949 40 15.3335 40C12.5721 40 10.3335 37.7614 10.3335 35C10.3335 32.2386 12.5721 30 15.3335 30C18.0949 30 20.3335 32.2386 20.3335 35Z" fill="#404040" />
-                </svg>
-            ),
-            global: (
-                <svg
-                    width="50"
-                    height="50"
-                    viewBox="0 0 50 50"
-                    fill="none"
-                    xmlns="http://www.w3.org/2000/svg"
-                    className={className}
-                >
-                    <circle cx="25" cy="25" r="25" fill="#FFD11A" />
-                    <path d="M25 12C28.866 12 32 18.268 32 25C32 31.732 28.866 38 25 38C21.134 38 18 31.732 18 25C18 18.268 21.134 12 25 12Z" fill="#404040" />
-                    <path d="M12 25H38" stroke="#404040" strokeWidth="2" />
-                    <path d="M25 12V38" stroke="#404040" strokeWidth="2" />
-                </svg>
-            )
-        };
-
-        return icons[type] || null;
-    };
-
     return (
         <article className="flex relative flex-col flex-1 gap-8 items-start py-12 rounded-xl max-md:py-8 max-sm:gap-5 max-sm:py-8">
             <div className="flex relative flex-col gap-8 items-start w-full max-sm:gap-5">
                 <div>
-                    <Icon type={iconType} className="w-[49.993px] max-sm:w-[40px] h-[50px] max-sm:h-[40px] relative" />
+                    <Image src={iconType} width={20} height={20} className="w-[49.993px] max-sm:w-[40px] h-[50px] max-sm:h-[40px] relative" />
                 </div>
                 <div className="flex relative gap-5 items-center w-full max-sm:gap-4">
                     <div className="flex relative flex-col flex-1 gap-1 items-start">

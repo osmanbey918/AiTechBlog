@@ -27,8 +27,8 @@ export default function RootLayout({ children }) {
       >
         <Navbar/>
         {children}
-        {/* <ConnectSection />
-        <Footer /> */}
+        <ConnectSection />
+        <Footer />
       </body>
     </html>
   );

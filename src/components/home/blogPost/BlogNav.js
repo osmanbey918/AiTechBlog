@@ -1,51 +1,33 @@
 "use client";
-import * as React from "react";
+import React, { useState } from "react";
 
-function BlogNav() {
-  return <CategoryFilter />;
-}
+const filters = [
+  "All",
+  "Quantum Computing",
+  "AI Ethics",
+  "Space Exploration",
+  "Biotechnology",
+  "Renewable Energy",
+];
 
-function CategoryFilter() {
-  const [activeFilter, setActiveFilter] = React.useState("All");
-
-  const filters = [
-    "All",
-    "Quantum Computing",
-    "AI Ethics",
-    "Space Exploration",
-    "Biotechnology",
-    "Renewable Energy",
-  ];
+export default function BlogNav() {
+  const [activeFilter, setActiveFilter] = useState("All");
 
   return (
-    <nav className="flex gap-3.5 items-start g-px py-10 w-full border border-neutral-800 max-md:py-10 max-sm:flex-col max-sm:gap-2 max-sm:p-5">
+    <nav className="flex overflow-x-auto gap-4 g-px py-8 w-full border border-neutral-800 scrollbar-hide scroll-smooth">
       {filters.map((filter) => (
-        <FilterButton
+        <button
           key={filter}
-          isActive={activeFilter === filter}
           onClick={() => setActiveFilter(filter)}
+          className={`flex-shrink-0 w-[200px] px-4 py-6 text-sm rounded-lg border border-neutral-800 transition-colors
+            ${activeFilter === filter
+              ? "bg-zinc-900 text-white"
+              : "text-neutral-400 hover:text-neutral-300"}
+          `}
         >
           {filter}
-        </FilterButton>
+        </button>
       ))}
     </nav>
   );
 }
-
-function FilterButton({ children, isActive, onClick }) {
-  const baseClasses =
-    "flex-1 gap-2.5 px-4 py-6 text-sm tracking-tight leading-5 rounded-lg border border-neutral-800 max-sm:px-3 max-sm:py-4 max-sm:w-full transition-colors";
-  const activeClasses = "text-white bg-zinc-900";
-  const inactiveClasses = "text-neutral-400 hover:text-neutral-300";
-
-  return (
-    <button
-      className={`${baseClasses} ${isActive ? activeClasses : inactiveClasses}`}
-      onClick={onClick}
-    >
-      {children}
-    </button>
-  );
-}
-
-export default BlogNav;

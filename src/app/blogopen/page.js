@@ -66,8 +66,6 @@ const page = () => {
 
 
             <SimilarNews newsItems={similarNewsItems} />
-            <ConnectSection />
-            {/* <Footer /> */}
         </div>
     );
 };

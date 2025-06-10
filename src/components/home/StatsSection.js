@@ -15,21 +15,21 @@ const StatsSection = () => {
 
     const statsData = [
         {
-            iconType: 'news',
+            iconType: '/assets/news.svg',
             title: 'Latest News Updates',
             subtitle: 'Stay Current',
             description: 'Over 1,000 articles published monthly',
             onClick: handleNewsClick
         },
         {
-            iconType: 'experts',
+            iconType: '/assets/expert.svg',
             title: 'Expert Contributors',
             subtitle: 'Trusted Insights',
             description: '50+ renowned AI experts on our team',
             onClick: handleExpertsClick
         },
         {
-            iconType: 'global',
+            iconType: '/assets/global.svg',
             title: 'Global Readership',
             subtitle: 'Worldwide Impact',
             description: '2 million monthly readers',
@@ -38,11 +38,11 @@ const StatsSection = () => {
     ];
     const Separator = () => {
         return (
-            <div className="relative w-px bg-neutral-800 h-[] max-md:h-[241px] max-sm:w-full max-sm:h-px" />
+            <div className="relative w-px bg-neutral-800  max-sm:w-full max-sm:h-px" />
         );
     };
     return (
-        <section className="flex relative gap-20 items-start g-px w-full border border-neutral-800 max-md:gap-10 max-sm:flex-col max-sm:gap-5">
+        <section className="flex relative gap-10 items-start g-px w-full border border-neutral-800 max-md:gap-6 max-sm:flex-col max-sm:gap-5">
             {statsData.map((stat, index) => (
                 <React.Fragment key={index}>
                     <StatCard

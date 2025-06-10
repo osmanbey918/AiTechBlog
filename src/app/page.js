@@ -12,6 +12,7 @@ import ConnectSection from "@/components/footer/ConnectSection";
 import MainNavBar from "@/components/navbar/MainNavBar";
 import Navbar from "@/components/navbar/MainNavBar";
 import Footer from "@/components/footer/Footer";
+import CourseAssessments from "@/components/CardList";
 
 export default function Home() {
   return (
@@ -40,8 +41,6 @@ export default function Home() {
       <FutureTechSection />
       <BlogPostSection />
       <ItemsContainer />
-      <ConnectSection />
-      
     </div>
   );
 }
