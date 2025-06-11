@@ -1,6 +1,6 @@
 module.exports = {
-  output: 'export',
   images: {
+    domains: ['techcrunch.com', 'images.techhive.com', 'beta.techcrunch.com'],
     unoptimized: true,
   },
   trailingSlash: true,

@@ -35,8 +35,8 @@ function Navbar() {
             <button onClick={() => navigate('/news')} className="text-sm text-zinc-500 hover:text-white transition">
               News
             </button>
-            <button onClick={() => navigate('/podcasts')} className="text-sm text-zinc-500 hover:text-white transition">
-              Podcasts
+            <button onClick={() => navigate('/blogs')} className="text-sm text-zinc-500 hover:text-white transition">
+              Blogs
             </button>
             <button onClick={() => navigate('/resources')} className="text-sm text-zinc-500 hover:text-white transition">
               Resources

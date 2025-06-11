@@ -25,7 +25,7 @@ body {
 }
 
 .g-px {
-  @apply px-20 max-md:px-16 max-sm:px-4;
+  @apply px-20 max-md:px-10 max-sm:px-[4lvw];
 }
 
 .blog-content {

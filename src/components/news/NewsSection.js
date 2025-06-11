@@ -60,17 +60,15 @@ const NewsSection = () => {
   }
 
   return (
-    <section className="w-full g-px py-8 border-t border-solid border-neutral-800 sm:px-6 sm:py-12 md:py-16">
-      <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {newsArticles.map((article) => (
-          <NewsCard
-            key={article.id}
-            {...article}
-          />
-        ))}
-      </div>
-    </section>
-  );
+  <section className="w-full g-px py-8 border-t border-neutral-800 sm:py-12 md:py-16">
+    <div className="flex flex-wrap gap-4 ">
+      {newsArticles.map((article) => (
+        <NewsCard key={article.id} {...article} />
+      ))}
+    </div>
+  </section>
+);
+
 };
 
 export const NewsCard = ({
@@ -86,7 +84,7 @@ export const NewsCard = ({
   altText = ""
 }) => {
   return (
-    <article className="flex flex-col flex-shrink-0 gap-4 w-[290px] h-[420px] rounded-xl overflow-hidden bg-neutral-950">
+    <article className="flex flex-col flex-shrink-0 gap-4 max-w-[280px] max-md:max-w-[272px] max-sm:max-w-full h-[420px] rounded-xl overflow-hidden bg-neutral-950">
       <div className="aspect-video overflow-hidden rounded-xl relative">
         <Image
           src={image}
@@ -99,7 +97,7 @@ export const NewsCard = ({
         />
       </div>
 
-      <div className="flex flex-col justify-between flex-grow gap-4 px-4 pb-4">
+      <div className="flex flex-col justify-between flex-grow gap-4 pb-4">
         <header className="flex flex-col gap-2">
           <h2 className="text-lg font-bold leading-tight text-white line-clamp-2">
             {title}
@@ -115,15 +113,15 @@ export const NewsCard = ({
           <p className="text-sm text-neutral-300 line-clamp-2">{description}</p>
         </header>
 
-        <div className="flex flex-wrap items-center justify-between gap-3 mt-auto">
+        <div className="flex flex-wrap items-center justify-between gap-3 mt-4">
           <div className="flex gap-2">
             <button className="flex items-center gap-1 px-3 py-1.5 text-sm rounded-full bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 transition-colors">
-              <span className="text-neutral-400">+</span>
+              <Image src="/assets/like.svg" width={20} height={20}/>
               <span className="text-neutral-400">{likes}</span>
             </button>
             <button className="flex items-center gap-1 px-3 py-1.5 text-sm rounded-full bg-neutral-900 border border-neutral-800 hover:bg-neutral-800 transition-colors">
               <span className="text-neutral-400">+</span>
-              <span className="text-neutral-400">{shares}</span>
+              <Image src="/assets/share.svg" width={20} height={20}/>
             </button>
           </div>
 

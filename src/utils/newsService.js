@@ -1,14 +1,23 @@
 import { NEWS_API_KEY, NEWS_API_BASE_URL } from '@/config/api.config';
 
-export const fetchNews = async ({ category, pageSize = 10, page = 1 }) => {
-    try {
+export const fetchNews = async ({ category, pageSize = 10, page = 1 }) => {    try {
+        if (!NEWS_API_KEY) {
+            throw new Error('News API key is not configured');
+        }
+
         const response = await fetch(
-            `${NEWS_API_BASE_URL}/top-headlines?country=pk&category=${category}&pageSize=${pageSize}&page=${page}&apiKey=${NEWS_API_KEY}`,
-            { next: { revalidate: 3600 } } // Cache for 1 hour
+            `${NEWS_API_BASE_URL}/top-headlines?country=us&category=${category}&pageSize=${pageSize}&page=${page}&apiKey=${NEWS_API_KEY}`,
+            { 
+                cache: 'no-store',
+                headers: {
+                    'Authorization': `Bearer ${NEWS_API_KEY}`
+                }
+            }
         );
 
         if (!response.ok) {
-            throw new Error('Failed to fetch news');
+            const errorData = await response.json();
+            throw new Error(errorData.message || 'Failed to fetch news');
         }
 
         const data = await response.json();
