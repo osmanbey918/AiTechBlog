@@ -11,7 +11,6 @@ export default function News() {
     return (
         <>
             <NewsHero />
-            <NewsHead />
             <NewsSection />
             <SectionHeader badge={"Welcome to Our News Hub"} heading={"Discover the World of Headlines"} buttonText={"View All News"} />
             <BlogNav />

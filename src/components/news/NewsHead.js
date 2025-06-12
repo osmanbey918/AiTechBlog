@@ -1,4 +1,5 @@
-import React from 'react';
+"use client"
+import React, { useState, useEffect, useCallback } from 'react';
 
 const StatBadge = ({ count }) => {
   return (
@@ -11,12 +12,15 @@ const StatBadge = ({ count }) => {
   );
 };
 
-const ArticleImage = ({ src, alt }) => {
+const ArticleImage = ({ src, alt, className = "" }) => {
+  const [imgError, setImgError] = useState(false);
+
   return (
     <img
-      src={src}
+      src={imgError ? "/assets/news.svg" : src}
       alt={alt}
-      className="object-cover rounded-xl h-[325px] w-[515px] max-md:w-full max-md:h-auto max-md:max-w-[515px]"
+      onError={() => setImgError(true)}
+      className={`object-cover rounded-xl h-[325px] w-[515px] max-md:w-full max-md:h-auto max-md:max-w-[515px] transition-transform duration-500 ${className}`}
     />
   );
 };
@@ -102,40 +106,88 @@ const ArticleContent = ({
   );
 };
 
-export const NewsHead = ({
-  imageSrc = "https://placehold.co/515x325/ff8c42/ff8c42",
-  imageAlt = "",
-  title = "Global Climate Summit Addresses Urgent Climate Action",
-  description = "World leaders gathered at the Global Climate Summit to discuss urgent climate action, emissions reductions, and renewable energy targets.",
-  category = "Environment",
-  date = "October 10, 2023",
-  author = "Jane Smith",
-  likes = "14k",
-  shares = "204"
-}) => {
-  return (
-  <article className="box-border flex flex-col md:flex-row gap-6 md:gap-10 items-start md:items-center g-px  py-8 sm:py-12 md:py-16 w-full border-t border-solid border-t-neutral-800">
-    <div className="w-full md:w-1/2">
-      <ArticleImage
-        src={imageSrc}
-        alt={imageAlt}
-      />
-    </div>
+export const NewsHead = ({ articles = [] }) => {  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTransitioning, setIsTransitioning] = useState(false);
 
-    <div className="w-full md:w-1/2">
-      <ArticleContent
-        title={title}
-        description={description}
-        category={category}
-        date={date}
-        author={author}
-        likes={likes}
-        shares={shares}
-      />
-    </div>
-  </article>
-);
+  useEffect(() => {
+    if (articles.length <= 1) return;
 
+    const timer = setInterval(() => {
+      setIsTransitioning(true);
+      setTimeout(() => {
+        setCurrentIndex((prev) => (prev + 1) % articles.length);
+        setIsTransitioning(false);
+      }, 500);
+    }, 3000); // Change slide every 3 seconds
+
+    return () => clearInterval(timer);
+  }, [articles.length]);
+
+  if (articles.length === 0) {
+    articles = [{
+      image: "https://placehold.co/515x325/ff8c42/ff8c42",
+      title: "Global Climate Summit Addresses Urgent Climate Action",
+      description: "World leaders gathered at the Global Climate Summit to discuss urgent climate action, emissions reductions, and renewable energy targets.",
+      category: "Environment",
+      publishedAt: "October 10, 2023",
+      source: { name: "Jane Smith" },
+      likes: "14k",
+      shares: "204"
+    }];
+  }
+
+  const currentArticle = articles[currentIndex];
+
+  return (    <article
+      className="box-border flex flex-col md:flex-row gap-6 md:gap-10 items-start md:items-center g-px py-8 sm:py-12 md:py-16 w-full border-t border-solid border-t-neutral-800 relative"
+    >
+      <div className={`w-full md:w-1/2 overflow-hidden transition-all duration-500 ${isTransitioning ? 'opacity-0 scale-95' : 'opacity-100 scale-100'}`}>
+        <ArticleImage
+          src={currentArticle.image}
+          alt={currentArticle.title}
+          className="hover:scale-105"
+        />
+      </div>
+
+      <div className={`w-full md:w-1/2 transition-all duration-500 ${isTransitioning ? 'opacity-0 translate-y-4' : 'opacity-100 translate-y-0'}`}>
+        <ArticleContent
+          title={currentArticle.title}
+          description={currentArticle.description}
+          category={currentArticle.category}
+          date={new Date(currentArticle.publishedAt).toLocaleDateString('en-US', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+          })}
+          author={currentArticle.source.name}
+          likes={currentArticle.likes}
+          shares={currentArticle.shares}
+        />
+      </div>
+
+      {articles.length > 1 && (
+        <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+          {articles.map((_, index) => (
+            <button
+              key={index}
+              className={`h-2 transition-all duration-300 rounded-full ${index === currentIndex
+                  ? 'w-8 bg-white'
+                  : 'w-2 bg-neutral-600 hover:bg-neutral-500'
+                }`}
+              onClick={() => {
+                setIsTransitioning(true);
+                setTimeout(() => {
+                  setCurrentIndex(index);
+                  setIsTransitioning(false);
+                }, 500);
+              }}
+              aria-label={`Go to slide ${index + 1}`}
+            />
+          ))}
+        </div>
+      )}
+    </article>
+  );
 };
 
 export default NewsHead;

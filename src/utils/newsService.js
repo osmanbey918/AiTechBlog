@@ -1,6 +1,7 @@
 import { NEWS_API_KEY, NEWS_API_BASE_URL } from '@/config/api.config';
 
-export const fetchNews = async ({ category, pageSize = 10, page = 1 }) => {    try {
+export const fetchNews = async ({ category, pageSize = 10, page = 1 }) => {
+    try {
         if (!NEWS_API_KEY) {
             throw new Error('News API key is not configured');
         }
@@ -21,7 +22,11 @@ export const fetchNews = async ({ category, pageSize = 10, page = 1 }) => {    t
         }
 
         const data = await response.json();
-        return data;
+        
+        return {
+            ...data,
+            hasMore: data.articles.length > 0 && data.totalResults > pageSize
+        };
     } catch (error) {
         console.error('Error fetching news:', error);
         return { articles: [], totalResults: 0 };
