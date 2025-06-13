@@ -1,6 +1,5 @@
 'use client';
 import React, { useEffect, useState } from 'react';
-import { fetchNews } from '@/utils/newsService';
 import Image from 'next/image';
 import NewsHead from './NewsHead';
 
@@ -21,27 +20,19 @@ const NewsSection = () => {
         setLoading(true);
       }
       
-      const data = await fetchNews({ 
-        category: 'technology', 
-        pageSize: isLoadMore ? (initialPageSize + (page * 4)) : initialPageSize,
-        page: 1
-      });
+      // Calculate pagination parameters
+      const skip = isLoadMore ? newsArticles.length : 0;
+      const limit = isLoadMore ? 4 : initialPageSize;
+      
+      const response = await fetch(`/api/news?skip=${skip}&limit=${limit}`);
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Failed to fetch news');
+      }
 
       if (data.articles) {
-        const newArticles = data.articles.map((article, index) => ({
-          id: isLoadMore ? newsArticles.length + index : index,
-          image: article.urlToImage || "/assets/news.svg",
-          title: article.title,
-          category: "Technology",
-          description: article.description,
-          source: article.source.name,
-          publishedAt: article.publishedAt,
-          url: article.url,
-          likes: Math.floor(Math.random() * 1000),
-          shares: Math.floor(Math.random() * 100),
-          altText: article.title
-        }));
-
+        const newArticles = data.articles;
         setNewsArticles(prev => isLoadMore ? [...prev, ...newArticles] : newArticles);
         setHasMore(data.hasMore);
         if (isLoadMore) {
@@ -84,7 +75,7 @@ const NewsSection = () => {
     );
   }
 
-  // Extract first 4 articles for the carousel and rest for the grid
+  // Extract first 4 articles for the carousel
   const carouselArticles = newsArticles.slice(0, 4);
   const gridArticles = newsArticles.slice(4);
 
@@ -135,7 +126,7 @@ export const NewsCard = ({
   const [imgSrc, setImgSrc] = useState(image);
 
   return (
-    <article className="flex flex-col bg-neutral-950 border border-neutral-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
+    <article className="flex flex-col bg-neutral-950 min-w-[14rem] border border-neutral-800 rounded-xl overflow-hidden shadow-sm hover:shadow-lg transition-shadow duration-300">
       <div className="relative aspect-video">
         <Image
           src={imgSrc}

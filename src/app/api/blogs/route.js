@@ -1,5 +1,7 @@
-import Parser from 'rss-parser';
 import { NextResponse } from 'next/server';
+import connectDB from '@/lib/mongodb';
+import Blog from '@/models/Blog';
+import Parser from 'rss-parser';
 
 const parser = new Parser({
   timeout: 5000,
@@ -24,8 +26,17 @@ function extractImageFromContent(content) {
 
 export async function GET() {
   try {
+    await connectDB();
     let allBlogs = [];
 
+    // First, try to get blogs from MongoDB
+    const mongoBlogs = await Blog.find({}).sort({ publishedAt: -1 });
+    
+    if (mongoBlogs.length > 0) {
+      return NextResponse.json({ blogs: mongoBlogs }, { status: 200 });
+    }
+
+    // If no blogs in MongoDB, fetch from RSS feeds and store them
     for (const url of feedUrls) {
       try {
         const feed = await parser.parseURL(url);

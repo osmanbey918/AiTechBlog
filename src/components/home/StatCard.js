@@ -32,7 +32,7 @@ const StatCard = ({ iconType, title, subtitle, description, onButtonClick }) => 
         <article className="flex relative flex-col flex-1 gap-8 items-start py-12 rounded-xl max-md:py-8 max-sm:gap-5 max-sm:py-8">
             <div className="flex relative flex-col gap-8 items-start w-full max-sm:gap-5">
                 <div>
-                    <Image src={iconType} width={20} height={20} className="w-[49.993px] max-sm:w-[40px] h-[50px] max-sm:h-[40px] relative" />
+                    <Image src={iconType} width={20} height={20} alt="icon" className="w-[49.993px] max-sm:w-[40px] h-[50px] max-sm:h-[40px] relative" />
                 </div>
                 <div className="flex relative gap-5 items-center w-full max-sm:gap-4">
                     <div className="flex relative flex-col flex-1 gap-1 items-start">

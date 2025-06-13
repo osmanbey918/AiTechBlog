@@ -22,9 +22,9 @@ export default function Blogs() {
       
       <ul>
         {blogs.map((blog, index) => (
-         <>
+         
             <BlogPostCard key={index}  authorName={blog.author} title={blog.title} authorSpecialty={blog.categories} description={blog.description} date={blog.published} onViewBlog={blog.link}/>
-       </>
+       
         ))}
       </ul>
     </div>
