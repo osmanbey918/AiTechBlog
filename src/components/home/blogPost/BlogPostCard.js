@@ -5,15 +5,17 @@ import { useMemo } from 'react';
 
 function AuthorProfile({ name }) {
     const image = getAvatarFromName(name || 'Anonymous');
+    const displayName = name || "Anonymous";
+    const isLongName = displayName.length > 15;
 
     return (
-        <div className="flex flex-col items-center gap-4 max-sm:flex-row max-sm:gap-3">
-            <img src={image} alt={name} className="w-16 h-16 rounded-full object-cover" />
+        <div className="flex flex-col items-center gap-4 max-sm:flex-row max-sm:gap-3 w-[130px] max-sm:w-full">
+            <img src={image} alt={displayName} className="w-16 h-16 rounded-full object-cover" />
             <div className="text-center max-sm:text-left">
-                <p className="text-white font-semibold text-lg" >
-                    {name
-                        ? (name.length > 20 ? name.substring(0, 20) + "..." : name)
-                        : "Anonymous"}            </p>
+                <p className="text-white font-semibold text-lg break-words max-w-[200px]" 
+                   title={isLongName ? displayName : undefined}>
+                    {isLongName ? `${displayName.substring(0, 15)}.` : displayName}
+                </p>
                 <p className="text-neutral-400 text-sm">AI engineer</p>
             </div>
         </div>
@@ -33,10 +35,6 @@ function getAvatarFromName(name) {
     return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
 }
 
-// function getAvatarFromName(name) {
-//     const seed = encodeURIComponent(name); // To ensure consistent avatar for same name
-//     return `https://api.dicebear.com/7.x/adventurer/svg?seed=${seed}`;
-// }
 function BlogContent({ date, title, description }) {
     return (
         <div className="flex flex-col flex-1 gap-6 items-start max-sm:gap-4 max-sm:w-full">
@@ -116,9 +114,7 @@ function BlogPostCard({
                     <BlogMetrics likes={10} comments={25} shares={55} />
                 </div>
 
-                {/* <div className="flex flex-col items-end max-sm:items-start"> */}
                 <ViewBlogButton link={onViewBlog} />
-                {/* </div> */}
             </div>
         </article>
 

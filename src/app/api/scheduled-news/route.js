@@ -12,20 +12,27 @@ cron.schedule('0 0,12 * * *', async () => {
 
 async function fetchAndStoreNews() {
     try {
+        console.log('Starting news fetch and store process...');
         await connectDB();
         
-        // Fetch news from the API
-        const { articles } = await fetchNews({ 
-            category: 'technology', 
-            pageSize: 20 // Fetch more articles to ensure fresh content
-        });
-
-        if (!articles || articles.length === 0) {
+        // Fetch news from multiple categories to ensure variety
+        const categories = ['technology', 'science'];
+        let allArticles = [];
+        
+        for (const category of categories) {
+            const { articles } = await fetchNews({ 
+                category, 
+                pageSize: 15 // Fetch articles per category
+            });
+            allArticles = [...allArticles, ...articles];
+        }        if (!allArticles || allArticles.length === 0) {
             throw new Error('No articles fetched from API');
         }
 
+        console.log(`Fetched ${allArticles.length} articles, preparing to store...`);
+
         // Process and store each article
-        const operations = articles.map(article => ({
+        const operations = allArticles.map(article => ({
             updateOne: {
                 filter: { url: article.url }, // Use URL as unique identifier
                 update: {
@@ -44,11 +51,28 @@ async function fetchAndStoreNews() {
             }
         }));
 
-        // Perform bulk write operation
+        // Perform bulk write operation        // Execute bulk operation
         const result = await News.bulkWrite(operations);
-        console.log(`News update completed: ${result.upsertedCount} new articles, ${result.modifiedCount} updated`);
+        
+        // Clean up old articles (keep last 7 days)
+        const sevenDaysAgo = new Date();
+        sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+        
+        await News.deleteMany({
+            publishedAt: { $lt: sevenDaysAgo }
+        });
 
-        return { success: true, result };
+        console.log(`News update completed: ${result.upsertedCount} new articles, ${result.modifiedCount} updated`);
+        
+        // Verify stored articles
+        const storedCount = await News.countDocuments({});
+        console.log(`Total articles in database: ${storedCount}`);
+
+        return { 
+            success: true, 
+            result,
+            totalArticles: storedCount 
+        };
     } catch (error) {
         console.error('Error in fetchAndStoreNews:', error);
         throw error;
@@ -56,10 +80,13 @@ async function fetchAndStoreNews() {
 }
 
 // API route handler for manual triggers and initial fetch
-export async function GET() {
+export async function GET(request) {
     try {
-        await fetchAndStoreNews();
-        return NextResponse.json({ message: 'News fetch and store completed' });
+        const result = await fetchAndStoreNews();
+        return NextResponse.json({ 
+            message: 'News fetch and store completed',
+            ...result
+        });
     } catch (error) {
         return NextResponse.json(
             { error: 'Failed to fetch and store news' }, 

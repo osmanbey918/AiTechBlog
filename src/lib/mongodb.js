@@ -19,10 +19,9 @@ async function connectDB() {
     return cached.conn;
   }
 
-  if (!cached.promise) {
-    const opts = {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+  if (!cached.promise) {    const opts = {
+      // MongoDB Node.js driver 4.0+ doesn't need these options
+      bufferCommands: false,
     };
 
     cached.promise = mongoose.connect(MONGODB_URI, opts).then((mongoose) => {

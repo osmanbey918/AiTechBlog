@@ -1,10 +1,8 @@
 import mongoose from 'mongoose';
 
-const newsSchema = new mongoose.Schema({
-    title: {
+const newsSchema = new mongoose.Schema({    title: {
         type: String,
-        required: true,
-        unique: true // Prevent duplicate news articles
+        required: true
     },
     description: {
         type: String,
