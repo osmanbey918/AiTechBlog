@@ -10,11 +10,19 @@ function AuthorProfile({ name }) {
 
     return (
         <div className="flex flex-col items-center gap-4 max-sm:flex-row max-sm:gap-3 w-[130px] max-sm:w-full">
-            <img src={image} alt={displayName} className="w-16 h-16 rounded-full object-cover" />
+            <div className="relative w-16 h-16">
+                <Image
+                    src={image}
+                    alt={`${displayName}'s avatar`}
+                    width={64}
+                    height={64}
+                    className="rounded-full object-cover"
+                />
+            </div>
             <div className="text-center max-sm:text-left">
-                <p className="text-white font-semibold text-lg break-words max-w-[200px]" 
-                   title={isLongName ? displayName : undefined}>
-                    {isLongName ? `${displayName.substring(0, 15)}.` : displayName}
+                <p className="text-white font-semibold text-lg break-words max-w-[200px]"
+                    title={isLongName ? displayName : undefined}>
+                    {isLongName ? `${displayName.substring(0, 15)}...` : displayName}
                 </p>
                 <p className="text-neutral-400 text-sm">AI engineer</p>
             </div>
@@ -80,16 +88,17 @@ function BlogMetrics({ likes, comments, shares }) {
 
 function ViewBlogButton({ link }) {
     return (
-    <a 
-    className="flex gap-1 items-center px-5 py-3.5 rounded-lg border bg-neutral-900 border-neutral-800 max-sm:justify-center max-sm:w-full"
-    href={link} target='_blank'
->
-    <span className="text-sm tracking-tight leading-5 text-neutral-400 whitespace-nowrap">View Blog</span>
-    <svg width="20" height="21" viewBox="0 0 20 21" fill="none">
-        <path d="M6.875 3.625L16.25 3.625C16.4158 3.625 16.5747 3.69085 16.6919 3.80806C16.8092 3.92527 16.875 4.08424 16.875 4.25V13.625C16.875 13.9702 16.5952 14.25 16.25 14.25C15.9048 14.25 15.625 13.9702 15.625 13.625V5.75888L4.19194 17.1919C3.94786 17.436 3.55214 17.436 3.30806 17.1919C3.06398 16.9479 3.06398 16.5521 3.30806 16.3081L14.7411 4.875L6.875 4.875C6.52982 4.875 6.25 4.59518 6.25 4.25C6.25 3.90482 6.52982 3.625 6.875 3.625Z" fill="#FFD11A" />
-    </svg>
-</a>
-
+        <>
+            <a
+                className="flex gap-1 items-center px-5 py-3.5 rounded-lg border bg-neutral-900 border-neutral-800 max-sm:justify-center max-sm:w-full"
+                href={link} target='_blank'
+            >
+                <span className="text-sm tracking-tight leading-5 text-neutral-400 whitespace-nowrap">View Blog</span>
+                <svg width="20" height="21" viewBox="0 0 20 21" fill="none">
+                    <path d="M6.875 3.625L16.25 3.625C16.4158 3.625 16.5747 3.69085 16.6919 3.80806C16.8092 3.92527 16.875 4.08424 16.875 4.25V13.625C16.875 13.9702 16.5952 14.25 16.25 14.25C15.9048 14.25 15.625 13.9702 15.625 13.625V5.75888L4.19194 17.1919C3.94786 17.436 3.55214 17.436 3.30806 17.1919C3.06398 16.9479 3.06398 16.5521 3.30806 16.3081L14.7411 4.875L6.875 4.875C6.52982 4.875 6.25 4.59518 6.25 4.25C6.25 3.90482 6.52982 3.625 6.875 3.625Z" fill="#FFD11A" />
+                </svg>
+            </a>
+        </>
     );
 }
 

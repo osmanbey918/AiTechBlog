@@ -171,7 +171,7 @@ export const SimilarNews = ({ newsItems }) => {
                 </button>
             </div>
 
-            <div className=" gap-4 flex overflow-x-auto pt-10">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pt-10">
                 {newsItems.map((article) => (
                     <NewsCard
                         key={article.id}
