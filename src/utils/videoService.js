@@ -13,7 +13,26 @@ export const fetchVideos = async ({ maxResults = 3, query = 'technology AI news'
         );
 
         if (!response.ok) {
-            throw new Error('Failed to fetch videos');
+            const errorData = await response.json().catch(() => ({ error: { message: 'Unknown error' } }));
+
+            // Handle specific error cases
+            switch (response.status) {
+                case 400:
+                    throw new Error('Invalid request parameters: ' + (errorData.error?.message || 'Bad Request'));
+                case 401:
+                    throw new Error('Invalid API key or unauthorized access');
+                case 403:
+                    throw new Error('Quota exceeded or API key invalid');
+                case 404:
+                    throw new Error('Requested resource not found');
+                case 429:
+                    throw new Error('Too many requests. Please try again later.');
+                case 500:
+                case 503:
+                    throw new Error('YouTube service is currently unavailable');
+                default:
+                    throw new Error(`Failed to fetch videos: ${errorData.error?.message || `HTTP ${response.status}`}`);
+            }
         }
 
         const data = await response.json();
@@ -31,6 +50,6 @@ export const fetchVideos = async ({ maxResults = 3, query = 'technology AI news'
         };
     } catch (error) {
         console.error('Error fetching videos:', error);
-        return { videos: [], nextPageToken: null, totalResults: 0 };
+        throw error; // Let the component handle the error
     }
 };

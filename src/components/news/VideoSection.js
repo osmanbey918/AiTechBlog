@@ -1,8 +1,9 @@
 'use client';
-import React from 'react';
+import React, { useState, useEffect, memo } from 'react';
 import Image from 'next/image';
 
-const VideoCard = ({ thumbnail, title, description, videoId, publishedAt, channelTitle }) => {
+// Memoize VideoCard to prevent unnecessary re-renders
+const VideoCard = memo(({ thumbnail, title, description, videoId, publishedAt, channelTitle }) => {
   const handleClick = () => {
     window.open(`https://www.youtube.com/watch?v=${videoId}`, '_blank');
   };
@@ -39,29 +40,82 @@ const VideoCard = ({ thumbnail, title, description, videoId, publishedAt, channe
       </div>
     </article>
   );
+});
+
+VideoCard.displayName = 'VideoCard';
+
+// Cache for storing video data
+const videoCache = {
+  data: null,
+  timestamp: null,
+  CACHE_DURATION: 5 * 60 * 1000 // 5 minutes
 };
 
 const VideoSection = () => {
-  const [videos, setVideos] = React.useState([]);
-  const [loading, setLoading] = React.useState(true);
-  const [error, setError] = React.useState(null);
+  const [videos, setVideos] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const MAX_RETRIES = 3;
 
-  React.useEffect(() => {
+  useEffect(() => {
     const loadVideos = async () => {
       try {
+        // Check cache first
+        const now = Date.now();
+        if (videoCache.data && videoCache.timestamp && (now - videoCache.timestamp < videoCache.CACHE_DURATION)) {
+          setVideos(videoCache.data);
+          setLoading(false);
+          return;
+        }
+
         const { fetchVideos } = await import('@/utils/videoService');
         const data = await fetchVideos({ maxResults: 3 });
+        
+        // Update cache
+        videoCache.data = data.videos;
+        videoCache.timestamp = now;
+        
         setVideos(data.videos);
+        setError(null); // Clear any previous errors
       } catch (err) {
-        setError('Failed to load videos');
         console.error('Error loading videos:', err);
+        
+        // Use cached data if available
+        if (videoCache.data) {
+          setVideos(videoCache.data);
+          setError('Using cached data - ' + err.message);
+        } else {
+          // Set appropriate error message based on the error
+          let errorMessage = 'Failed to load videos';
+          
+          if (err.message.includes('API key')) {
+            errorMessage = 'YouTube API configuration error. Please try again later.';
+          } else if (err.message.includes('quota')) {
+            errorMessage = 'Daily video quota exceeded. Please try again tomorrow.';
+          } else if (err.message.includes('Too many requests')) {
+            errorMessage = 'Too many requests. Please wait a moment and try again.';
+          } else if (err.message.includes('unavailable')) {
+            errorMessage = 'YouTube service is temporarily unavailable. Please try again later.';
+          }
+          
+          setError(errorMessage);
+
+          // Implement retry logic for certain errors
+          if (retryCount < MAX_RETRIES && 
+              (err.message.includes('network') || err.message.includes('unavailable'))) {
+            setTimeout(() => {
+              setRetryCount(prev => prev + 1);
+            }, Math.pow(2, retryCount) * 1000); // Exponential backoff
+          }
+        }
       } finally {
         setLoading(false);
       }
     };
 
     loadVideos();
-  }, []);
+  }, [retryCount]); // Add retryCount as dependency
 
   if (loading) {
     return (
@@ -73,11 +127,19 @@ const VideoSection = () => {
     );
   }
 
-  if (error) {
+  if (error && !videos.length) {
     return (
       <section className="box-border flex gap-8 items-start px-20 py-16 w-full border-t border-solid border-t-neutral-800 max-md:flex-col max-md:gap-8 max-md:p-10 max-sm:gap-5 max-sm:p-5">
-        <div className="flex justify-center items-center w-full min-h-[200px]">
+        <div className="flex flex-col justify-center items-center w-full min-h-[200px] gap-4">
           <div className="text-red-400">{error}</div>
+          {retryCount < MAX_RETRIES && (
+            <button 
+              onClick={() => setRetryCount(prev => prev + 1)}
+              className="px-4 py-2 bg-neutral-800 text-white rounded-md hover:bg-neutral-700 transition-colors"
+            >
+              Retry
+            </button>
+          )}
         </div>
       </section>
     );
@@ -96,6 +158,11 @@ const VideoSection = () => {
           channelTitle={video.channelTitle}
         />
       ))}
+      {error && (
+        <div className="w-full text-center text-yellow-400 text-sm mt-4">
+          {error}
+        </div>
+      )}
     </section>
   );
 };

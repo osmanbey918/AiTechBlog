@@ -1,4 +1,5 @@
 import SectionHeader from '@/components/sectionHeader/SectionHeader';
+import Image from 'next/image';
 import React from 'react';
 
 function StarRating() {
@@ -27,9 +28,11 @@ function StarRating() {
 function CustomerProfile({ name, location, imageUrl, altText }) {
   return (
     <header className="flex relative gap-2.5 justify-center items-center self-stretch max-sm:flex-col max-sm:gap-4">
-      <img
+      <Image
         src={imageUrl}
         alt={altText}
+        width={50}
+        height={50}
         className="object-cover rounded-full h-[50px] w-[50px]"
       />
       <div className="flex flex-col gap-1 items-start max-sm:items-center">

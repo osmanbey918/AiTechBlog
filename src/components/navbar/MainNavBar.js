@@ -38,11 +38,11 @@ function Navbar() {
 
   return (
     <nav 
-      className={` py-2 w-full z-50 transition-all duration-300 ${
+      className={` py-2 w-full transition-all duration-300 ${
         scrolled ? 'bg-zinc-900/95 backdrop-blur-sm shadow-lg' : 'bg-zinc-900'
       }`}
     >
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="max-w-7xl mx-auto g-px">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div 

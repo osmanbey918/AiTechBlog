@@ -7,9 +7,11 @@ import React from 'react';
 export const BlogHero = ({ title, backgroundImage }) => {
     return (
         <section className="h-[439px] w-full relative">
-            <img
+            <Image
                 src={backgroundImage}
-                alt=""
+                alt='hello'
+                width={100}
+                height={100}
                 className="w-full h-full object-cover absolute left-0 top-0"
             />
             {/* <h1 className="text-white text-center text-[44px] font-bold leading-[66px] tracking-[-1.32px] absolute -translate-x-2/4 w-[918px] h-[66px] left-2/4 top-[338px] max-md:text-4xl max-md:w-[90%] max-sm:text-[28px] max-sm:w-[95%] max-sm:px-5 max-sm:py-0">
@@ -84,14 +86,14 @@ export const EngagementMetrics = ({ likes, views, shares }) => {
             </button>
 
             <button className="flex justify-center items-center gap-1 border border-[color:var(--Dark-15,#262626)] bg-[#141414] px-3.5 py-2 rounded-[100px] border-solid hover:bg-[#1a1a1a] transition-colors">
-                <Image src="/assets/comment.svg" width={20} height={20}/>
+                <Image src="/assets/comment.svg" width={20} height={20} alt='comment'/>
                 <span className="text-[#98989A] text-sm font-normal leading-[21px] tracking-[-0.42px]">
                     {views}
                 </span>
             </button>
 
             <button className="flex justify-center items-center gap-1 border border-[color:var(--Dark-15,#262626)] bg-[#141414] px-3.5 py-2 rounded-[100px] border-solid hover:bg-[#1a1a1a] transition-colors">
-                <Image src="/assets/share.svg" width={20} height={20}/>
+                <Image src="/assets/share.svg" width={20} height={20} alt='share'/>
                 <span className="text-[#98989A] text-sm font-normal leading-[21px] tracking-[-0.42px]">
                     {shares}
                 </span>

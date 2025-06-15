@@ -78,7 +78,7 @@ function BlogMetrics({ likes, comments, shares }) {
                     key={index}
                     className="flex gap-0.5 justify-center items-center px-3 py-1.5 border bg-zinc-900 border-neutral-800 rounded-[100px]"
                 >
-                    <Image src={metric.icon} height={20} width={20} />
+                    <Image src={metric.icon} height={20} width={20} alt='"icon'/>
                     <span className="text-sm tracking-tight leading-5 text-neutral-400">{metric.count}</span>
                 </div>
             ))}

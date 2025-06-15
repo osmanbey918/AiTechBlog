@@ -1,7 +1,11 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import NewsHead from './NewsHead';
+
+// Cache implementation
+const cache = new Map();
+const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 
 const NewsSection = () => {
   const [newsArticles, setNewsArticles] = useState([]);
@@ -12,7 +16,42 @@ const NewsSection = () => {
   const [hasMore, setHasMore] = useState(true);
   const initialPageSize = 12; // Increased to get enough articles for both carousel and grid
 
-  const loadNews = async (isLoadMore = false) => {
+  // Debounced fetch implementation
+  const debouncedFetch = useCallback((url) => {
+    const cacheKey = url;
+    const cachedData = cache.get(cacheKey);
+    
+    if (cachedData && Date.now() - cachedData.timestamp < CACHE_DURATION) {
+      return Promise.resolve(cachedData.data);
+    }
+
+    // Add a small delay to prevent rapid successive calls
+    return new Promise((resolve) => {
+      setTimeout(async () => {
+        try {
+          const response = await fetch(url);
+          const data = await response.json();
+          
+          if (!response.ok) {
+            throw new Error(data.error || 'Failed to fetch news');
+          }
+
+          // Cache the successful response
+          cache.set(cacheKey, {
+            data,
+            timestamp: Date.now()
+          });
+
+          resolve(data);
+        } catch (error) {
+          console.error('Error fetching news:', error);
+          throw error;
+        }
+      }, 300); // 300ms delay
+    });
+  }, []);
+
+  const loadNews = useCallback(async (isLoadMore = false) => {
     try {
       if (isLoadMore) {
         setLoadingMore(true);
@@ -24,12 +63,7 @@ const NewsSection = () => {
       const skip = isLoadMore ? newsArticles.length : 0;
       const limit = isLoadMore ? 4 : initialPageSize;
       
-      const response = await fetch(`/api/news?skip=${skip}&limit=${limit}`);
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to fetch news');
-      }
+      const data = await debouncedFetch(`/api/news?skip=${skip}&limit=${limit}`);
 
       if (data.articles) {
         const newArticles = data.articles;
@@ -49,11 +83,12 @@ const NewsSection = () => {
         setLoading(false);
       }
     }
-  };
+  }, [newsArticles.length, debouncedFetch]);
 
+  // Use useEffect with proper dependencies
   useEffect(() => {
     loadNews();
-  }, []);
+  }, [loadNews]);
 
   if (loading) {
     return (

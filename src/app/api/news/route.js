@@ -3,6 +3,40 @@ import connectDB from '@/lib/mongodb';
 import News from '@/models/News';
 import { NEWS_API_KEY, NEWS_API_BASE_URL } from '@/config/api.config';
 
+// Simple rate limiting implementation
+const rateLimit = {
+    windowMs: 60 * 1000, // 1 minute
+    maxRequests: 30, // max requests per window
+    clients: new Map()
+};
+
+function getRateLimitInfo(ip) {
+    const now = Date.now();
+    const windowStart = now - rateLimit.windowMs;
+    
+    // Clean up old entries
+    rateLimit.clients.forEach((data, key) => {
+        if (data.windowStart < windowStart) {
+            rateLimit.clients.delete(key);
+        }
+    });
+
+    if (!rateLimit.clients.has(ip)) {
+        rateLimit.clients.set(ip, {
+            windowStart: now,
+            count: 0
+        });
+    }
+
+    const client = rateLimit.clients.get(ip);
+    if (client.windowStart < windowStart) {
+        client.windowStart = now;
+        client.count = 0;
+    }
+
+    return client;
+}
+
 async function fetchFromNewsAPI(limit) {
     const response = await fetch(
         `${NEWS_API_BASE_URL}/top-headlines?country=us&category=technology&pageSize=${limit}&apiKey=${NEWS_API_KEY}`
@@ -37,6 +71,18 @@ async function fetchFromNewsAPI(limit) {
 
 export async function GET(request) {
     try {
+        // Apply rate limiting
+        const ip = request.headers.get('x-forwarded-for') || 'unknown';
+        const rateLimitInfo = getRateLimitInfo(ip);
+        
+        if (rateLimitInfo.count >= rateLimit.maxRequests) {
+            return NextResponse.json(
+                { error: 'Too many requests' },
+                { status: 429 }
+            );
+        }
+        rateLimitInfo.count++;
+
         await connectDB();
         
         // Get query parameters
@@ -48,7 +94,8 @@ export async function GET(request) {
         let articles = await News.find({})
             .sort({ publishedAt: -1 })
             .skip(skip)
-            .limit(limit);
+            .limit(limit)
+            .lean(); // Use lean() for better performance
 
         // If no articles in database, fetch from API
         if (articles.length === 0) {
@@ -59,7 +106,8 @@ export async function GET(request) {
             articles = await News.find({})
                 .sort({ publishedAt: -1 })
                 .skip(skip)
-                .limit(limit);
+                .limit(limit)
+                .lean();
         }
 
         // Get total count for pagination

@@ -17,10 +17,12 @@ const ArticleImage = ({ src, alt, className = "" }) => {
   const [imgError, setImgError] = useState(false);
 
   return (
-    <img
+    <Image
       src={imgError ? "/assets/news.svg" : src}
       alt={alt}
       onError={() => setImgError(true)}
+      width={515}
+      height={325}
       className={`object-cover rounded-xl h-[325px] w-[515px] max-md:w-full max-md:h-auto max-md:max-w-[515px] transition-transform duration-500 ${className}`}
     />
   );
