@@ -1,4 +1,3 @@
-
 function FeatureCard({ title, description }) {
   return (
     <article className="flex flex-col flex-1 gap-5 items-start p-8 rounded-xl border bg-zinc-900 border-neutral-800 max-md:p-6 max-sm:p-5">

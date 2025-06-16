@@ -5,11 +5,11 @@ import React from "react";
 export default function BlogPostSection() {
     return (
         <div>
-            <SectionHeader badge={"A Knowledge Treasure Trove"} heading={"Explore FutureTech's In-Depth Blog Posts"} buttonText={"View All Blogs"}/>
+            <SectionHeader badge={"A Knowledge Treasure Trove"} heading={"Explore FutureTech's In-Depth Blog Posts"} buttonText={"View All Blogs"} />
             <BlogNav />
             <div className="p-6 bg-black min-h-screen text-white">
                 {blogData.map((data, i) => (
-                    <BlogPostCard key={i} {...data} onViewBlog={() => alert(`Viewing blog: ${data.title}`)} />
+                    <BlogPostCard key={i} {...data} />
                 ))}
             </div>
         </div>
@@ -19,6 +19,7 @@ export default function BlogPostSection() {
 
 const blogData = [
     {
+        id: 1,
         authorImage: "https://randomuser.me/api/portraits/men/1.jpg",
         authorName: "Alice Quantum",
         authorSpecialty: "Quantum Physics",
@@ -30,6 +31,7 @@ const blogData = [
         shares: "10",
     },
     {
+        id: 2,
         authorImage: "https://randomuser.me/api/portraits/women/2.jpg",
         authorName: "Bob Techie",
         authorSpecialty: "AI & ML",
@@ -41,6 +43,7 @@ const blogData = [
         shares: "33",
     },
     {
+        id: 3,
         authorImage: "https://randomuser.me/api/portraits/men/3.jpg",
         authorName: "Clara Innovate",
         authorSpecialty: "Biotech",

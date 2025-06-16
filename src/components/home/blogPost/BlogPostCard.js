@@ -1,7 +1,9 @@
+"use client"
 import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
+import { useRouter } from 'next/navigation';
 
-import { useMemo } from 'react';
 
 function AuthorProfile({ name }) {
     const image = getAvatarFromName(name || 'Anonymous');
@@ -78,7 +80,7 @@ function BlogMetrics({ likes, comments, shares }) {
                     key={index}
                     className="flex gap-0.5 justify-center items-center px-3 py-1.5 border bg-zinc-900 border-neutral-800 rounded-[100px]"
                 >
-                    <Image src={metric.icon} height={20} width={20} alt='"icon'/>
+                    <Image src={metric.icon} height={20} width={20} alt='"icon' />
                     <span className="text-sm tracking-tight leading-5 text-neutral-400">{metric.count}</span>
                 </div>
             ))}
@@ -89,15 +91,12 @@ function BlogMetrics({ likes, comments, shares }) {
 function ViewBlogButton({ link }) {
     return (
         <>
-            <a
+            <Link
                 className="flex gap-1 items-center px-5 py-3.5 rounded-lg border bg-neutral-900 border-neutral-800 max-sm:justify-center max-sm:w-full"
-                href={link} target='_blank'
-            >
+                href={`${link}`} target='_blank'  >
                 <span className="text-sm tracking-tight leading-5 text-neutral-400 whitespace-nowrap">View Blog</span>
-                <svg width="20" height="21" viewBox="0 0 20 21" fill="none">
-                    <path d="M6.875 3.625L16.25 3.625C16.4158 3.625 16.5747 3.69085 16.6919 3.80806C16.8092 3.92527 16.875 4.08424 16.875 4.25V13.625C16.875 13.9702 16.5952 14.25 16.25 14.25C15.9048 14.25 15.625 13.9702 15.625 13.625V5.75888L4.19194 17.1919C3.94786 17.436 3.55214 17.436 3.30806 17.1919C3.06398 16.9479 3.06398 16.5521 3.30806 16.3081L14.7411 4.875L6.875 4.875C6.52982 4.875 6.25 4.59518 6.25 4.25C6.25 3.90482 6.52982 3.625 6.875 3.625Z" fill="#FFD11A" />
-                </svg>
-            </a>
+                <Image src={"/assets/arrow-up-right.svg"} width={18} height={18} alt='icon' />
+            </Link>
         </>
     );
 }
@@ -113,7 +112,13 @@ function BlogPostCard({
     comments,
     shares,
     onViewBlog,
+    id,
 }) {
+    const router = useRouter();
+    const handleViewBlog = () => {
+        router.push(`/blogopen/${id}`);
+    };
+
     return (
         <article className="flex gap-10 items-start g-px py-16 w-full border border-neutral-800 max-md:py-10 max-sm:flex-col max-sm:gap-5 max-sm:py-8">
             <AuthorProfile image={authorImage} name={authorName} specialty={authorSpecialty} />
@@ -123,7 +128,13 @@ function BlogPostCard({
                     <BlogMetrics likes={10} comments={25} shares={55} />
                 </div>
 
-                <ViewBlogButton link={onViewBlog} />
+                {onViewBlog && < ViewBlogButton link={onViewBlog} />}
+                {onViewBlog && <button
+                    className="flex gap-1 items-center px-5 py-3.5 rounded-lg border bg-neutral-900 border-neutral-800 max-sm:justify-center max-sm:w-full"
+                    onClick={id} target='_blank'  >
+                    <span className="text-sm tracking-tight leading-5 text-neutral-400 whitespace-nowrap">View Blog</span>
+                    <Image src={"/assets/arrow-up-right.svg"} width={18} height={18} alt='icon' />
+                </button>}
             </div>
         </article>
 

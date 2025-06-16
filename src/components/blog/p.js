@@ -7,13 +7,13 @@ import React from 'react';
 export const BlogHero = ({ title, backgroundImage }) => {
     return (
         <section className="h-[439px] w-full relative">
-            <Image
+            {/* <Image
                 src={backgroundImage}
                 alt='hello'
                 width={100}
                 height={100}
                 className="w-full h-full object-cover absolute left-0 top-0"
-            />
+            /> */}
             {/* <h1 className="text-white text-center text-[44px] font-bold leading-[66px] tracking-[-1.32px] absolute -translate-x-2/4 w-[918px] h-[66px] left-2/4 top-[338px] max-md:text-4xl max-md:w-[90%] max-sm:text-[28px] max-sm:w-[95%] max-sm:px-5 max-sm:py-0">
                 {title}
             </h1> */}
