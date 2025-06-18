@@ -25,7 +25,7 @@ body {
 }
 
 .g-px {
-  @apply px-[6lvw] max-lg:px-[4lvw] max-md:px-10 max-sm:px-[4lvw];
+  @apply px-[6lvw] max-lg:px-[4lvw]  max-sm:px-[4lvw];
 }
 
 .blog-content {
