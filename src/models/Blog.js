@@ -17,10 +17,13 @@ const blogSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    required: [true, 'Please specify a category'],
+    default: 'Other',
     enum: ['Technology', 'AI', 'Programming', 'Science', 'Other']
   },
-  tags: [String],
+  tags: {
+    type: [String],
+    default: []
+  },
   likes: {
     type: Number,
     default: 0
@@ -29,9 +32,18 @@ const blogSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
+  comments: {
+    type: Number,
+    default: 0
+  },
   image: {
     type: String,
-    required: [true, 'Please provide an image URL']
+    default: '/assets/r-blog.svg'  // Default placeholder image
+  },
+  status: {
+    type: String,
+    enum: ['draft', 'published'],
+    default: 'published'
   },
   publishedAt: {
     type: Date,

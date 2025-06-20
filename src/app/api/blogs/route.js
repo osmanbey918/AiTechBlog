@@ -74,3 +74,32 @@ export async function GET() {
     );
   }
 }
+
+export async function POST(req) {
+  try {
+    const body = await req.json();
+    await connectDB();
+
+    const newBlog = new Blog({
+      title: body.title,
+      content: body.content,
+      author: body.author,
+      category: body.category || 'Other',
+      tags: body.tags || [],
+      image: body.image || '/assets/r-blog.svg',
+      status: body.status || 'published',
+      publishedAt: body.publishedAt || new Date(),
+    });
+
+    const savedBlog = await newBlog.save();
+
+    return new Response(JSON.stringify({ success: true, blog: savedBlog }), {
+      status: 201,
+    });
+  } catch (error) {
+    console.error('Error creating blog:', error);
+    return new Response(JSON.stringify({ success: false, error: error.message }), {
+      status: 500,
+    });
+  }
+}

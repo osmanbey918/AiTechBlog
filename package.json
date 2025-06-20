@@ -11,6 +11,11 @@
     "deploy": "gh-pages -d out --dotfiles"
   },
   "dependencies": {
+    "@tiptap/extension-highlight": "^2.22.0",
+    "@tiptap/extension-link": "^2.22.0",
+    "@tiptap/pm": "^2.22.0",
+    "@tiptap/react": "^2.22.0",
+    "@tiptap/starter-kit": "^2.22.0",
     "mongodb": "^6.17.0",
     "mongoose": "^8.15.2",
     "next": "15.3.3",
