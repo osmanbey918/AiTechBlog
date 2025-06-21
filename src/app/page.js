@@ -28,7 +28,7 @@ export default function Home() {
             <StatisticsSection />
           </div>
         </header>
-        <aside className="border flex-1 w-full pr-[6lvw] max-lg:pr-[4lvw] max-md:pr-10 max-sm:pr-[4lvw]">
+        <aside className="border border-neutral-800 flex-1 w-full pr-[6lvw] max-lg:pr-[4lvw] max-md:pr-10 max-sm:pr-[4lvw]">
           <SideSection />
         </aside>
       </main>

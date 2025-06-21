@@ -19,7 +19,7 @@ const SectionHeader = ({ badge, heading, buttonText }) => {
   );
 };
 
-const ViewAllButton = ({ text }) => {
+export const ViewAllButton = ({ text }) => {
   return (
     <button className="flex gap-1 items-center px-5 py-3.5 rounded-lg border bg-neutral-900 border-neutral-800 max-sm:justify-center max-sm:w-full">
       <span className="text-sm tracking-tight leading-5 text-neutral-400">{text}</span>
