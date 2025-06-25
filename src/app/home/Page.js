@@ -1,69 +1,45 @@
 "use client";
-import React from "react";
-function StatisticItem({ value, suffix, description }) {
+
+import BlogPostSection from "@/components/home/blogPost/BlogPostSection";
+import StatisticsSection from "@/components/home/StatisticsSection";
+import StatsSection from "@/components/home/StatsSection";
+import FutureTechSection from "@/components/home/techFeatureSection/FutureTechSection";
+import ItemsContainer from "@/components/home/testimonial/Testimonial";
+import SideSection from "@/components/SideSection";
+
+export default function page() {
   return (
-    <div className="flex relative flex-col flex-1 gap-2.5 items-start py-12 max-md:py-10 max-sm:py-8">
-      <div className="relative w-full text-4xl font-bold tracking-tighter text-yellow-400 leading-[60px] max-md:text-3xl max-sm:text-2xl max-sm:tracking-tighter">
-        <span className="text-white">{value}</span>
-        <span className="text-yellow-400">{suffix}</span>
-      </div>
-      <p className="relative w-full text-lg tracking-tight leading-7 text-neutral-400 max-md:text-base max-sm:text-sm max-sm:tracking-tight">
-        {description}
-      </p>
+    <div>
+      <main className="flex relative max-lg:flex-col  bg-black text-white min-h-[628px] items-stretch">
+        <header className="flex relative flex-2 flex-col gap-8 max-lg:max-w-full  pt-24 max-md:pt-20 max-sm:pt-16 items-start max-w-[60%]  max-sm:gap-5">
+          <p className="relative text-3xl tracking-tighter g-px leading-9 text-stone-500 max-md:text-2xl max-sm:text-xl max-sm:tracking-tight">
+            Your Journey to Tomorrow Begins Here
+          </p>
+          <div className="flex relative flex-col gap-5 items-start g-px w-full pb-6">
+            <h1 className="relative w-full text-[3.8rem] max-lg:text-6xl tracking-tighter text-white leading-[84px] max-md:text-5xl max-md:tracking-tighter max-sm:text-3xl max-sm:tracking-tighter">
+              Explore the Frontiers of Artificial Intelligence
+            </h1>
+            <p className="relative w-full text-lg tracking-tight leading-7 text-zinc-500 max-md:text-base max-sm:text-sm max-sm:tracking-tight">
+              Welcome to the epicenter of AI innovation. FutureTech AI News is your passport
+              to a world where machines think, learn, and reshape the future. Join us on this
+              visionary expedition into the heart of AI.
+            </p>
+          </div>
+          <div className="w-full">
+            <StatisticsSection />
+          </div>
+        </header>
+        <aside className="border border-neutral-800 flex-1 w-full pr-[6lvw] max-lg:pr-[4lvw] max-md:pr-10 max-sm:pr-[4lvw]">
+          <SideSection />
+        </aside>
+      </main>
+
+
+      <StatsSection />
+      <FutureTechSection />
+      <BlogPostSection />
+      <ItemsContainer />
+
     </div>
-  );
-}
-
-function StatisticsSection() {
-  const statistics = [
-    { value: "300", suffix: "+", description: "Resources available" },
-    { value: "12k", suffix: "+", description: "Total Downloads" },
-    { value: "10k", suffix: "+", description: "Active Users" }
-  ];
-
-  return (
-    <section className="flex relative gap-12 items-start pr-5 pl-40 w-full border border-neutral-800 max-md:gap-8 max-md:pl-20 max-sm:flex-col max-sm:gap-5 max-sm:px-5">
-      {statistics.map((stat, index) => (
-        <React.Fragment key={index}>
-          <StatisticItem
-            value={stat.value}
-            suffix={stat.suffix}
-            description={stat.description}
-          />
-          {index < statistics.length - 1 && (
-            <div className="relative w-px bg-neutral-800 h-[197px] max-md:h-[157px] max-sm:w-full max-sm:h-px" />
-          )}
-        </React.Fragment>
-      ))}
-    </section>
-  );
-}
-
-function HeroSection() {
-  return (
-    <header className="flex relative flex-col gap-8 items-start px-40 w-full max-md:px-20 max-sm:gap-5 max-sm:px-5">
-      <p className="relative text-3xl tracking-tighter leading-9 text-stone-500 max-md:text-2xl max-sm:text-xl max-sm:tracking-tight">
-        Your Journey to Tomorrow Begins Here
-      </p>
-      <div className="flex relative flex-col gap-5 items-start w-full">
-        <h1 className="relative w-full text-7xl tracking-tighter text-white leading-[84px] max-md:text-5xl max-md:tracking-tighter max-sm:text-3xl max-sm:tracking-tighter">
-          Explore the Frontiers of Artificial Intelligence
-        </h1>
-        <p className="relative w-full text-lg tracking-tight leading-7 text-zinc-500 max-md:text-base max-sm:text-sm max-sm:tracking-tight">
-          Welcome to the epicenter of AI innovation. FutureTech AI News is your passport
-          to a world where machines think, learn, and reshape the future. Join us on this
-          visionary expedition into the heart of AI.
-        </p>
-      </div>
-    </header>
-  );
-}
-
-export default function Home() {
-  return (
-    <main className="flex relative flex-col flex-1 gap-24 items-start pt-36 max-md:gap-16 max-md:pt-24 max-sm:gap-10 max-sm:pt-16 min-h-screen bg-black text-white">
-      {/* <HeroSection />
-      <StatisticsSection /> */}
-    </main>
   );
 }

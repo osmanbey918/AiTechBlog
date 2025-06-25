@@ -111,10 +111,10 @@ const ArticleContent = ({
         author={author}
       />
 
-      <ArticleStats
+      {/* <ArticleStats
         likes={likes}
         shares={shares}
-      />
+      /> */}
     </div>
   );
 };
