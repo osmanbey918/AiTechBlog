@@ -21,18 +21,18 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-
+  width: 4l;
 }
 
 .g-px {
-  @apply px-[6lvw] max-lg:px-[4lvw]  max-sm:px-[4lvw];
+  @apply max-xl:px-20 max-lg:px-16  max-sm:px-4 max-md:px-8 px-24;
 }
 
 .blog-content {
   position: relative;
   transition: max-height 0.5s ease-out;
   max-width: 80vw;
-
+ color: #0a0a0ac0;
 }
 
 .blog-content.collapsed {

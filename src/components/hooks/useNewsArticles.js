@@ -44,7 +44,7 @@ const useNewsArticles = (initialPageSize = 12) => {
       const skip = isLoadMore ? newsArticles.length : 0;
       const limit = isLoadMore ? 4 : initialPageSize;
 
-      const data = await debouncedFetch(`/api/news?skip=${skip}&limit=${limit}`);
+      const data = await fetch(`/api/news?skip=${skip}&limit=${limit}`);
 
       if (data.articles) {
         setNewsArticles(prev => isLoadMore ? [...prev, ...data.articles] : data.articles);

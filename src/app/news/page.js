@@ -6,16 +6,20 @@ import NewsHero from "@/components/news/NewsHero";
 import NewsSection from "@/components/news/NewsSection";
 import VideoSection from "@/components/news/VideoSection";
 import SectionHeader from "@/components/sectionHeader/SectionHeader";
+import { getNews } from "@/utils/getNews";
 
-export default function News() {
+export const revalidate = 3600; // Revalidate page every hour
+
+async function News() {
+    const { articles } = await getNews();
     return (
         <>
             <NewsHero />
-            <NewsSection />
+            <NewsSection articles={articles} />
             <SectionHeader badge={"Welcome to Our News Hub"} heading={"Discover the World of Headlines"} buttonText={"View All News"} />
             <BlogNav />
             <div className="p-6 bg-black min-h-screen text-white">
-                {blogData.map((data, i) => (
+                {blogData?.map((data, i) => (
                     <BlogPostCard key={i} {...data} />
                 ))}
             </div>
@@ -60,3 +64,5 @@ const blogData = [
         shares: "12",
     },
 ];
+
+export default News;

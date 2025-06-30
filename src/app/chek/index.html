@@ -1,0 +1,849 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Tech Blog - Latest News</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #e11d48;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --gray-light: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f1f5f9;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 0;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--primary);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--primary);
+        }
+
+        .search-bar {
+            display: flex;
+            align-items: center;
+            background-color: var(--gray-light);
+            border-radius: 50px;
+            padding: 0.5rem 1rem;
+            width: 300px;
+        }
+
+        .search-bar input {
+            border: none;
+            background: transparent;
+            width: 100%;
+            padding: 0.5rem;
+            outline: none;
+        }
+
+        .search-bar button {
+            background: transparent;
+            border: none;
+            cursor: pointer;
+            color: var(--gray);
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 4rem 0;
+            margin-bottom: 2rem;
+            border-radius: 0 0 20px 20px;
+        }
+
+        .hero-content {
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .hero p {
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.75rem 1.5rem;
+            background-color: white;
+            color: var(--primary);
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background-color: var(--secondary);
+            color: white;
+        }
+
+        /* Featured Section */
+        .section-title {
+            font-size: 1.75rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 60px;
+            height: 4px;
+            background-color: var(--primary);
+            border-radius: 2px;
+        }
+
+        .featured-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        /* Card Styles */
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Style 1: Featured Card (Large) */
+        .card-featured {
+            grid-column: span 2;
+        }
+
+        .card-featured .card-img {
+            height: 250px;
+        }
+
+        .card-featured .card-body {
+            padding: 1.5rem;
+        }
+
+        .card-featured .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+
+        .card-featured .card-text {
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .card-featured .card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--gray-light);
+        }
+
+        .card-author {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .author-avatar {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .author-name {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .post-date {
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        /* Style 2: Regular Card */
+        .card-regular .card-img {
+            height: 180px;
+        }
+
+        .card-regular .card-body {
+            padding: 1.25rem;
+        }
+
+        .card-regular .card-title {
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-regular .card-text {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 1rem;
+        }
+
+        .card-regular .card-footer {
+            padding-top: 0.75rem;
+            border-top: 1px solid var(--gray-light);
+            font-size: 0.8rem;
+            color: var(--gray);
+        }
+
+        .card-img {
+            width: 100%;
+            object-fit: cover;
+        }
+
+        .category-tag {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+        }
+
+        .category-tag.ai {
+            background-color: #10b981;
+        }
+
+        .category-tag.tech {
+            background-color: #3b82f6;
+        }
+
+        .category-tag.security {
+            background-color: #ef4444;
+        }
+
+        .category-tag.web {
+            background-color: #8b5cf6;
+        }
+
+        /* Trending Section */
+        .trending-section {
+            margin-bottom: 3rem;
+        }
+
+        .trending-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1.5rem;
+        }
+
+        /* Style 3: Trending Card (Small) */
+        .card-trending {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .card-trending .card-img {
+            height: 120px;
+            border-radius: 10px 10px 0 0;
+        }
+
+        .card-trending .card-body {
+            padding: 1rem;
+            flex-grow: 1;
+        }
+
+        .card-trending .card-title {
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-trending .card-footer {
+            font-size: 0.7rem;
+            color: var(--gray);
+        }
+
+        /* Categories Section */
+        .categories-section {
+            margin-bottom: 3rem;
+        }
+
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        /* Style 4: Category Card */
+        .card-category {
+            position: relative;
+            height: 200px;
+            display: flex;
+            align-items: flex-end;
+            padding: 1.5rem;
+            color: white;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .card-category::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            z-index: 1;
+        }
+
+        .card-category img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 0;
+        }
+
+        .card-category .card-body {
+            position: relative;
+            z-index: 2;
+        }
+
+        .card-category .card-title {
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-category .card-text {
+            font-size: 0.9rem;
+            opacity: 0.9;
+        }
+
+        /* Newsletter */
+        .newsletter {
+            background-color: white;
+            padding: 3rem;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 3rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .newsletter h2 {
+            margin-bottom: 1rem;
+        }
+
+        .newsletter p {
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            color: var(--gray);
+        }
+
+        .newsletter-form {
+            display: flex;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .newsletter-form input {
+            flex-grow: 1;
+            padding: 0.75rem 1rem;
+            border: 1px solid var(--gray-light);
+            border-radius: 50px 0 0 50px;
+            outline: none;
+        }
+
+        .newsletter-form button {
+            padding: 0.75rem 1.5rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0 50px 50px 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .newsletter-form button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 3rem 0;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+        }
+
+        .footer-col h3 {
+            font-size: 1.2rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+            padding-bottom: 0.5rem;
+        }
+
+        .footer-col h3::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background-color: var(--primary);
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-col ul li a {
+            color: var(--gray-light);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .footer-col ul li a:hover {
+            color: white;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            color: white;
+            transition: background-color 0.3s;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 2rem;
+            margin-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--gray-light);
+            font-size: 0.9rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .featured-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .card-featured {
+                grid-column: span 1;
+            }
+
+            .trending-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .categories-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .footer-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar {
+                flex-direction: column;
+                gap: 1rem;
+                padding: 1rem 0;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .search-bar {
+                width: 100%;
+                margin-top: 1rem;
+            }
+
+            .trending-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .newsletter-form {
+                flex-direction: column;
+            }
+
+            .newsletter-form input {
+                border-radius: 50px;
+                margin-bottom: 0.5rem;
+            }
+
+            .newsletter-form button {
+                border-radius: 50px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <nav class="navbar">
+                <a href="#" class="logo">AI Tech Blog</a>
+                <div class="nav-links">
+                    <a href="#">Home</a>
+                    <a href="#">AI</a>
+                    <a href="#">Technology</a>
+                    <a href="#">Security</a>
+                    <a href="#">Web Dev</a>
+                    <a href="#">Reviews</a>
+                </div>
+                <div class="search-bar">
+                    <input type="text" placeholder="Search articles...">
+                    <button><i class="fas fa-search"></i></button>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>Stay Updated with the Latest in AI & Technology</h1>
+                <p>Discover cutting-edge research, tutorials, and industry news from experts in artificial intelligence,
+                    cybersecurity, and web development.</p>
+                <a href="#" class="btn btn-primary">Explore Articles</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Section -->
+    <section class="container">
+        <h2 class="section-title">Featured Articles</h2>
+        <div class="featured-grid">
+            <!-- Featured Card (Style 1) -->
+            <article class="card card-featured">
+                <img src="https://source.unsplash.com/random/800x400/?ai,technology" alt="Featured Article"
+                    class="card-img">
+                <div class="card-body">
+                    <span class="category-tag ai">Artificial Intelligence</span>
+                    <h3 class="card-title">How GPT-4 is Revolutionizing Content Creation</h3>
+                    <p class="card-text">Explore the capabilities of OpenAI's latest model and how it's transforming
+                        industries from marketing to education with its advanced natural language processing.</p>
+                    <div class="card-footer">
+                        <div class="card-author">
+                            <img src="https://randomuser.me/api/portraits/women/43.jpg" alt="Author"
+                                class="author-avatar">
+                            <span class="author-name">Sarah Johnson</span>
+                        </div>
+                        <span class="post-date">May 15, 2023 · 8 min read</span>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Regular Card (Style 2) -->
+            <article class="card card-regular">
+                <img src="https://source.unsplash.com/random/600x400/?cybersecurity" alt="Article" class="card-img">
+                <div class="card-body">
+                    <span class="category-tag security">Cybersecurity</span>
+                    <h3 class="card-title">Zero-Day Vulnerabilities: What Developers Need to Know</h3>
+                    <p class="card-text">Understanding the risks and mitigation strategies for undisclosed software
+                        vulnerabilities that hackers exploit.</p>
+                    <div class="card-footer">
+                        <span>June 2, 2023 · 5 min read</span>
+                    </div>
+                </div>
+            </article>
+            <article class="card card-regular">
+                <img src="https://source.unsplash.com/random/600x400/?cybersecurity" alt="Article" class="card-img">
+                <div class="card-body">
+                    <span class="category-tag security">Cybersecurity</span>
+                    <h3 class="card-title">Zero-Day Vulnerabilities: What Developers Need to Know</h3>
+                    <p class="card-text">Understanding the risks and mitigation strategies for undisclosed software
+                        vulnerabilities that hackers exploit.</p>
+                    <div class="card-footer">
+                        <span>June 2, 2023 · 5 min read</span>
+                    </div>
+                </div>
+            </article>
+            <article class="card card-regular">
+                <img src="https://source.unsplash.com/random/600x400/?cybersecurity" alt="Article" class="card-img">
+                <div class="card-body">
+                    <span class="category-tag security">Cybersecurity</span>
+                    <h3 class="card-title">Zero-Day Vulnerabilities: What Developers Need to Know</h3>
+                    <p class="card-text">Understanding the risks and mitigation strategies for undisclosed software
+                        vulnerabilities that hackers exploit.</p>
+                    <div class="card-footer">
+                        <span>June 2, 2023 · 5 min read</span>
+                    </div>
+                </div>
+            </article>
+            <!-- Regular Card (Style 2) -->
+            <article class="card card-regular">
+                <img src="https://source.unsplash.com/random/600x400/?webdevelopment" alt="Article" class="card-img">
+                <div class="card-body">
+                    <span class="category-tag web">Web Development</span>
+                    <h3 class="card-title">The Future of React: Server Components Explained</h3>
+                    <p class="card-text">How React Server Components will change the way we build modern web
+                        applications with improved performance and SEO.</p>
+                    <div class="card-footer">
+                        <span>May 28, 2023 · 6 min read</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Trending Section -->
+    <section class="container trending-section">
+        <h2 class="section-title">Trending Now</h2>
+        <div class="trending-grid">
+            <!-- Trending Card (Style 3) -->
+            <article class="card card-trending">
+                <img src="https://source.unsplash.com/random/400x300/?blockchain" alt="Trending Article"
+                    class="card-img">
+                <div class="card-body">
+                    <span class="category-tag tech">Blockchain</span>
+                    <h3 class="card-title">Ethereum's Shanghai Upgrade: Key Changes</h3>
+                    <div class="card-footer">
+                        <span>June 10, 2023</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card card-trending">
+                <img src="https://source.unsplash.com/random/400x300/?machinelearning" alt="Trending Article"
+                    class="card-img">
+                <div class="card-body">
+                    <span class="category-tag ai">Machine Learning</span>
+                    <h3 class="card-title">TensorFlow 2.12 Release Highlights</h3>
+                    <div class="card-footer">
+                        <span>June 8, 2023</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card card-trending">
+                <img src="https://source.unsplash.com/random/400x300/?cloudcomputing" alt="Trending Article"
+                    class="card-img">
+                <div class="card-body">
+                    <span class="category-tag tech">Cloud</span>
+                    <h3 class="card-title">AWS vs Azure: 2023 Performance Comparison</h3>
+                    <div class="card-footer">
+                        <span>June 5, 2023</span>
+                    </div>
+                </div>
+            </article>
+
+            <article class="card card-trending">
+                <img src="https://source.unsplash.com/random/400x300/?programming" alt="Trending Article"
+                    class="card-img">
+                <div class="card-body">
+                    <span class="category-tag web">Programming</span>
+                    <h3 class="card-title">Rust vs Go: Which Should You Learn in 2023?</h3>
+                    <div class="card-footer">
+                        <span>June 3, 2023</span>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="container categories-section">
+        <h2 class="section-title">Browse Categories</h2>
+        <div class="categories-grid">
+            <!-- Category Card (Style 4) -->
+            <article class="card-category">
+                <img src="https://source.unsplash.com/random/600x400/?ai" alt="AI Category">
+                <div class="card-body">
+                    <h3 class="card-title">Artificial Intelligence</h3>
+                    <p class="card-text">120+ Articles</p>
+                </div>
+            </article>
+
+            <article class="card-category">
+                <img src="https://source.unsplash.com/random/600x400/?programming" alt="Web Dev Category">
+                <div class="card-body">
+                    <h3 class="card-title">Web Development</h3>
+                    <p class="card-text">85+ Articles</p>
+                </div>
+            </article>
+
+            <article class="card-category">
+                <img src="https://source.unsplash.com/random/600x400/?security" alt="Security Category">
+                <div class="card-body">
+                    <h3 class="card-title">Cybersecurity</h3>
+                    <p class="card-text">64+ Articles</p>
+                </div>
+            </article>
+        </div>
+    </section>
+
+    <!-- Newsletter -->
+    <section class="container">
+        <div class="newsletter">
+            <h2>Subscribe to Our Newsletter</h2>
+            <p>Get the latest tech news, tutorials, and exclusive content delivered straight to your inbox every week.
+            </p>
+            <form class="newsletter-form">
+                <input type="email" placeholder="Your email address">
+                <button type="submit">Subscribe</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col">
+                    <h3>AI Tech Blog</h3>
+                    <p>Your trusted source for the latest in artificial intelligence, technology trends, and web
+                        development insights.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#"><i class="fab fa-github"></i></a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h3>Categories</h3>
+                    <ul>
+                        <li><a href="#">Artificial Intelligence</a></li>
+                        <li><a href="#">Machine Learning</a></li>
+                        <li><a href="#">Web Development</a></li>
+                        <li><a href="#">Cybersecurity</a></li>
+                        <li><a href="#">Cloud Computing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About Us</a></li>
+                        <li><a href="#">Our Team</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                        <li><a href="#">Advertise</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Terms of Service</a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                        <li><a href="#">Cookie Policy</a></li>
+                        <li><a href="#">GDPR</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 AI Tech Blog. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>
