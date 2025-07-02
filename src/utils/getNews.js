@@ -9,7 +9,7 @@ export async function getNews(skip = 0, limit = 12) {
       articles: [],
       hasMore: false,
     };
-  }
+  } 
 
   try {
     const res = await fetch(`${baseUrl}/api/news?skip=${skip}&limit=${limit}`, {
