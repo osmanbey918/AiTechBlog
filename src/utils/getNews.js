@@ -12,7 +12,8 @@ export async function getNews(skip = 0, limit = 12) {
 
         const data = await res.json();
         const articles = Array.isArray(data.articles) ? data.articles : [];
-
+        console.log(articles);
+        
         return {
             articles,
             hasMore: articles.length === limit, // Optional: improves paging logic
@@ -21,7 +22,7 @@ export async function getNews(skip = 0, limit = 12) {
     } catch (error) {
         console.error('Error in getNews:', error);
         return {
-            articles: [],
+            articles: [], 
             hasMore: false,
         };
     }

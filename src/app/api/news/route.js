@@ -65,7 +65,8 @@ async function fetchFromNewsAPI(limit) {
     if (articles.length > 0) {
         await News.insertMany(articles);
     }
-
+    console.log(articles);
+    
     return articles;
 }
 
