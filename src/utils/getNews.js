@@ -1,29 +1,36 @@
 // utils/getNews.ts
 
 export async function getNews(skip = 0, limit = 12) {
-    const baseUrl = process.env.APP_URL || 'http://localhost:3000';
+  const baseUrl = process.env.APP_URL;
 
-    try {
-        const res = await fetch(`${baseUrl}/api/news?skip=${skip}&limit=${limit}`, {
-            next: { revalidate: 3600 }, // 1 hour caching (ISR)
-        });
+  if (!baseUrl) {
+    console.warn('⚠️ APP_URL not defined. Set it in .env or Vercel settings');
+    return {
+      articles: [],
+      hasMore: false,
+    };
+  }
 
-        if (!res.ok) throw new Error('Failed to fetch news');
+  try {
+    const res = await fetch(`${baseUrl}/api/news?skip=${skip}&limit=${limit}`, {
+      next: { revalidate: 3600 }, // 1 hour ISR cache
+    });
 
-        const data = await res.json();
-        const articles = Array.isArray(data.articles) ? data.articles : [];
-        console.log(articles);
-        
-        return {
-            articles,
-            hasMore: articles.length === limit, // Optional: improves paging logic
-        };
+    if (!res.ok) throw new Error(`Failed to fetch news: ${res.status}`);
 
-    } catch (error) {
-        console.error('Error in getNews:', error);
-        return {
-            articles: [], 
-            hasMore: false,
-        };
-    }
+    const data = await res.json();
+    const articles = Array.isArray(data.articles) ? data.articles : [];
+
+    return {
+      articles,
+      hasMore: articles.length === limit,
+    };
+
+  } catch (error) {
+    console.error('❌ Error in getNews:', error);
+    return {
+      articles: [],
+      hasMore: false,
+    };
+  }
 }
