@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import NewsCard, { NewsSecondCard } from './NewsCard';
 import NewsHead from './NewsHead';
-import { Articlesss } from '@/app/chek/page';
+import Articlesss from '@/app/chek/page';
 import { getNews } from '@/utils/getNews';
 
 const NewsSection = async () => {
@@ -48,7 +48,7 @@ const NewsSection = async () => {
               return <NewsSecondCard key={article.id || index} {...article} />;
             }
             if (index === 2) {
-              return <Articlesss />;
+              return <Articlesss key="popular-articles" />;
             }
             return <NewsCard key={article.id || index} {...article} />;
           })}

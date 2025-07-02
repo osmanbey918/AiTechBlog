@@ -1,5 +1,5 @@
 "use client";
-import { NewsCard } from '@/components/news/NewsSection';
+import NewsCard from '@/components/news/NewsCard';
 import Image from 'next/image';
 import React from 'react';
 

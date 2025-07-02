@@ -54,6 +54,7 @@ const NewsCard = ({
   );
 };
 
+export default NewsCard;
 export const NewsSecondCard = ({
   image,
   title,
@@ -109,4 +110,3 @@ export const NewsSecondCard = ({
 
   );
 };
-export default NewsCard;
