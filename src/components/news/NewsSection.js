@@ -4,7 +4,7 @@ import NewsHead from './NewsHead';
 import Articlesss from '@/app/chek/page';
 
 const NewsSection = async () => {
-  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/news`, {
+  const res = await fetch(`${process.env.APP_URL}/api/news`, {
     cache: "no-store",
   });
   const data = await res.json();
