@@ -1,4 +1,5 @@
-import ConnectSection from "@/components/footer/ConnectSection";
+// src/app/news/page.js
+
 import BlogNav from "@/components/home/blogPost/BlogNav";
 import BlogPostCard from "@/components/home/blogPost/BlogPostCard";
 import NewsHead from "@/components/news/NewsHead";
@@ -6,29 +7,44 @@ import NewsHero from "@/components/news/NewsHero";
 import NewsSection from "@/components/news/NewsSection";
 import VideoSection from "@/components/news/VideoSection";
 import SectionHeader from "@/components/sectionHeader/SectionHeader";
-import { getNews } from "@/utils/getNews";
+import { connectMongoDB } from "@/lib/mongodb";
+// import { blogData } from "@/data/blogData"; // assuming blogData is imported
 
-export const revalidate = 3600; // Revalidate page every hour
+export default async function page() {
+    // Fetch news articles directly inside the server component
+    const db = await connectMongoDB();
+    const articles = await db.collection("news").find().toArray();
 
-async function News() {
-    const { articles } = await getNews();
+    const newsArticles = articles.map((article) => ({
+        ...article,
+        _id: article._id.toString(),
+    }));
+
     return (
         <>
             <NewsHero />
-            <NewsSection articles={articles} />
-            <SectionHeader badge={"Welcome to Our News Hub"} heading={"Discover the World of Headlines"} buttonText={"View All News"} />
+            <NewsSection newsArticles={newsArticles} />
+            <SectionHeader
+                badge="Welcome to Our News Hub"
+                heading="Discover the World of Headlines"
+                buttonText="View All News"
+            />
             <BlogNav />
             <div className="p-6 bg-black min-h-screen text-white">
-                {blogData?.map((data, i) => (
+                {blogData.map((data, i) => (
                     <BlogPostCard key={i} {...data} />
                 ))}
             </div>
-            <SectionHeader badge={"Featured Videos"} heading={"Visual Insights for the Modern Viewer"} buttonText={"View All"} />
+            <SectionHeader
+                badge="Featured Videos"
+                heading="Visual Insights for the Modern Viewer"
+                buttonText="View All"
+            />
             <VideoSection />
-
         </>
     );
 }
+
 const blogData = [
     {
         authorImage: "https://randomuser.me/api/portraits/men/1.jpg",
@@ -65,4 +81,4 @@ const blogData = [
     },
 ];
 
-export default News;
+

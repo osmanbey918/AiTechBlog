@@ -1,28 +1,25 @@
-'use client';
-import React, { useState } from 'react';
 import Image from 'next/image';
 
 const NewsCard = ({
-  image,
   title,
   category,
   description,
   publishedAt,
   url,
+  urlToImage,
   altText = "News Image"
 }) => {
-  const [imgSrc, setImgSrc] = useState(image);
+  if (!urlToImage || urlToImage.trim() === "") return null;
 
   return (
-    <article className="flex flex-col col-span-1 mx-auto max-w-[430px] bg-neutral-950 rounded-sm overflow-hidden shadow-md hover:shadow-xl transition duration-300 ">
+    <article className="flex flex-col col-span-1 mx-auto max-w-[430px] bg-neutral-950 rounded-sm overflow-hidden shadow-md hover:shadow-xl transition duration-300">
       <div className="relative aspect-video">
         <a href={url} rel="noopener noreferrer" target="_blank">
           <Image
-            src={imgSrc}
+            src={urlToImage}
             alt={altText}
             fill
             className="object-cover transition-transform duration-500 hover:scale-105"
-            onError={() => setImgSrc('/assets/news.svg')}
             sizes="(max-width: 768px) 100vw, 33vw"
           />
         </a>
@@ -38,7 +35,7 @@ const NewsCard = ({
             }).format(new Date(publishedAt))}
           </span>
         </div>
-        <header className="flex flex-col gap-1 ">
+        <header className="flex flex-col gap-1">
           <a
             href={url}
             target="_blank"
@@ -55,6 +52,8 @@ const NewsCard = ({
 };
 
 export default NewsCard;
+
+
 export const NewsSecondCard = ({
   image,
   title,
@@ -62,19 +61,21 @@ export const NewsSecondCard = ({
   description,
   publishedAt,
   url,
+  urlToImage,
+
   altText = "News Image"
 }) => {
-  const [imgSrc, setImgSrc] = useState(image);
+  if (!urlToImage || urlToImage.trim() === "") return null;
+
 
   return (
-    <article className="flex flex-col col-span-1 sm:col-span-2 lg:col-span-2 bg-neutral-950 rounded-sm overflow-hidden shadow-md hover:shadow-xl transition duration-300">
+    <article className="flex flex-col col-span-1 sm:col-span-2 lg:col-span-2 max-sm:max-w-[430px mx-auto bg-neutral-950 rounded-sm overflow-hidden shadow-md hover:shadow-xl transition duration-300">
       <div className="relative aspect-video">
         <a href={url} rel="noopener noreferrer" target="_blank">
           <Image
-            src={imgSrc}
+            src={urlToImage}
             alt={altText}
             fill
-            onError={() => setImgSrc('/assets/news.svg')}
             sizes="(max-width: 768px) 100vw, 33vw"
             className="object-cover transition-transform duration-500 hover:scale-105"
           />
