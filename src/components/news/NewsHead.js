@@ -47,7 +47,7 @@ const ArticleContent = ({ title, description, category, date, author }) => (
 export const NewsHead = ({ articles }) => {
   // ✅ Always filter and slice first
   const valid = articles
-    .filter((a) => typeof a.urlToImage === "string" && a.urlToImage.trim() !== "")
+    .filter((a) => typeof a.image === "string" && a.image.trim() !== "")
     .slice(0, 4);
 
   // ✅ Always declare hooks BEFORE any return or condition
@@ -81,7 +81,7 @@ export const NewsHead = ({ articles }) => {
         }`}
       >
         <ArticleImage
-          src={currentArticle.urlToImage}
+          src={currentArticle.image}
           alt={currentArticle.title}
           className="hover:scale-105"
         />

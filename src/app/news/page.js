@@ -12,18 +12,18 @@ import { connectMongoDB } from "@/lib/mongodb";
 
 export default async function page() {
     // Fetch news articles directly inside the server component
-    const db = await connectMongoDB();
-    const articles = await db.collection("news").find().toArray();
+    // const db = await connectMongoDB();
+    // const articles = await db.collection("news").find().toArray();
 
-    const newsArticles = articles.map((article) => ({
-        ...article,
-        _id: article._id.toString(),
-    }));
+    // const newsArticles = articles.map((article) => ({
+    //     ...article,
+    //     _id: article._id.toString(),
+    // }));
 
     return (
         <>
             <NewsHero />
-            <NewsSection newsArticles={newsArticles} />
+            <NewsSection  />
             <SectionHeader
                 badge="Welcome to Our News Hub"
                 heading="Discover the World of Headlines"

@@ -6,17 +6,17 @@ const NewsCard = ({
   description,
   publishedAt,
   url,
-  urlToImage,
+  image,
   altText = "News Image"
 }) => {
-  if (!urlToImage || urlToImage.trim() === "") return null;
+  if (!image || image.trim() === "") return null;
 
   return (
     <article className="flex flex-col col-span-1 mx-auto max-w-[430px] bg-neutral-950 rounded-sm overflow-hidden shadow-md hover:shadow-xl transition duration-300">
       <div className="relative aspect-video">
         <a href={url} rel="noopener noreferrer" target="_blank">
           <Image
-            src={urlToImage}
+            src={image}
             alt={altText}
             fill
             className="object-cover transition-transform duration-500 hover:scale-105"
@@ -55,17 +55,17 @@ export default NewsCard;
 
 
 export const NewsSecondCard = ({
-  image,
+ 
   title,
   category,
   description,
   publishedAt,
   url,
-  urlToImage,
+  image,
 
   altText = "News Image"
 }) => {
-  if (!urlToImage || urlToImage.trim() === "") return null;
+  if (!image || image.trim() === "") return null;
 
 
   return (
@@ -73,7 +73,7 @@ export const NewsSecondCard = ({
       <div className="relative aspect-video">
         <a href={url} rel="noopener noreferrer" target="_blank">
           <Image
-            src={urlToImage}
+            src={image}
             alt={altText}
             fill
             sizes="(max-width: 768px) 100vw, 33vw"

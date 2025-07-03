@@ -3,24 +3,28 @@ import NewsCard, { NewsSecondCard } from './NewsCard';
 import NewsHead from './NewsHead';
 import Articlesss from '@/app/chek/page';
 
-const NewsSection = ({newsArticles}) => {
+const NewsSection = async () => {
+  const res = await fetch(`${process.env.NEXT_PUBLIC_APP_URL}/api/news`, {
+    cache: "no-store",
+  });
+  const data = await res.json();
+  const articles = data.articles
+  console.log(articles);
+  // const carouselArticles = articles.slice(0, 12);
+  // const gridArticles = articles.slice(18);
 
-  const carouselArticles = newsArticles.slice(0, 12);
-  const gridArticles = newsArticles.slice(18);
-  console.log(carouselArticles.length);
-  
 
   return (
     <>
-      <NewsHead articles={carouselArticles} />
+      <NewsHead articles={articles} />
       <h2 className="flex mt-20 w-full border-b font-bold text-6xl border-neutral-800 g-px">
         Trending
         <Image src="/assets/trending-up-fill.svg" width={80} height={80} alt="arrow" />
       </h2>
 
       <section className="w-full container mx-auto py-8 border-t border-neutral-800 sm:py-12 md:py-16">
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-fr max-lg:px-8 max-md:px-0">
-          {gridArticles.map((article, index) => {
+        <div className="grid grid-cols-1 grid-rows-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 auto-rows-fr max-lg:px-8 max-md:px-0">
+          {articles.map((article, index) => {
             if (index === 0) {
               return <NewsSecondCard key={article.id || index} {...article} />;
             }
