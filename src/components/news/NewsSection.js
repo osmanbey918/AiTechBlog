@@ -5,7 +5,7 @@ import Articlesss from '@/app/chek/page';
 
 const NewsSection = async () => {
   const res = await fetch(`${process.env.APP_URL}/api/news`, {
-    cache: "no-store",
+    next: { revalidate: 3600 },
   });
   const data = await res.json();
   const articles = data.articles
@@ -16,10 +16,10 @@ const NewsSection = async () => {
 
   return (
     <>
-      {/* <NewsHead articles={articles} /> */}
+      {/* <NewsHead /> */}
       <h2 className="flex mt-20 w-full border-b font-bold text-6xl max-sm:text-4xl border-neutral-800 g-px">
         Trending
-        <Image src="/assets/trending-up-fill.svg" width={80} height={80} alt="arrow" className='max-sm:w-[50px] max-sm:h-[50px]'/>
+        <Image src="/assets/trending-up-fill.svg" width={80} height={80} alt="arrow" className='max-sm:w-[50px] max-sm:h-[50px]' />
       </h2>
 
       <section className="w-full container mx-auto py-8 border-t border-neutral-800 sm:py-12 md:py-16">

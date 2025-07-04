@@ -1,4 +1,4 @@
-const YOUTUBE_API_KEY = process.env.YOUTUBE_API_KEY;
+const YOUTUBE_API_KEY = process.env.NEXT_PUBLIC_YOUTUBE_API_KEY;
 const YOUTUBE_API_BASE_URL = 'https://www.googleapis.com/youtube/v3';
 
 export const fetchVideos = async ({ maxResults = 3, query = 'technology AI news', pageToken = '' }) => {
