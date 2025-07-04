@@ -10,6 +10,7 @@ const NewsCard = ({
   altText = "News Image"
 }) => {
   if (!image || image.trim() === "") return null;
+  console.log(" i am rerendering");
 
   return (
     <article className="flex flex-col col-span-1 mx-auto max-w-[430px] bg-neutral-950 rounded-sm overflow-hidden shadow-md hover:shadow-xl transition duration-300">
@@ -66,6 +67,7 @@ export const NewsSecondCard = ({
   altText = "News Image"
 }) => {
   if (!image || image.trim() === "") return null;
+  console.log(" i am rerendering");
 
 
   return (

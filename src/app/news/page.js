@@ -7,18 +7,9 @@ import NewsHero from "@/components/news/NewsHero";
 import NewsSection from "@/components/news/NewsSection";
 import VideoSection from "@/components/news/VideoSection";
 import SectionHeader from "@/components/sectionHeader/SectionHeader";
-import { connectMongoDB } from "@/lib/mongodb";
-// import { blogData } from "@/data/blogData"; // assuming blogData is imported
 
 export default async function page() {
-    // Fetch news articles directly inside the server component
-    // const db = await connectMongoDB();
-    // const articles = await db.collection("news").find().toArray();
-
-    // const newsArticles = articles.map((article) => ({
-    //     ...article,
-    //     _id: article._id.toString(),
-    // }));
+  console.log(" i am rerendering");
 
     return (
         <>
