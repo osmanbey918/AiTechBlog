@@ -1,7 +1,6 @@
 import Image from 'next/image';
 import NewsCard, { NewsSecondCard } from './NewsCard';
-import NewsHead from './NewsHead';
-import Articlesss from '@/app/chek/page';
+import Articlesss from '../Articlesss';
 
 const NewsSection = async () => {
   const res = await fetch(`${process.env.APP_URL}/api/news`, {

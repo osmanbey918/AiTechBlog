@@ -12,7 +12,7 @@ const parser = new Parser({
 
 const feedUrls = [
   'https://techcrunch.com/feed/',
-//   'https://www.theverge.com/rss/index.xml',
+  // 'https://www.theverge.com/rss/index.xml',
   'https://www.wired.com/feed/rss',
 //   'http://feeds.arstechnica.com/arstechnica/index',
 //   'https://hnrss.org/frontpage'

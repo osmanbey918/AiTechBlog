@@ -48,14 +48,19 @@ function getAvatarFromName(name) {
 function BlogContent({ date, title, description }) {
     return (
         <div className="flex flex-col flex-1 gap-6 items-start max-sm:gap-4 max-sm:w-full">
-            <time className="w-full text-lg font-bold tracking-tight leading-7 text-neutral-400 max-sm:text-base max-sm:tracking-tight">
-                {date}
+            <time className="text-sm font-medium text-neutral-400">
+                {new Date(date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                })}
             </time>
-            <div className="flex flex-col gap-1.5 items-start w-full">
-                <h2 className="w-full text-2xl font-bold tracking-tighter leading-8 text-white max-sm:text-lg max-sm:tracking-tight">
+
+            <div className="flex flex-col gap-1.5 items-start w-full ">
+                <h2 className="w-full text-2xl font-bold tracking-tighter line-clamp-3 leading-8 text-white max-sm:text-lg max-sm:tracking-tight">
                     {title}
                 </h2>
-                <p className="w-full text-base tracking-tight leading-6 text-neutral-400 max-sm:text-sm max-sm:tracking-tight">
+                <p className="w-full text-base tracking-tight leading-6 line-clamp-1 text-neutral-400 max-sm:text-sm max-sm:tracking-tight">
                     {description}
                 </p>
             </div>
@@ -80,7 +85,7 @@ function BlogMetrics({ likes, comments, shares }) {
                     key={index}
                     className="flex gap-0.5 justify-center items-center px-3 py-1.5 border bg-zinc-900 border-neutral-800 rounded-[100px]"
                 >
-                    <Image src={metric.icon} height={20} width={20} alt='"icon' />
+                    <Image src={metric.icon} height={12} width={12} alt='"icon' />
                     <span className="text-sm tracking-tight leading-5 text-neutral-400">{metric.count}</span>
                 </div>
             ))}
@@ -128,12 +133,12 @@ function BlogPostCard({
                     <BlogMetrics likes={10} comments={25} shares={55} />
                 </div>
 
-                {onViewBlog && < ViewBlogButton link={onViewBlog} />}
+                {/* {onViewBlog && < ViewBlogButton link={onViewBlog} />} */}
                 {onViewBlog && <button
                     className="flex gap-1 items-center px-5 py-3.5 rounded-lg border bg-neutral-900 border-neutral-800 max-sm:justify-center max-sm:w-full"
                     onClick={id} target='_blank'  >
                     <span className="text-sm tracking-tight leading-5 text-neutral-400 whitespace-nowrap">View Blog</span>
-                    <Image src={"/assets/arrow-up-right.svg"} width={18} height={18} alt='icon' />
+                    <Image src={"/assets/arrow-up-right.svg"} width={12} height={12} alt='icon' />
                 </button>}
             </div>
         </article>

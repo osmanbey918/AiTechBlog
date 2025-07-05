@@ -7,7 +7,7 @@ import FutureTechSection from "@/components/home/techFeatureSection/FutureTechSe
 import ItemsContainer from "@/components/home/testimonial/Testimonial";
 import SideSection from "@/components/SideSection";
 
-export default function page() {
+export default function Page() {
   return (
     <div>
       <main className="flex relative max-lg:flex-col  bg-black text-white min-h-[628px] items-stretch">

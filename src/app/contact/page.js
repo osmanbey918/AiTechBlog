@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from 'react';
+import React, { useState,useEffect,useRef } from 'react';
 
 // ContactButton Component
 const ContactButton = ({ children, onClick, className = "" }) => {
@@ -34,7 +34,7 @@ const ContactSection = ({ title, items = [], children }) => {
           {title}
         </h2>
       </header>
-      
+
       {items.length > 0 && (
         <div className="flex flex-col items-start gap-2.5 self-stretch">
           {items.map((item, index) => (
@@ -47,7 +47,7 @@ const ContactSection = ({ title, items = [], children }) => {
           ))}
         </div>
       )}
-      
+
       {children}
     </section>
   );
@@ -75,6 +75,17 @@ const ContactForm = () => {
     e.preventDefault();
     console.log('Form submitted:', formData);
   };
+  const [message, setMessage] = useState('');
+  const maxChars = 500;
+  const textareaRef = useRef(null);
+
+  // Auto expand function
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
+    }
+  }, [message]);
 
   return (
     <section className="flex flex-col items-start gap-[30px] flex-[1_0_0] self-stretch border-l-neutral-800 pl-[60px] pr-0 py-[60px] border-l border-solid max-md:border-t-neutral-800 max-md:px-0 max-md:py-10 max-md:border-l-[none] max-md:border-t max-md:border-solid max-sm:px-0 max-sm:py-[30px]">
@@ -146,14 +157,22 @@ const ContactForm = () => {
           <label htmlFor="message" className="self-stretch text-white text-base font-medium leading-6">
             Message
           </label>
-          <textarea
-            id="message"
-            value={formData.message}
-            onChange={(e) => handleInputChange('message', e.target.value)}
-            placeholder="Enter your Message"
-            className="flex-[1_0_0] text-[#666] text-sm font-normal leading-[21px] h-[163px] self-stretch border border-neutral-800 bg-[#1A1A1A] p-4 rounded-md border-solid resize-none focus:outline-none focus:ring-2 focus:ring-[#FFD11A] focus:border-transparent"
-          />
-        </div>
+          {/* <div className="w-full max-w-lg mx-auto"> */}
+            <textarea
+              id="message"
+              ref={textareaRef}
+              value={message}
+              maxLength={maxChars}
+              onChange={(e) => setMessage(e.target.value)}
+              placeholder="Enter your message..."
+              className="w-full text-[#e0e0e0] text-sm font-normal leading-[21px] min-h-[100px] self-stretch border border-neutral-800 bg-[#1A1A1A] p-4 rounded-md border-solid resize-none 
+        focus:outline-none focus:ring-2 focus:ring-[#FFD11A] focus:border-transparent transition-all duration-300"
+            />
+            <div className="text-right text-sm text-neutral-500 mt-1">
+              {message.length}/{maxChars} characters
+            </div>
+          </div>
+        {/* </div> */}
 
         <div className="flex items-center gap-[70px] self-stretch max-sm:flex-col max-sm:gap-5 max-sm:items-start">
           <div className="flex items-center gap-1.5 flex-[1_0_0] max-sm:flex-col max-sm:items-start max-sm:gap-2.5">
@@ -290,9 +309,9 @@ const ContactPage = () => {
             }
           ]}
         />
-        
+
         <div className="w-px h-[282px] bg-neutral-800 max-md:w-full max-md:h-px" />
-        
+
         <ContactSection
           title="Technical Support"
           items={[
@@ -306,9 +325,9 @@ const ContactPage = () => {
             }
           ]}
         />
-        
+
         <div className="w-px h-[282px] bg-neutral-800 max-md:w-full max-md:h-px" />
-        
+
         <ContactSection title="Our Office">
           <div className="flex flex-col items-start gap-3 self-stretch">
             <address className="self-stretch text-[#98989A] text-base font-normal leading-6 tracking-[-0.48px] not-italic">
@@ -322,9 +341,9 @@ const ContactPage = () => {
             </ContactButton>
           </div>
         </ContactSection>
-        
+
         <div className="w-px h-[282px] bg-neutral-800 max-md:w-full max-md:h-px" />
-        
+
         <ContactSection title="Connect with Us">
           <div className="flex items-start gap-2.5 self-stretch max-sm:flex-col">
             <SocialButton onClick={() => handleSocialClick('Twitter')} />

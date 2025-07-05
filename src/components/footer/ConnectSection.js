@@ -21,8 +21,6 @@ const ConnectSection = () => {
   return (
     <section className="box-border flex flex-col gap-12 justify-center items-start p-20 w-full border-t border-b border-solid bg-zinc-900 border-b-neutral-800 border-t-neutral-800 max-md:gap-10 max-md:px-10 max-md:py-16 max-sm:gap-8 max-sm:px-5 max-sm:py-10">
       <div className="flex gap-16 items-center w-full max-md:flex-col max-md:gap-10 max-md:text-center max-sm:gap-8">
-        {/* Replaced Logo with + */}
-        {/* <div className="text-4xl font-bold text-white">+</div> */}
         <Image src={"/assets/Logo.svg"} alt="Logo" width={50} height={50} className="w-12 h-12" />
         <div className="flex flex-col flex-1 gap-5 justify-center items-start">
           <header className="flex flex-col gap-2.5 justify-center items-start w-full">
