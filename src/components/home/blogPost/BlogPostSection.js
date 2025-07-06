@@ -6,7 +6,7 @@ export default function BlogPostSection() {
     return (
         <div>
             <SectionHeader badge={"A Knowledge Treasure Trove"} heading={"Explore FutureTech's In-Depth Blog Posts"} buttonText={"View All Blogs"} />
-            <BlogNav />
+            {/* <BlogNav /> */}
             <div className="p-6 bg-black min-h-screen text-white">
                 {blogData.map((data, i) => (
                     <BlogPostCard key={i} {...data} />

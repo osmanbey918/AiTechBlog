@@ -32,6 +32,7 @@ function Navbar() {
   const navItems = [
     { path: '/', label: 'Home' },
     { path: '/news', label: 'News' },
+    { path: '/AI', label: 'AI' },
     { path: '/blogs', label: 'Blogs' },
     { path: '/resources', label: 'Resources' },
   ];

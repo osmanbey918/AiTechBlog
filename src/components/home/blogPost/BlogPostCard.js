@@ -94,17 +94,35 @@ function BlogMetrics({ likes, comments, shares }) {
 }
 
 function ViewBlogButton({ link }) {
-    return (
-        <>
-            <Link
-                className="flex gap-1 items-center px-5 py-3.5 rounded-lg border bg-neutral-900 border-neutral-800 max-sm:justify-center max-sm:w-full"
-                href={`${link}`} target='_blank'  >
-                <span className="text-sm tracking-tight leading-5 text-neutral-400 whitespace-nowrap">View Blog</span>
-                <Image src={"/assets/arrow-up-right.svg"} width={18} height={18} alt='icon' />
-            </Link>
-        </>
-    );
+    
+    const router = useRouter();
+    
+    const handleClick = () => {
+      console.log("good");
+      console.log(link);
+    if (!link) return;
+    
+    router.push(`/blogopen/${encodeURIComponent(link)}`);
+  };
+
+  return (
+    <button
+      onClick={handleClick}
+      className="inline-flex items-center gap-2 px-5 py-3.5 rounded-lg border border-neutral-800 bg-neutral-900 hover:bg-neutral-800 transition-colors duration-200 max-sm:w-full max-sm:justify-center"
+    >
+      <span className="text-sm font-medium text-neutral-300 whitespace-nowrap">
+        View Blog
+      </span>
+      <Image
+        src="/assets/arrow-up-right.svg"
+        width={12}
+        height={12}
+        alt="Navigate to blog"
+      />
+    </button>
+  );
 }
+
 
 function BlogPostCard({
     authorImage,
@@ -119,11 +137,6 @@ function BlogPostCard({
     onViewBlog,
     id,
 }) {
-    const router = useRouter();
-    const handleViewBlog = () => {
-        router.push(`/blogopen/${id}`);
-    };
-
     return (
         <article className="flex gap-10 items-start g-px py-16 w-full border border-neutral-800 max-md:py-10 max-sm:flex-col max-sm:gap-5 max-sm:py-8">
             <AuthorProfile image={authorImage} name={authorName} specialty={authorSpecialty} />
@@ -133,13 +146,13 @@ function BlogPostCard({
                     <BlogMetrics likes={10} comments={25} shares={55} />
                 </div>
 
-                {/* {onViewBlog && < ViewBlogButton link={onViewBlog} />} */}
-                {onViewBlog && <button
+                {onViewBlog && < ViewBlogButton link={onViewBlog}/>}
+                {/* {onViewBlog && <button
                     className="flex gap-1 items-center px-5 py-3.5 rounded-lg border bg-neutral-900 border-neutral-800 max-sm:justify-center max-sm:w-full"
                     onClick={id} target='_blank'  >
                     <span className="text-sm tracking-tight leading-5 text-neutral-400 whitespace-nowrap">View Blog</span>
                     <Image src={"/assets/arrow-up-right.svg"} width={12} height={12} alt='icon' />
-                </button>}
+                </button>} */}
             </div>
         </article>
 

@@ -14,20 +14,25 @@ export default function BlogNav() {
   const [activeFilter, setActiveFilter] = useState("All");
 
   return (
-    <nav className="flex overflow-x-auto gap-4 g-px py-8 w-full border border-neutral-800 scrollbar-hide scroll-smooth">
-      {filters.map((filter) => (
-        <button
-          key={filter}
-          onClick={() => setActiveFilter(filter)}
-          className={`flex-shrink-0 w-[200px] px-4 py-6 text-sm rounded-lg border border-neutral-800 transition-colors
-            ${activeFilter === filter
-              ? "bg-zinc-900 text-white"
-              : "text-neutral-400 hover:text-neutral-300"}
-          `}
-        >
-          {filter}
-        </button>
-      ))}
+    <nav className="container mx-auto w-full overflow-x-auto py-4 scrollbar-hide scroll-smooth">
+      <ul className="flex gap-2 md:gap-4 ">
+        {filters.map((filter) => (
+          <li key={filter}>
+            <button
+              onClick={() => setActiveFilter(filter)}
+              className={`whitespace-nowrap px-4 py-2 text-sm font-medium rounded-full border transition-all duration-200
+                ${
+                  activeFilter === filter
+                    ? "bg-white text-black border-white"
+                    : "bg-transparent text-neutral-400 border-neutral-700 hover:text-white hover:border-neutral-500"
+                }
+              `}
+            >
+              {filter}
+            </button>
+          </li>
+        ))}
+      </ul>
     </nav>
   );
 }

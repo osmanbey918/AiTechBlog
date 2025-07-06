@@ -57,7 +57,7 @@
 // ];
 
 // // ✅ Use PascalCase for your page component
-// const BlogOpenPage = () => {
+// const Page = () => {
 //     return (
 //         <div className="flex w-full flex-col items-start text-white bg-black">
 //             <BlogHero
@@ -86,4 +86,4 @@
 //     );
 // };
 
-// export default BlogOpenPage;
+// export default Page;
