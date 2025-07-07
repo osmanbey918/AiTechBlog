@@ -1,89 +1,70 @@
-// import React from 'react';
-// import ConnectSection from '@/components/footer/ConnectSection';
-// import Footer from '@/components/footer/Footer';
-// import { BlogContent, BlogHero, BlogMetadata, BlogSidebar, SimilarNews } from '@/components/blog/p';
+import { getAllPostSlugs, getPostBySlug } from '@/lib/markdown';
+import BlogLayout from '@/components/BlogLayout';
 
-// // ✅ ✅ Move mock data outside the component for stable production build
+export async function generateStaticParams() {
+  const slugs = getAllPostSlugs();
+  console.log(slugs);
+  
+  // Support both array of strings and array of objects
+  return slugs.map(slugObj => (
+    typeof slugObj === 'string'
+      ? { slug: slugObj }
+      : { slug: slugObj.slug || slugObj.params?.slug }
+  ));
+}
 
-// const blogData = {
-//     title: "The Rise of Artificial Intelligence in Healthcare",
-//     publicationDate: "June 15, 2025",
-//     category: "Healthcare & Technology",
-//     readingTime: "8 min read",
-//     authorName: "Dr. Sarah Johnson",
-//     backgroundImage: "https://placehold.co/1200x400/2a2a2a/2a2a2a"
-// };
 
-// const tableOfContents = [
-//     'Introduction',
-//     'AI in Diagnostic Imaging',
-//     'Predictive Analytics and Disease Prevention',
-//     'Personalized Treatment Plans',
-//     'Drug Discovery and Research',
-//     'AI in Telemedicine',
-//     'Ethical Considerations',
-//     'The Future of AI in Healthcare',
-//     'Conclusion'
-// ];
+// ✅ SEO metadata for each blog page
+export async function generateMetadata({ params }) {
+  const {slug} = await params;
+  const post = await getPostBySlug(slug);
 
-// const similarNewsItems = [
-//     {
-//         id: '1',
-//         image: 'https://placehold.co/400x185/ff6b35/ff6b35',
-//         title: 'A Decisive Victory for Progressive Policies',
-//         category: 'Politics',
-//         likes: '2.2k',
-//         shares: '60',
-//         date: 'June 14, 2025'
-//     },
-//     {
-//         id: '2',
-//         image: 'https://placehold.co/400x185/0066cc/0066cc',
-//         title: 'Tech Giants Unveil Cutting-Edge AI Innovations',
-//         category: 'Technology',
-//         likes: '6k',
-//         shares: '92',
-//         date: 'June 13, 2025'
-//     },
-//     {
-//         id: '3',
-//         image: 'https://placehold.co/400x185/4a90e2/4a90e2',
-//         title: 'COVID-19 Variants',
-//         category: 'Health',
-//         likes: '10k',
-//         shares: '124',
-//         date: 'June 12, 2025'
-//     }
-// ];
 
-// // ✅ Use PascalCase for your page component
-// const Page = () => {
-//     return (
-//         <div className="flex w-full flex-col items-start text-white bg-black">
-//             <BlogHero
-//                 title={blogData.title}
-//                 backgroundImage={blogData.backgroundImage}
-//             />
-//             <div className="flex justify-between w-full max-w-[1440px] mx-auto py-16 gap-16 max-lg:px-8 max-lg:flex-col">
-//                 <article className="flex-1">
-//                     <BlogContent />
-//                     <BlogMetadata
-//                         publicationDate={blogData.publicationDate}
-//                         category={blogData.category}
-//                         readingTime={blogData.readingTime}
-//                         authorName={blogData.authorName}
-//                     />
-//                 </article>
-//                 <aside className="w-[400px] max-lg:w-full">
-//                     {/* ✅ Add optional chaining to avoid undefined errors */}
-//                     <BlogSidebar tableOfContents={tableOfContents ?? []} />
-//                 </aside>
-//             </div>
-//             <SimilarNews items={similarNewsItems ?? []} />
-//             <ConnectSection />
-//             <Footer />
-//         </div>
-//     );
-// };
+  return {
+    title: `${post.meta.title} | AI Tech Blog`,
+    description: post.meta.excerpt || 'Read this article on AI Tech Blog',
+    keywords: post.meta.tags || [],
+    authors: [{ name: post.meta.author }],
+    publisher: 'AI Tech Blog',
+    alternates: {
+      canonical: `https://yourdomain.com/blogopen/${slug}`,
+    },
+    robots: {
+      index: true,
+      follow: true,
+      nocache: false,
+    },
+    openGraph: {
+      title: post.meta.title,
+      description: post.meta.excerpt || '',
+      url: `https://yourdomain.com/blogopen/${slug}`,
+      siteName: 'AI Tech Blog',
+      images: [
+        {
+          url: post.meta.coverImage,
+          width: 1200,
+          height: 630,
+          alt: post.meta.title,
+        },
+      ],
+      type: 'article',
+      locale: 'en_US',
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: post.meta.title,
+      description: post.meta.excerpt || '',
+      images: [post.meta.coverImage],
+    },
+  };
+}
 
-// export default Page;
+
+
+export default async function BlogPage({ params }) {
+    const {slug} = await params
+    const post = await getPostBySlug(slug);
+    console.log(post.contentHtml);
+
+    return <BlogLayout meta={post.meta} contentHtml={post.contentHtml} />;
+}
