@@ -3,9 +3,23 @@ import path from 'path';
 
 export async function POST(req) {
   const body = await req.json();
-  const { title, excerpt, tags, slug, content } = body;
+  const { title, excerpt, tags, slug, content, jsonld } = body;
 
-  const frontmatter = `---\ntitle: "${title}"\nexcerpt: "${excerpt}"\ndate: "${new Date().toISOString()}"\ntags:\n${tags.map((t) => `  - ${t}`).join('\n')}\n---\n\n`;
+  const indent = (str, spaces = 2) =>
+    str
+      .split('\n')
+      .map(line => ' '.repeat(spaces) + line)
+      .join('\n');
+
+  const frontmatter = `---
+title: "${title}"
+excerpt: "${excerpt}"
+date: "${new Date().toISOString()}"
+tags:
+${tags.map((t) => `  - ${t}`).join('\n')}
+jsonld:
+${indent(jsonld, 2)}
+---\n\n`;
 
   const fileContent = frontmatter + content;
 

@@ -32,7 +32,7 @@ function Navbar() {
   const navItems = [
     { path: '/', label: 'Home' },
     { path: '/news', label: 'News' },
-    { path: '/AI', label: 'AI' },
+    { path: '/ai', label: 'AI' },
     { path: '/blogs', label: 'Blogs' },
     { path: '/resources', label: 'Resources' },
   ];
@@ -43,7 +43,7 @@ function Navbar() {
         scrolled ? 'bg-zinc-900/95 backdrop-blur-sm shadow-lg' : 'bg-zinc-900'
       }`}
     >
-      <div className="max-w-7xl mx-auto g-px">
+      <div className="max-w g-px">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div 
@@ -61,7 +61,7 @@ function Navbar() {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden lg:flex items-center space-x-8">
+          <div className="hidden lg:flex  space-x-8">
             {navItems.map((item) => (
               <button
                 key={item.path}
@@ -91,7 +91,7 @@ function Navbar() {
           {/* Mobile Menu Button */}
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="lg:hidden p-2 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 focus:outline-none"
+            className="lg:hidden p-4 rounded-md text-zinc-400 hover:text-white hover:bg-zinc-800 focus:outline-none"
             aria-label="Toggle menu"
           >
             <div className="w-6 h-6 relative">

@@ -9,11 +9,11 @@ tags:
   - Productivity
   - Automation
 
-coverImage: "https://th.bing.com/th/id/OIP.o0omc44xidI57F69KrzPZwHaEK?r=0&o=7rm=3&rs=1&pid=ImgDetMain&o=7&rm=3"
+coverImage: "https://imgv3.fotor.com/images/share/wonderland-girl-generated-by-Fotor-ai-art-generator.jpg"
 ---
 
 
-![](https://imgv3.fotor.com/images/share/wonderland-girl-generated-by-Fotor-ai-art-generator.jpg)
+<!-- ![](https://imgv3.fotor.com/images/share/wonderland-girl-generated-by-Fotor-ai-art-generator.jpg) -->
 
 # *What is AI?*
 

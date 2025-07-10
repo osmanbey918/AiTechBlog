@@ -1,24 +1,19 @@
 import { getAllPostSlugs, getPostBySlug } from '@/lib/markdown';
 import BlogLayout from '@/components/BlogLayout';
+import JsonLdScript from '@/components/JsonLdScript';
 
 export async function generateStaticParams() {
   const slugs = getAllPostSlugs();
-  console.log(slugs);
-  
-  // Support both array of strings and array of objects
-  return slugs.map(slugObj => (
+  return slugs.map(slugObj =>
     typeof slugObj === 'string'
       ? { slug: slugObj }
       : { slug: slugObj.slug || slugObj.params?.slug }
-  ));
+  );
 }
 
-
-// ✅ SEO metadata for each blog page
 export async function generateMetadata({ params }) {
-  const {slug} = await params;
+  const { slug } = await params;
   const post = await getPostBySlug(slug);
-
 
   return {
     title: `${post.meta.title} | AI Tech Blog`,
@@ -59,12 +54,14 @@ export async function generateMetadata({ params }) {
   };
 }
 
+export default async function Page({ params }) {
+  const { slug } = await params;
+  const post = await getPostBySlug(slug);
 
-
-export default async function BlogPage({ params }) {
-    const {slug} = await params
-    const post = await getPostBySlug(slug);
-    console.log(post.contentHtml);
-
-    return <BlogLayout meta={post.meta} contentHtml={post.contentHtml} />;
+  return (
+    <>
+      <JsonLdScript jsonld={post.meta?.jsonld} />
+      <BlogLayout meta={post.meta} contentHtml={post.contentHtml} />
+    </> 
+  );
 }

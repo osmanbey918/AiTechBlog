@@ -9,7 +9,7 @@ tags:
   - Ethics
   - AI
   - Enterprise
-coverImage: "https://example.com/agentic-ai-2025.jpg"
+coverImage: "https://automationedge.com/wp-content/uploads/2024/11/ImportedPhoto.752472467.553424.webp"
 ---
 
 ![](https://example.com/agentic-ai-illustration.jpg)

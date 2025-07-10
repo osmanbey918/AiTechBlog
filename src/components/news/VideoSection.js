@@ -146,7 +146,7 @@ const VideoSection = () => {
   }
 
   return (
-    <section className="box-border flex gap-8 items-start px-20 py-16 w-full border-t border-solid border-t-neutral-800 max-md:flex-col max-md:gap-8 max-md:p-10 max-sm:gap-5 max-sm:p-5">
+    <section className="box-border flex gap-8 items-start g-px py-16 w-full border-t border-solid border-t-neutral-800 max-md:flex-col max-md:gap-8 max-md:py-10 max-sm:gap-5 max-sm:py-5">
       {videos.map((video) => (
         <VideoCard
           key={video.id}

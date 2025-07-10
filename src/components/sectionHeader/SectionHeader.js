@@ -4,18 +4,28 @@ import Image from "next/image";
 
 const SectionHeader = ({ badge, heading, buttonText }) => {
   return (
-    <section className="flex gap-52 items-center py-12 w-full border bg-zinc-900 border-neutral-800 g-px max-md:gap-24 max-sm:flex-col max-sm:gap-10 max-sm:p-4">
-      <div className="flex flex-col flex-1 gap-2.5 justify-center items-start max-sm:w-full">
-        {badge && <Badge>{badge}</Badge>}
+   <section className="flex gap-52 items-center py-12 w-full border bg-zinc-900 border-neutral-800 max-md:gap-24 max-sm:flex-col max-sm:gap-10 max-sm:py-4">
+  <div className="flex flex-col g-px flex-1 gap-4 justify-center items-start max-sm:w-full">
+    {badge && <Badge>{badge}</Badge>}
+
+    <div className="flex justify-between items-center w-full gap-4 flex-wrap">
+      <div className="flex-1 min-w-[200px]">
         {heading && (
-          <h1 className="w-full text-5xl tracking-tighter text-white leading-[57.2px] max-md:text-4xl max-md:tracking-tighter max-sm:text-3xl max-sm:tracking-tighter">
+          <h1 className="text-5xl tracking-tighter text-white leading-[57.2px] max-md:text-4xl max-sm:text-3xl">
             {heading}
           </h1>
         )}
       </div>
 
-      {buttonText && <ViewAllButton text={buttonText} />}
-    </section>
+      {buttonText && (
+        <div className="max-sm:w-full">
+          <ViewAllButton text={buttonText} />
+        </div>
+      )}
+    </div>
+  </div>
+</section>
+
   );
 };
 

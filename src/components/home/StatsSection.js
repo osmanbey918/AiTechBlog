@@ -1,7 +1,14 @@
 import Image from "next/image";
 import React from 'react';
 
+export const Separator = () => {
+    return (
+        <div className="w-px self-stretch mx-8 max-sm:mx-0 bg-neutral-800 max-sm:w-full max-sm:h-px max-sm:self-auto"
+        />
+    );
+};
 const StatsSection = () => {
+
     const statsData = [
         {
             iconType: '/assets/news.svg',
@@ -25,26 +32,23 @@ const StatsSection = () => {
             href: '/global'
         }
     ];
-
-    const Separator = () => {
-        return (
-            <div className="relative w-px bg-neutral-800  max-sm:w-full max-sm:h-px" />
-        );
-    };
     return (
-        <section className="flex relative gap-10 items-start g-px w-full border border-neutral-800 max-md:gap-6 max-sm:flex-col max-sm:gap-5">
-            {statsData.map((stat, index) => (
-                <React.Fragment key={index}>
-                    <StatCard
-                        iconType={stat.iconType}
-                        title={stat.title}
-                        subtitle={stat.subtitle}
-                        description={stat.description}
-                        onButtonClick={stat.onClick}
-                    />
-                    {index < statsData.length - 1 && <Separator />}
-                </React.Fragment>
-            ))}
+
+        <section className="border-t border-neutral-800">
+            <section className="flex relative items-start g-px w-full max-sm:flex-col">
+                {statsData.map((stat, index) => (
+                    <React.Fragment key={index}>
+                        <StatCard
+                            iconType={stat.iconType}
+                            title={stat.title}
+                            subtitle={stat.subtitle}
+                            description={stat.description}
+                            onButtonClick={stat.onClick}
+                        />
+                        {index < statsData.length - 1 && <Separator />}
+                    </React.Fragment>
+                ))}
+            </section>
         </section>
     );
 };
@@ -84,12 +88,12 @@ const StatCard = ({ iconType, title, subtitle, description }) => {
     };
 
     return (
-        <article className="flex relative flex-col flex-1 gap-8 items-start py-12 rounded-xl max-md:py-8 max-sm:gap-5 max-sm:py-8">
-            <div className="flex relative flex-col gap-8 items-start w-full max-sm:gap-5">
+        <article className="flex relative flex-col flex-1 gap-8 justify-center py-12 max-md:py-8 max-sm:gap-5 max-sm:py-8">
+            <div className="flex relative flex-col gap-8 w-full max-sm:gap-5">
                 <div>
                     <Image src={iconType} width={20} height={20} alt="icon" className="w-[49.993px] max-sm:w-[40px] h-[50px] max-sm:h-[40px] relative" />
                 </div>
-                <div className="flex relative gap-5 items-center w-full max-sm:gap-4">
+                <div className="flex relative gap-5 items-center w-[100%] max-sm:gap-4">
                     <div className="flex relative flex-col flex-1 gap-1 items-start">
                         <h3 className="relative w-full text-xl tracking-tight leading-8 text-white max-md:text-lg max-sm:text-base max-sm:tracking-tight">
                             {title}

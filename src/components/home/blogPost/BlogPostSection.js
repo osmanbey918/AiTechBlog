@@ -1,4 +1,3 @@
-import BlogNav from "./BlogNav";
 import BlogPostCard from "./BlogPostCard";
 import SectionHeader from "../../sectionHeader/SectionHeader";
 import React from "react";
@@ -6,7 +5,6 @@ export default function BlogPostSection() {
     return (
         <div>
             <SectionHeader badge={"A Knowledge Treasure Trove"} heading={"Explore FutureTech's In-Depth Blog Posts"} buttonText={"View All Blogs"} />
-            {/* <BlogNav /> */}
             <div className="p-6 bg-black min-h-screen text-white">
                 {blogData.map((data, i) => (
                     <BlogPostCard key={i} {...data} />

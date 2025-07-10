@@ -147,12 +147,6 @@ function BlogPostCard({
                 </div>
 
                 {onViewBlog && < ViewBlogButton link={onViewBlog}/>}
-                {/* {onViewBlog && <button
-                    className="flex gap-1 items-center px-5 py-3.5 rounded-lg border bg-neutral-900 border-neutral-800 max-sm:justify-center max-sm:w-full"
-                    onClick={id} target='_blank'  >
-                    <span className="text-sm tracking-tight leading-5 text-neutral-400 whitespace-nowrap">View Blog</span>
-                    <Image src={"/assets/arrow-up-right.svg"} width={12} height={12} alt='icon' />
-                </button>} */}
             </div>
         </article>
 

@@ -6,7 +6,7 @@ readTime: "8 min read"
 views: "12.4K"
 category: "Artificial Intelligence"
 avatar: "https://randomuser.me/api/portraits/women/43.jpg"
-coverImage: "https://source.unsplash.com/random/1200x600/?ai,technology"
+coverImage: "https://th.bing.com/th/id/R.f31711c03528e55fe82cf6c775dea462?rik=6aehfZf0u9gQXg&pid=ImgRaw&r=0"
 tags:
   - AI
   - GPT-4
