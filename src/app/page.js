@@ -1,5 +1,3 @@
-"use client";
-
 import BlogPostSection from "@/components/home/blogPost/BlogPostSection";
 import StatisticsSection from "@/components/home/StatisticsSection";
 import StatsSection from "@/components/home/StatsSection";
@@ -9,7 +7,7 @@ import SideSection from "@/components/SideSection";
 
 export default function Page() {
   return (
-    <div className="bg-black ">
+    <div className="bg-zinc-950 ">
       <main className="flex g-px relative max-lg:flex-col text-white items-stretch">
         <header className="flex relative flex-2 flex-col gap-8 max-lg:max-w-full pt-24 max-md:pt-20 max-sm:pt-16 items-start max-w-[60%] max-sm:gap-5">
           <p className="relative text-3xl tracking-tighter leading-9 text-stone-500 max-md:text-2xl max-sm:text-xl max-sm:tracking-tight">
@@ -37,7 +35,7 @@ export default function Page() {
 
       <StatsSection />
       <FutureTechSection />
-      <BlogPostSection />
+      {/* <BlogPostSection /> */}
       <ItemsContainer />
 
     </div>

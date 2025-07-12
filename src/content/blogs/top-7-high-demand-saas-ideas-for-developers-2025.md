@@ -8,7 +8,7 @@ tags:
   - saas-ideas
   - developers
   - automation
-coverImage: "https://ai-tech-blog-26p6.vercel.app//assets/ss.jpg"
+coverImage: "https://ai-tech-blog-26p6.vercel.app/assets/ss.jpg"
 jsonld:
   "@context": "https://schema.org"
   "@type": "Article"

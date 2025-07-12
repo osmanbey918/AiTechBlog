@@ -35,7 +35,7 @@ export default function Search() {
             <input
                 type="search"
                 placeholder="Search articles..."
-                className="peer block w-full max-w-[60%] mx-auto bg-black mb-12 rounded-md border border-gray-200 py-[9px] px-3 text-sm outline-2 placeholder:text-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
+                className="peer block w-full max-w-[60%] mx-auto bg-black mb-12 rounded-md border-b border-gray-200 py-[9px] px-3 text-sm outline-2 placeholder:text-gray-500 focus:border-blue-500 focus:ring-1 focus:ring-blue-500"
                 onChange={(e) => {
                     handleSearch(e.target.value);
                 }}
