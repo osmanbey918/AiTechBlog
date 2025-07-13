@@ -1,146 +1,156 @@
-'use client';
-
-import React, { useCallback, useMemo } from 'react';
+"use client"
 import Image from 'next/image';
+import Link from 'next/link';
+import React from 'react';
 import { useRouter } from 'next/navigation';
 
-const BlogCoverImage = React.memo(({ src, alt = 'Blog cover' }) => (
-  <div className="relative w-full h-64 md:h-80 rounded-xl overflow-hidden border border-neutral-800">
-    <Image
-      src={src}
-      alt={alt}
-      fill
-      className="object-cover"
-      sizes="100vw"
-      priority
-    />
-  </div>
-));
-BlogCoverImage.displayName = 'BlogCoverImage';
 
-const BlogAuthor = React.memo(({ name = "Anonymous", specialty = "AI Engineer" }) => {
-  const isLongName = name.length > 20;
-  const truncated = isLongName ? `${name.slice(0, 20)}...` : name;
+function AuthorProfile({ name }) {
+    const image = getAvatarFromName(name || 'Anonymous');
+    const displayName = name || "Anonymous";
+    const isLongName = displayName.length > 15;
 
-  return (
-    <div className="text-sm text-neutral-400 mt-4">
-      <span className="block text-white font-semibold text-base">{truncated}</span>
-      <span>{specialty}</span>
-    </div>
-  );
-});
-BlogAuthor.displayName = 'BlogAuthor';
-
-const BlogContent = React.memo(({ date, title, description, id }) => {
-  const formattedDate = useMemo(() => (
-    new Date(date).toLocaleDateString("en-US", {
-      year: "numeric",
-      month: "long",
-      day: "numeric"
-    })
-  ), [date]);
-
-  return (
-    <div className="flex flex-col gap-4" aria-labelledby={`blog-title-${id}`}>
-      <time className="text-sm text-neutral-400 font-medium">{formattedDate}</time>
-      <h2
-        id={`blog-title-${id}`}
-        className="text-2xl md:text-3xl font-bold text-white leading-tight line-clamp-3"
-      >
-        {title}
-      </h2>
-      <p className="text-neutral-400 text-base md:text-lg line-clamp-2">
-        {description}
-      </p>
-    </div>
-  );
-});
-BlogContent.displayName = 'BlogContent';
-
-const BlogMetrics = React.memo(({ likes = 0, comments = 0, shares = 0 }) => {
-  const metrics = useMemo(() => [
-    { icon: "/assets/like.svg", count: likes, alt: "Likes" },
-    { icon: "/assets/comment.svg", count: comments, alt: "Comments" },
-    { icon: "/assets/share.svg", count: shares, alt: "Shares" }
-  ], [likes, comments, shares]);
-
-  return (
-    <div className="flex gap-3 flex-wrap mt-2">
-      {metrics.map((metric, i) => (
-        <div
-          key={i}
-          className="flex items-center gap-1.5 px-3 py-1.5 bg-zinc-900 border border-neutral-800 rounded-full"
-        >
-          <Image src={metric.icon} width={14} height={14} alt={metric.alt} />
-          <span className="text-sm text-neutral-400">
-            {metric.count.toLocaleString()}
-          </span>
+    return (
+        <div className="flex flex-col items-center gap-4 max-sm:flex-row max-sm:gap-3 w-[130px] max-sm:w-full">
+            <div className="relative w-16 h-16">
+                <Image
+                    src={image}
+                    alt={`${displayName}'s avatar`}
+                    width={64}
+                    height={64}
+                    className="rounded-full object-cover"
+                />
+            </div>
+            <div className="text-center max-sm:text-left">
+                <p className="text-white font-semibold text-lg break-words max-w-[200px]"
+                    title={isLongName ? displayName : undefined}>
+                    {isLongName ? `${displayName.substring(0, 15)}...` : displayName}
+                </p>
+                <p className="text-neutral-400 text-sm">AI engineer</p>
+            </div>
         </div>
-      ))}
-    </div>
-  );
-});
-BlogMetrics.displayName = 'BlogMetrics';
+    );
+}
 
-const ViewBlogButton = React.memo(({ link }) => {
-  const router = useRouter();
-  const handleClick = useCallback(() => {
-    if (link) router.push(`/blogopen/${encodeURIComponent(link)}`);
-  }, [link, router]);
+function getAvatarFromName(name) {
+    // Simple hash function to get consistent number from name
+    let hash = 0;
+    for (let i = 0; i < name.length; i++) {
+        hash = name.charCodeAt(i) + ((hash << 5) - hash);
+    }
+
+    const id = Math.abs(hash % 90);  // Keep id between 0-89
+    const gender = hash % 2 === 0 ? 'men' : 'women';
+
+    return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
+}
+
+function BlogContent({ date, title, description }) {
+    return (
+        <div className="flex flex-col flex-1 gap-6 items-start max-sm:gap-4 max-sm:w-full">
+            <time className="text-sm font-medium text-neutral-400">
+                {new Date(date).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric"
+                })}
+            </time>
+
+            <div className="flex flex-col gap-1.5 items-start w-full ">
+                <h2 className="w-full text-2xl font-bold tracking-tighter line-clamp-3 leading-8 text-white max-sm:text-lg max-sm:tracking-tight">
+                    {title}
+                </h2>
+                <p className="w-full text-base tracking-tight leading-6 line-clamp-1 text-neutral-400 max-sm:text-sm max-sm:tracking-tight">
+                    {description}
+                </p>
+            </div>
+        </div>
+    );
+}
+
+function BlogMetrics({ likes, comments, shares }) {
+    return (
+        <div className="flex gap-2 items-start max-sm:flex-wrap">
+            {[{
+                icon: "/assets/like.svg",
+                count: likes
+            }, {
+                icon: "/assets/comment.svg",
+                count: comments
+            }, {
+                icon: "/assets/share.svg",
+                count: shares
+            }].map((metric, index) => (
+                <div
+                    key={index}
+                    className="flex gap-0.5 justify-center items-center px-3 py-1.5 border bg-zinc-900 border-neutral-800 rounded-[100px]"
+                >
+                    <Image src={metric.icon} height={12} width={12} alt='"icon' />
+                    <span className="text-sm tracking-tight leading-5 text-neutral-400">{metric.count}</span>
+                </div>
+            ))}
+        </div>
+    );
+}
+
+function ViewBlogButton({ link }) {
+    
+    const router = useRouter();
+    
+    const handleClick = () => {
+      console.log("good");
+      console.log(link);
+    if (!link) return;
+    
+    router.push(`/blogopen/${encodeURIComponent(link)}`);
+  };
 
   return (
     <button
       onClick={handleClick}
-      className="inline-flex items-center gap-2 px-5 py-3 rounded-lg border border-neutral-800 bg-neutral-900 hover:bg-neutral-800 transition-colors duration-200"
-      aria-label="View blog post"
+      className="inline-flex items-center gap-2 px-5 py-3.5 rounded-lg border border-neutral-800 bg-neutral-900 hover:bg-neutral-800 transition-colors duration-200 max-sm:w-full max-sm:justify-center"
     >
-      <span className="text-sm font-medium text-neutral-300">View Blog</span>
+      <span className="text-sm font-medium text-neutral-300 whitespace-nowrap">
+        View Blog
+      </span>
       <Image
         src="/assets/arrow-up-right.svg"
         width={12}
         height={12}
-        alt=""
-        aria-hidden="true"
+        alt="Navigate to blog"
       />
     </button>
   );
-});
-ViewBlogButton.displayName = 'ViewBlogButton';
+}
 
-const BlogPostCard = ({
-  id,
-  authorName,
-  authorSpecialty,
-  date,
-  title,
-  description,
-  likes = 0,
-  comments = 0,
-  shares = 0,
-  onViewBlog,
-  coverImage
-}) => {
-  return (
-    <article
-      className="flex flex-col gap-6 px-6 py-10 w-full border border-neutral-800 rounded-2xl hover:border-neutral-700 transition-colors max-w-4xl mx-auto"
-      aria-labelledby={`blog-title-${id}`}
-    >
-      {/* Cover Image */}
-      {coverImage && <BlogCoverImage src={coverImage} />}
 
-      {/* Author */}
-      <BlogAuthor name={authorName} specialty={authorSpecialty} />
+function BlogPostCard({
+    authorImage,
+    authorName,
+    authorSpecialty,
+    date,
+    title,
+    description,
+    likes,
+    comments,
+    shares,
+    onViewBlog,
+    id,
+}) {
+    return (
+        <article className="flex max-h-48 min-h-48 items-start g-px py-8 w-full border border-neutral-800 max-md:py-10 max-sm:flex-col max-sm:gap-5 max-sm:py-8">
+            {/* <AuthorProfile image={authorImage} name={authorName} specialty={authorSpecialty} /> */}
+            <div className="flex flex-1 gap-10 items-start max-sm:flex-col max-sm:gap-5 max-sm:items-start max-sm:w-full">
+                <div className="flex flex-col gap-6 max-sm:gap-4 w-full">
+                    <BlogContent  title={title} description={description} />
+                    {/* <BlogMetrics likes={10} comments={25} shares={55} /> */}
+                </div>
 
-      {/* Title, Date, Description */}
-      <BlogContent date={date} title={title} description={description} id={id} />
+                {onViewBlog && < ViewBlogButton link={onViewBlog}/>}
+            </div>
+        </article>
 
-      {/* Metrics + Button */}
-      <div className="flex justify-between items-center flex-wrap gap-4">
-        <BlogMetrics likes={likes} comments={comments} shares={shares} />
-        {onViewBlog && <ViewBlogButton link={onViewBlog} />}
-      </div>
-    </article>
-  );
-};
+    );
+}
 
-export default React.memo(BlogPostCard);
+export default BlogPostCard;
