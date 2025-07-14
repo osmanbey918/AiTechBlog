@@ -20,13 +20,13 @@ export default function Page() {
   }, []);
 
   return (
-    <div>
+    <div >
       <SectionHeader badge={"A Knowledge Treasure Trove"} heading={"Explore FutureTech's In-Depth Blog Posts"} />
       <BlogNav />
-      <ul>
+      <ul className='g-px'>
         {blogs.map((blog, index) => (
 
-          <BlogPostCard key={index} authorName={blog.author} title={blog.title} authorSpecialty={blog.categories} description={blog.description} date={blog.published} onViewBlog={blog.link} />
+          <BlogPostCard key={index} image={blog.image} author={blog.author} title={blog.title} authorSpecialty={blog.categories} description={blog.description} datePublished={blog.published} slug={blog.link} />
 
         ))}
       </ul>

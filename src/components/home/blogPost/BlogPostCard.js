@@ -1,156 +1,187 @@
-"use client"
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react';
-import { useRouter } from 'next/navigation';
 
-
-function AuthorProfile({ name }) {
-    const image = getAvatarFromName(name || 'Anonymous');
-    const displayName = name || "Anonymous";
-    const isLongName = displayName.length > 15;
-
-    return (
-        <div className="flex flex-col items-center gap-4 max-sm:flex-row max-sm:gap-3 w-[130px] max-sm:w-full">
-            <div className="relative w-16 h-16">
-                <Image
-                    src={image}
-                    alt={`${displayName}'s avatar`}
-                    width={64}
-                    height={64}
-                    className="rounded-full object-cover"
-                />
-            </div>
-            <div className="text-center max-sm:text-left">
-                <p className="text-white font-semibold text-lg break-words max-w-[200px]"
-                    title={isLongName ? displayName : undefined}>
-                    {isLongName ? `${displayName.substring(0, 15)}...` : displayName}
-                </p>
-                <p className="text-neutral-400 text-sm">AI engineer</p>
-            </div>
-        </div>
-    );
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString("en-US", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
 }
 
-function getAvatarFromName(name) {
-    // Simple hash function to get consistent number from name
-    let hash = 0;
-    for (let i = 0; i < name.length; i++) {
-        hash = name.charCodeAt(i) + ((hash << 5) - hash);
-    }
-
-    const id = Math.abs(hash % 90);  // Keep id between 0-89
-    const gender = hash % 2 === 0 ? 'men' : 'women';
-
-    return `https://randomuser.me/api/portraits/${gender}/${id}.jpg`;
-}
-
-function BlogContent({ date, title, description }) {
-    return (
-        <div className="flex flex-col flex-1 gap-6 items-start max-sm:gap-4 max-sm:w-full">
-            <time className="text-sm font-medium text-neutral-400">
-                {new Date(date).toLocaleDateString("en-US", {
-                    year: "numeric",
-                    month: "long",
-                    day: "numeric"
-                })}
-            </time>
-
-            <div className="flex flex-col gap-1.5 items-start w-full ">
-                <h2 className="w-full text-2xl font-bold tracking-tighter line-clamp-3 leading-8 text-white max-sm:text-lg max-sm:tracking-tight">
-                    {title}
-                </h2>
-                <p className="w-full text-base tracking-tight leading-6 line-clamp-1 text-neutral-400 max-sm:text-sm max-sm:tracking-tight">
-                    {description}
-                </p>
-            </div>
-        </div>
-    );
-}
-
-function BlogMetrics({ likes, comments, shares }) {
-    return (
-        <div className="flex gap-2 items-start max-sm:flex-wrap">
-            {[{
-                icon: "/assets/like.svg",
-                count: likes
-            }, {
-                icon: "/assets/comment.svg",
-                count: comments
-            }, {
-                icon: "/assets/share.svg",
-                count: shares
-            }].map((metric, index) => (
-                <div
-                    key={index}
-                    className="flex gap-0.5 justify-center items-center px-3 py-1.5 border bg-zinc-900 border-neutral-800 rounded-[100px]"
-                >
-                    <Image src={metric.icon} height={12} width={12} alt='"icon' />
-                    <span className="text-sm tracking-tight leading-5 text-neutral-400">{metric.count}</span>
-                </div>
-            ))}
-        </div>
-    );
-}
-
-function ViewBlogButton({ link }) {
-    
-    const router = useRouter();
-    
-    const handleClick = () => {
-      console.log("good");
-      console.log(link);
-    if (!link) return;
-    
-    router.push(`/blogopen/${encodeURIComponent(link)}`);
-  };
-
+function CategoryBadge({ category }) {
   return (
-    <button
-      onClick={handleClick}
-      className="inline-flex items-center gap-2 px-5 py-3.5 rounded-lg border border-neutral-800 bg-neutral-900 hover:bg-neutral-800 transition-colors duration-200 max-sm:w-full max-sm:justify-center"
-    >
-      <span className="text-sm font-medium text-neutral-300 whitespace-nowrap">
-        View Blog
-      </span>
-      <Image
-        src="/assets/arrow-up-right.svg"
-        width={12}
-        height={12}
-        alt="Navigate to blog"
-      />
-    </button>
+    <span className="inline-flex items-center text-xs px-2 py-0.5 rounded-full text-yellow-400 w-auto">
+      {category}
+    </span>
+
   );
 }
 
-
-function BlogPostCard({
-    authorImage,
-    authorName,
-    authorSpecialty,
-    date,
-    title,
-    description,
-    likes,
-    comments,
-    shares,
-    onViewBlog,
-    id,
+export function BlogPostCardVergeStyle({
+  title,
+  description,
+  datePublished,
+  category = "Tech",
+  author = "Anonymous",
+  image,
+  slug,
 }) {
-    return (
-        <article className="flex max-h-48 min-h-48 items-start g-px py-8 w-full border border-neutral-800 max-md:py-10 max-sm:flex-col max-sm:gap-5 max-sm:py-8">
-            {/* <AuthorProfile image={authorImage} name={authorName} specialty={authorSpecialty} /> */}
-            <div className="flex flex-1 gap-10 items-start max-sm:flex-col max-sm:gap-5 max-sm:items-start max-sm:w-full">
-                <div className="flex flex-col gap-6 max-sm:gap-4 w-full">
-                    <BlogContent  title={title} description={description} />
-                    {/* <BlogMetrics likes={10} comments={25} shares={55} /> */}
-                </div>
+  const views = getRandomViews(); // fixed per render
 
-                {onViewBlog && < ViewBlogButton link={onViewBlog}/>}
-            </div>
-        </article>
+  return (
+    <Link href={`/blogopen/${slug}`}>
+      <article className="group flex justify-between items-start w-full max-w-4xl  border-b border-zinc-600 py-6 gap-6 hover:bg-neutral-900/50 transition rounded-xs ">
+        {/* Left Content */}
+        <div className="flex flex-col gap-2 flex-1">
+          <CategoryBadge category={category} />
+          <h2 className="text-white text-lg md:text-xl font-serif font-semibold leading-tight group-hover:text-yellow-400 group-hover:drop-shadow-md transition">
+            {title}
+          </h2>
+          <div className="flex items-center text-xs text-neutral-500 gap-3 flex-wrap">
+            <span className="text-gray-400 font-medium">{author}</span>
+            <span>{formatDate(datePublished)}</span>
+            <span className="text-neutral-600 ">|</span>
+            {/* <span><Eye/></span> */}
+            <span className='flex gap-1'><Eye />{views}</span>
+          </div>
+        </div>
 
-    );
+        {/* Right Image */}
+        <div className="relative w-28 h-20 md:w-36 md:h-24 rounded-lg overflow-hidden border border-neutral-700 shadow-inner shrink-0">
+          <Image
+            src={image || "/assets/default-cover.jpg"}
+            alt={title}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        </div>
+      </article>
+    </Link>
+  );
 }
 
-export default BlogPostCard;
+export default function BlogPostCard({
+  title,
+  description,
+  datePublished,
+  category = "Tech",
+  author = "Anonymous",
+  image,
+  slug,
+}) {
+  const views = getRandomViews();
+
+  return (
+    <Link href={`/blogopen/${slug}`}>
+      <article className="group flex flex-col pr-2 md:flex-row items-start w-full border-b border-r border-neutral-800 py-6 gap-6 hover:bg-neutral-900/40 transition rounded-xl hover:shadow-md">
+
+        {/* Left Image */}
+        <div className="relative w-full md:w-64 h-44 md:h-40 rounded-md overflow-hidden border border-neutral-700 shadow-inner shrink-0">
+          <Image
+            src={image || "/assets/default-cover.jpg"}
+            alt={title}
+            fill
+            className="object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        </div>
+
+        {/* Right Content */}
+        <div className="flex flex-col gap-3 flex-1">
+          <div className="flex items-center gap-2">
+            <CategoryBadge category={category} />
+          </div>
+
+          <h2 className="text-white underline decoration-yellow-400 text-lg md:text-xl font-serif font-semibold leading-snug group-hover:text-yellow-400 transition">
+            {title}
+          </h2>
+
+
+          <p className="text-sm text-neutral-400 line-clamp-3">
+            {description}
+          </p>
+
+          <div className="flex items-center text-xs text-neutral-500 gap-3 mt-2 flex-wrap">
+            <span className="text-gray-400 font-medium">{author}</span>
+            <span>{formatDate(datePublished)}</span>
+            <span className="text-neutral-600">|</span>
+            <span className="flex items-center gap-1"><Eye className="w-4 h-4" /> {views}</span>
+          </div>
+        </div>
+      </article>
+    </Link>
+  );
+}
+function getRandomViews(min = 10, max = 1000) {
+  return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+// export function BlogCardVergeStyle({
+//     title,
+//     category = "News",
+//     author = "Anonymous",
+//     time = "5:00 PM GMT+5",
+//     comments = 0,
+//     image = "/assets/default-cover.jpg",
+//     slug = "#"
+// }) {
+//     return (
+//         <Link href={`/blogopen/${slug}`} className="group w-full border-b border-neutral-800 py-6 flex justify-between items-start gap-4 hover:bg-neutral-900/50 transition">
+//             {/* Left Content */}
+//             <div className="flex flex-1 flex-col md:flex-row items-start gap-4">
+//                 {/* Vertical Category Label */}
+//                 {/* <div className="text-xs font-medium tracking-widest text-neutral-500 rotate-180 writing-vertical-lr hidden sm:block">
+//           {category}
+//         </div> */}
+
+//                 {/* Main Content */}
+//                 <div className="flex-1">
+//                     <h2 className="text-white text-lg md:text-xl font-bold leading-snug group-hover:text-yellow-400 transition">
+//                         {title}
+//                     </h2>
+//                     <div className="flex items-center text-xs text-neutral-500 mt-2 gap-3 flex-wrap">
+//                         <span className="text-blue-400 font-semibold uppercase">{author}</span>
+//                         <span>{time}</span>
+//                         <span className="text-neutral-600">|</span>
+//                         <span>💬 {comments}</span>
+//                     </div>
+//                 </div>
+//             </div>
+
+//             {/* Right Image */}
+//             <div className="min-w-[100px] w-[120px] h-[80px] relative rounded-md overflow-hidden shrink-0">
+//                 <Image
+//                     src={image}
+//                     alt={title}
+//                     fill
+//                     className="object-cover group-hover:scale-105 transition-transform duration-300"
+//                 />
+//             </div>
+//         </Link>
+//     );
+// }
+
+const Eye = () => {
+  return (<svg
+    xmlns="http://www.w3.org/2000/svg"
+    className="w-4 h-4 text-neutral-500"
+    fill="none"
+    viewBox="0 0 24 24"
+    stroke="currentColor"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
+    />
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M2.458 12C3.732 7.943 7.522 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z"
+    />
+  </svg>)
+}

@@ -14,8 +14,8 @@ const feedUrls = [
   'https://techcrunch.com/feed/',
   // 'https://www.theverge.com/rss/index.xml',
   'https://www.wired.com/feed/rss',
-//   'http://feeds.arstechnica.com/arstechnica/index',
-//   'https://hnrss.org/frontpage'
+  //   'http://feeds.arstechnica.com/arstechnica/index',
+  //   'https://hnrss.org/frontpage'
 ];
 
 // Image extractor function
@@ -31,7 +31,7 @@ export async function GET() {
 
     // First, try to get blogs from MongoDB
     const mongoBlogs = await Blog.find({}).sort({ publishedAt: -1 });
-    
+
     if (mongoBlogs.length > 0) {
       return NextResponse.json({ blogs: mongoBlogs }, { status: 200 });
     }
@@ -40,10 +40,11 @@ export async function GET() {
     for (const url of feedUrls) {
       try {
         const feed = await parser.parseURL(url);
+
         console.log(feed);
-        
-        const blogs = feed.items.slice(0, 3).map(item => {
+        const blogs = feed.items.slice(0, 8).map(item => {
           const imageFromContent = extractImageFromContent(item.content);
+
           return {
             title: item.title,
             link: item.link,
@@ -51,7 +52,7 @@ export async function GET() {
             published: item.pubDate || item.isoDate,
             author: item.creator || item['dc:creator'] || feed.title || 'Unknown',
             categories: item.categories || [],
-            image: imageFromContent || feed.image?.url || 'https://via.placeholder.com/150',
+            image: imageFromContent || feed.image?.url || 'https://techcrunch.com/wp-content/uploads/2015/02/cropped-cropped-favicon-gradient.png?w=32',
             description: item.content,
             source: feed.title,
           };

@@ -23,7 +23,7 @@ jsonld:
     logo:
       "@type": "ImageObject"
       url: "https://yourdomain.com/logo.png"
-  datePublished: "2025-07-13T13:00:00.000Z"
+  datePublished: "2025-07-13"
   mainEntityOfPage:
     "@type": "WebPage"
     "@id": "https://yourdomain.com/blog/ai-coding-productivity-study-2025"

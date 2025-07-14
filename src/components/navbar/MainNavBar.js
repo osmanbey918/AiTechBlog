@@ -31,10 +31,10 @@ function Navbar() {
 
   const navItems = [
     { path: '/', label: 'Home' },
-    { path: '/news', label: 'News' },
     { path: '/ai', label: 'AI' },
     { path: '/blogs', label: 'Blogs' },
     { path: '/resources', label: 'Resources' },
+    { path: '/about', label: 'About us' },
   ];
 
   return (

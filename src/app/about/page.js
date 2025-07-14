@@ -1,5 +1,3 @@
-"use client";
-
 import BlogPostSection from "@/components/home/blogPost/BlogPostSection";
 import StatisticsSection from "@/components/home/StatisticsSection";
 import StatsSection from "@/components/home/StatsSection";
@@ -9,13 +7,13 @@ import SideSection from "@/components/SideSection";
 
 export default function Page() {
   return (
-    <div>
-      <main className="flex relative max-lg:flex-col  bg-black text-white min-h-[628px] items-stretch">
-        <header className="flex relative flex-2 flex-col gap-8 max-lg:max-w-full  pt-24 max-md:pt-20 max-sm:pt-16 items-start max-w-[60%]  max-sm:gap-5">
-          <p className="relative text-3xl tracking-tighter g-px leading-9 text-stone-500 max-md:text-2xl max-sm:text-xl max-sm:tracking-tight">
+    <div className="bg-zinc-950 ">
+      <main className="flex g-px relative max-lg:flex-col text-white items-stretch">
+        <header className="flex relative flex-2 flex-col gap-8 max-lg:max-w-full pt-24 max-md:pt-20 max-sm:pt-16 items-start max-w-[60%] max-sm:gap-5">
+          <p className="relative text-3xl tracking-tighter leading-9 text-stone-500 max-md:text-2xl max-sm:text-xl max-sm:tracking-tight">
             Your Journey to Tomorrow Begins Here
           </p>
-          <div className="flex relative flex-col gap-5 items-start g-px w-full pb-6">
+          <div className="flex relative flex-col gap-5 items-start w-full pb-6 pr-4">
             <h1 className="relative w-full text-[3.8rem] max-lg:text-6xl tracking-tighter text-white leading-[84px] max-md:text-5xl max-md:tracking-tighter max-sm:text-3xl max-sm:tracking-tighter">
               Explore the Frontiers of Artificial Intelligence
             </h1>
@@ -29,7 +27,7 @@ export default function Page() {
             <StatisticsSection />
           </div>
         </header>
-        <aside className="border border-neutral-800 flex-1 w-full pr-[6lvw] max-lg:pr-[4lvw] max-md:pr-10 max-sm:pr-[4lvw]">
+        <aside className="border border-neutral-800 flex-1 w-full min-h-64">
           <SideSection />
         </aside>
       </main>
@@ -37,7 +35,7 @@ export default function Page() {
 
       <StatsSection />
       <FutureTechSection />
-      <BlogPostSection />
+      {/* <BlogPostSection /> */}
       <ItemsContainer />
 
     </div>

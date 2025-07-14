@@ -28,13 +28,13 @@ const NewsCard = ({
       <div className="flex flex-col justify-between flex-grow py-4 gap-3 bg-zinc-900 px-2">
         <div className="flex justify-between items-center text-sm text-neutral-400">
           <span>{category}</span>
-          <span className="text-xs text-neutral-500">
+          {publishedAt && <span className="text-xs text-neutral-500">
             {new Intl.DateTimeFormat('en-US', {
               year: 'numeric',
               month: 'short',
               day: 'numeric',
             }).format(new Date(publishedAt))}
-          </span>
+          </span>}
         </div>
         <header className="flex flex-col gap-1">
           <a
@@ -56,7 +56,7 @@ export default NewsCard;
 
 
 export const NewsSecondCard = ({
- 
+
   title,
   category,
   description,

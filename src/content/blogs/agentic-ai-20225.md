@@ -2,7 +2,7 @@
 title: "Agentic AI in 2025: Autonomous Agents Powering the Real World"
 slug: "agentic-ai-2025"
 excerpt: "Autonomous AI agents are no longer sci-fi—they’re live in enterprise workflows, smart assistants, and energy grids. Explore the stats, tools, and ethical governance shaping today's agentic AI landscape."
-date: "2025-07-07T16:00:00.000Z"
+date: "2025-07-07"
 tags:
   - AgenticAI
   - Automation

@@ -23,7 +23,7 @@ jsonld:
     logo:
       "@type": "ImageObject"
       url: "https://yourdomain.com/logo.png"
-  datePublished: "2025-07-11T10:30:00.000Z"
+  datePublished: "2025-07-11"
   mainEntityOfPage:
     "@type": "WebPage"
     "@id": "https://yourdomain.com/blog/autonomous-ai-agents-revolutionizing-software-development-2025"
