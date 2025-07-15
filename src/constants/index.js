@@ -26,7 +26,7 @@ export const DEFAULT_IMAGES = {
     AUTHOR: '/assets/default-avatar.jpg'
 };
 
-export const REVALIDATION_TIME = 1800; // 30 minutes
+// export const REVALIDATION_TIME = 1800; // 30 minutes
 
 export const METRICS_RANGES = {
     VIEWS: { min: 100, max: 1000 },

@@ -1,5 +1,6 @@
 import { getPromptBySlug } from '@/lib/markdown';
 import PromptDetails from '@/components/ai/PromptDetails';
+import Link from 'next/link';
 
 export async function generateMetadata({ params }) {
   const prompt = await getPromptBySlug(params.slug);
@@ -38,12 +39,12 @@ export default async function Page({ params }) {
           <p className="text-neutral-400">
             The prompt you&apos;re looking for doesn&apos;t exist or has been removed.
           </p>
-          <a 
+          <Link 
             href="/ai" 
             className="inline-flex mt-6 px-6 py-3 bg-yellow-400 text-black font-semibold rounded-lg hover:bg-yellow-300 transition-colors"
           >
             Browse All Prompts
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -55,9 +56,9 @@ export default async function Page({ params }) {
       <div className="bg-neutral-900/50 border-b border-neutral-800">
         <div className="container mx-auto px-4 py-4">
           <nav className="flex text-sm">
-            <a href="/" className="text-neutral-400 hover:text-yellow-400">Home</a>
+            <Link href="/" className="text-neutral-400 hover:text-yellow-400">Home</Link>
             <span className="text-neutral-600 mx-2">/</span>
-            <a href="/ai" className="text-neutral-400 hover:text-yellow-400">AI Prompts</a>
+            <Link href="/ai" className="text-neutral-400 hover:text-yellow-400">AI Prompts</Link>
             <span className="text-neutral-600 mx-2">/</span>
             <span className="text-yellow-400">{prompt.title}</span>
           </nav>

@@ -6,14 +6,14 @@ import VideoSection from "@/components/news/VideoSection";
 import NewsLetter from "@/components/NewsLetter";
 import SectionHeader from "@/components/sectionHeader/SectionHeader";
 import { postService } from '@/services/posts';
-import { POST_SECTIONS, REVALIDATION_TIME } from '@/constants';
+import { POST_SECTIONS } from '@/constants';
 
 export const metadata = {
     title: "AI News Hub - Curated Research and Insights",
     description: "Explore the latest AI insights, curated blogs, and trending topics.",
 };
 
-export const revalidate = REVALIDATION_TIME;
+export const revalidate = 1800;
 
 export default async function Page() {
     try {
