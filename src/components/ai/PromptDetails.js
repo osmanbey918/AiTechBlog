@@ -19,10 +19,10 @@ export default function PromptDetails({ prompt }) {
       <div className="mb-8">
         <Link
           href="/ai"
-          className="inline-flex items-center text-blue-400 hover:text-blue-300 mb-6 transition-colors"
+          className="inline-flex items-center text-neutral-400 hover:text-yellow-400 mb-6 transition-colors group"
         >
           <svg
-            className="w-5 h-5 mr-2"
+            className="w-5 h-5 mr-2 group-hover:-translate-x-1 transition-transform"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -52,14 +52,14 @@ export default function PromptDetails({ prompt }) {
             <div>
               <h1 className="text-3xl font-bold text-white mb-2">{prompt.title}</h1>
               <div className="flex items-center gap-4">
-                <span className="text-blue-400 font-medium">{prompt.category}</span>
+                <span className="px-3 py-1 text-sm rounded-full bg-yellow-400/10 text-yellow-400 border border-yellow-400/20">{prompt.category}</span>
                 <div className="flex items-center text-yellow-400">
                   <svg className="w-5 h-5 mr-1" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                   </svg>
                   <span className="font-medium">{prompt.rating}</span>
                 </div>
-                <span className="text-gray-400">
+                <span className="text-neutral-400">
                   {new Intl.NumberFormat('en-US', {
                     notation: 'compact',
                     maximumSignificantDigits: 3,
@@ -76,7 +76,7 @@ export default function PromptDetails({ prompt }) {
         {prompt.tags?.map((tag, index) => (
           <span
             key={index}
-            className="px-3 py-1 text-sm rounded-full bg-blue-500/10 text-blue-400"
+            className="px-3 py-1 text-sm rounded-full bg-neutral-900/50 text-neutral-400 border border-neutral-800 hover:border-yellow-400/20 hover:text-yellow-400 transition-colors cursor-pointer"
           >
             #{tag}
           </span>
@@ -84,18 +84,22 @@ export default function PromptDetails({ prompt }) {
       </div>
 
       {/* Description */}
-      <div className="bg-gray-900/50 rounded-xl p-6 mb-8">
+      <div className="bg-neutral-900/50 rounded-xl p-6 mb-8 border border-neutral-800">
         <h2 className="text-xl font-semibold text-white mb-4">Description</h2>
-        <p className="text-gray-300">{prompt.excerpt}</p>
+        <p className="text-neutral-400 leading-relaxed">{prompt.excerpt}</p>
       </div>
 
       {/* Prompt Content */}
-      <div className="bg-gray-900/50 rounded-xl p-6 mb-8">
+      <div className="bg-neutral-900/50 rounded-xl p-6 mb-8 border border-neutral-800">
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-semibold text-white">Prompt Template</h2>
           <button
             onClick={() => copyToClipboard(prompt.content)}
-            className="inline-flex items-center px-3 py-1 rounded-lg bg-blue-500/10 text-blue-400 hover:bg-blue-500/20 transition-colors"
+            className={`inline-flex items-center px-4 py-2 rounded-lg transition-colors ${
+              copied 
+                ? 'bg-green-400/10 text-green-400 border border-green-400/20' 
+                : 'bg-yellow-400/10 text-yellow-400 border border-yellow-400/20 hover:bg-yellow-400/20'
+            }`}
           >
             {copied ? (
               <>
@@ -134,7 +138,7 @@ export default function PromptDetails({ prompt }) {
             )}
           </button>
         </div>
-        <div className="bg-black/30 rounded-lg p-6 font-mono text-sm text-gray-300 whitespace-pre-wrap">
+        <div className="bg-neutral-950/50 rounded-lg p-6 font-mono text-sm text-neutral-300 whitespace-pre-wrap border border-neutral-800">
           {prompt.content}
         </div>
       </div>
@@ -142,10 +146,10 @@ export default function PromptDetails({ prompt }) {
       {/* Usage Guide and Results */}
       <div className="space-y-8">
         {Array.isArray(prompt.usageTips) && prompt.usageTips.length > 0 && (
-          <div className="bg-gray-900/50 rounded-xl p-6">
+          <div className="bg-neutral-900/50 rounded-xl p-6 border border-neutral-800">
             <div className="flex items-center mb-4">
               <svg
-                className="w-6 h-6 text-blue-400 mr-2"
+                className="w-6 h-6 text-yellow-400 mr-2"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -162,10 +166,10 @@ export default function PromptDetails({ prompt }) {
             <ul className="list-none space-y-3">
               {prompt.usageTips.map((tip, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-blue-500/10 text-blue-400 text-sm mr-3 flex-shrink-0 mt-0.5">
+                  <span className="inline-flex items-center justify-center w-6 h-6 rounded-full bg-yellow-400/10 text-yellow-400 text-sm mr-3 flex-shrink-0 mt-0.5 border border-yellow-400/20">
                     {index + 1}
                   </span>
-                  <span className="text-gray-300">{tip}</span>
+                  <span className="text-neutral-300">{tip}</span>
                 </li>
               ))}
             </ul>
@@ -173,10 +177,10 @@ export default function PromptDetails({ prompt }) {
         )}
 
         {prompt.expectedResults && Object.keys(prompt.expectedResults).length > 0 && (
-          <div className="bg-gray-900/50 rounded-xl p-6">
+          <div className="bg-neutral-900/50 rounded-xl p-6 border border-neutral-800">
             <div className="flex items-center mb-4">
               <svg
-                className="w-6 h-6 text-blue-400 mr-2"
+                className="w-6 h-6 text-yellow-400 mr-2"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -192,13 +196,13 @@ export default function PromptDetails({ prompt }) {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {Object.entries(prompt.expectedResults).map(([key, value], index) => (
-                <div key={index} className="bg-black/30 rounded-lg p-4 flex items-start">
+                <div key={index} className="bg-neutral-950/50 rounded-lg p-4 flex items-start border border-neutral-800">
                   <div className="flex-1">
-                    <div className="text-blue-400 font-medium mb-1">{key}</div>
-                    <div className="text-gray-300">{value}</div>
+                    <div className="text-yellow-400 font-medium mb-1">{key}</div>
+                    <div className="text-neutral-300">{value}</div>
                   </div>
                   <svg
-                    className="w-5 h-5 text-green-400 flex-shrink-0 ml-3 mt-1"
+                    className="w-5 h-5 text-yellow-400 flex-shrink-0 ml-3 mt-1"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"

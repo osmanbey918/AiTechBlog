@@ -1,56 +1,22 @@
 import mongoose from 'mongoose';
 
 const blogSchema = new mongoose.Schema({
-  title: {
+  mdxContent: {
     type: String,
-    required: [true, 'Please provide a title for this blog'],
-    maxlength: [100, 'Title cannot be more than 100 characters']
+    required: [true, 'MDX content is required.'],
   },
-  content: {
-    type: String,
-    required: [true, 'Please provide the content for this blog']
+  jsonLd: {
+    type: Object,
+    required: [true, 'JSON-LD is required.'],
   },
-  author: {
-    type: String,
-    required: [true, 'Please provide an author name'],
-    maxlength: [50, 'Author name cannot be more than 50 characters']
+  meta: {
+    title: { type: String, required: true },
+    description: { type: String, required: true },
+    slug: { type: String, required: true, unique: true },
+    author: { type: String, required: true },
+    keywords: { type: String },
+    imageUrl: { type: String },
   },
-  category: {
-    type: String,
-    default: 'Other',
-    enum: ['Technology', 'AI', 'Programming', 'Science', 'Other']
-  },
-  tags: {
-    type: [String],
-    default: []
-  },
-  likes: {
-    type: Number,
-    default: 0
-  },
-  shares: {
-    type: Number,
-    default: 0
-  },
-  comments: {
-    type: Number,
-    default: 0
-  },
-  image: {
-    type: String,
-    default: '/assets/r-blog.svg'  // Default placeholder image
-  },
-  status: {
-    type: String,
-    enum: ['draft', 'published'],
-    default: 'published'
-  },
-  publishedAt: {
-    type: Date,
-    default: Date.now
-  }
-}, {
-  timestamps: true
-});
+}, { timestamps: true });
 
-export default mongoose.models.Blog || mongoose.model('Blog', blogSchema);
+export default mongoose.models.blog || mongoose.model('blog', blogSchema);

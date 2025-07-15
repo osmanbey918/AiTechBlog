@@ -62,7 +62,7 @@ export default function FeaturedCard({
           </div>
 
           {/* Title */}
-          <h2 className="text-3xl md:text-5xl font-bold mb-4 line-clamp-5 leading-tight drop-shadow-md">
+          <h2 className="text-3xl md:text-5xl font-bold mb-4 line-clamp-5 leading-tight drop-shadow-md group-hover:underline group-hover:decoration-yellow-400 group-hover:drop-shadow-md transition">
             {title}
           </h2>
 

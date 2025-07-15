@@ -37,7 +37,7 @@ export function BlogPostCardVergeStyle({
         {/* Left Content */}
         <div className="flex flex-col gap-2 flex-1">
           <CategoryBadge category={category} />
-          <h2 className="text-white text-lg md:text-xl font-serif font-semibold leading-tight group-hover:text-yellow-400 group-hover:drop-shadow-md transition">
+          <h2 className="text-white text-lg md:text-xl font-serif font-semibold leading-tight group-hover:underline group-hover:decoration-yellow-400 group-hover:drop-shadow-md transition">
             {title}
           </h2>
           <div className="flex items-center text-xs text-neutral-500 gap-3 flex-wrap">
@@ -94,12 +94,12 @@ export default function BlogPostCard({
             <CategoryBadge category={category} />
           </div>
 
-          <h2 className="text-white underline decoration-yellow-400 text-lg md:text-xl font-serif font-semibold leading-snug group-hover:text-yellow-400 transition">
+          <h2 className="text-white text-lg md:text-xl font-serif font-semibold leading-tight group-hover:underline group-hover:decoration-yellow-400 group-hover:drop-shadow-md transition">
             {title}
           </h2>
 
 
-          <p className="text-sm text-neutral-400 line-clamp-3">
+          <p className="text-sm text-neutral-400 line-clamp-3 group-hover:underline group-hover:decoration-yellow-400 group-hover:drop-shadow-md transition">
             {description}
           </p>
 

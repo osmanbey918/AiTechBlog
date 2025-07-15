@@ -1,553 +1,171 @@
 'use client';
-import yaml from 'js-yaml';
-import { useState, useEffect } from 'react';
-import { useEditor, EditorContent } from '@tiptap/react';
-import StarterKit from '@tiptap/starter-kit';
-import Link from '@tiptap/extension-link';
-import CodeBlock from '@tiptap/extension-code-block';
-import { Markdown } from 'tiptap-markdown';
-import { marked } from 'marked';
-import hljs from 'highlight.js';
-import 'highlight.js/styles/github.css'; // You can choose other styles too
-import Image from '@tiptap/extension-image';
+import { EditorContent } from '@tiptap/react';
 
-export default function WritePage() {
-  const [title, setTitle] = useState('');
-  const [excerpt, setExcerpt] = useState('');
-  const [tags, setTags] = useState('');
-  const [slug, setSlug] = useState('');
+
+import { useState, useCallback } from 'react';
+import yaml from 'js-yaml';
+import { marked } from 'marked';
+import { createPost} from './actions';
+import InputFields from '@/components/write/InputFields';
+import EditorToolbar from '@/components/write/EditorToolbar';
+import { useEditorSetup } from '@/components/write/useEditorSetup';
+import LivePreview from '@/components/write/LivePreview';
+
+const CATEGORIES = ['Technology', 'AI', 'Programming', 'Science', 'Other'];
+export default function Page() {
+  // ... inside your component
+  const [formData, setFormData] = useState({
+    title: '',
+    // 'excerpt' will be used as the 'description' in the meta object
+    excerpt: '',
+    tags: [],
+    slug: '',
+    // 'image' will be used as 'imageUrl'
+    coverImage: '',
+    category: CATEGORIES[0],
+    authorName: ''
+  });
   const [markdown, setMarkdown] = useState('');
   const [saving, setSaving] = useState(false);
-  const [message, setMessage] = useState('');
+  const [message, setMessage] = useState(null); // To display success/error messages
 
-  const editor = useEditor({
-    extensions: [
-      StarterKit.configure({ codeBlock: false }),
-      CodeBlock,
-      Link.configure({ openOnClick: false }),
-      Markdown.configure({
-        html: false,
-        transformers: [
-          {
-            extensions: [Image],
-            markdown: {
-              match: node => node.type.name === 'image',
-              runner: (state, node) => {
-                const alt = node.attrs.alt || '';
-                const src = node.attrs.src || '';
-                state.write(`![${alt}](${src})`);
-              },
-            },
-          },
-        ],
-      }),
-      Image.configure({
-        allowBase64: true, // enables base64 or external URLs
-      }),
-    ],
-    onUpdate({ editor }) {
-      const md = editor.storage.markdown.getMarkdown();
-      setMarkdown(md);
-    },
-    content: '',
-    // 👇 Add this line to avoid SSR hydration mismatch
-    editorProps: {
-      attributes: {
-        class: 'focus:outline-none prose dark:prose-invert', // Optional styling
-      },
-    },
-    // 👇 This is the fix!
-    immediatelyRender: false,
-  });
-
+  const { editor, editorLoaded } = useEditorSetup(setMarkdown);
 
   const handleSave = async () => {
-    if (!editor) return;
+    // Basic validation
+    if (!formData.title || !formData.authorName || !markdown) {
+      setMessage({ text: 'Title, Author Name, and Content are required.', type: 'error' });
+      return;
+    }
+
     setSaving(true);
-    setMessage('');
-    const dateNow = new Date().toISOString(); // ✅ Moved up here
+    setMessage(null);
 
-    const jsonld = {
-      "@context": "https://schema.org",
-      "@type": "Article",
-      "headline": title,
-      "image": "https://yourdomain.com/default-cover.jpg", // Optional: Replace or make dynamic
-      "author": {
-        "@type": "Person",
-        "name": "Muhammad Usman"
-      },
-      "publisher": {
-        "@type": "Organization",
-        "name": "YourSiteName",
-        "logo": {
-          "@type": "ImageObject",
-          "url": "https://yourdomain.com/logo.png"
+    try {
+      const dateNow = new Date().toISOString();
+
+      // Sanitize the slug from either the slug field or the title
+      const cleanSlug = (formData.slug || formData.title)
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, '') // Remove non-word chars
+        .replace(/\s+/g, '-');      // Replace spaces with -
+
+      // 1. Construct the JSON-LD object (as a plain object)
+      const jsonldObject = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": formData.title,
+        "image": formData.image || "https://yourdomain.com/default-cover.jpg",
+        "author": {
+          "@type": "Person",
+          "name": formData.authorName
+        },
+        "publisher": {
+          "@type": "Organization",
+          "name": "YourAppName", // Replace with your app's name
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://yourdomain.com/logo.png"
+          }
+        },
+        "datePublished": dateNow,
+        "mainEntityOfPage": {
+          "@type": "WebPage",
+          "@id": "https:yourdomain.com/blog/${cleanSlug}"
+        },
+        "description": formData.excerpt,
+        "articleSection": formData.category
+      };
+
+      // 2. Construct the payload matching the server action's expectation
+      const payload = {
+        mdxContent: markdown,
+        jsonLd: jsonldObject, // Pass it as an object
+        meta: {
+          title: formData.title,
+          description: formData.excerpt,
+          slug: cleanSlug,
+          author: formData.authorName,
+          // Convert the tags array to a comma-separated string
+          keywords: formData.tags.join(', '),
+          imageUrl: formData.coverImage,
         }
-      },
-      "datePublished": dateNow,
-      "mainEntityOfPage": {
-        "@type": "WebPage",
-        "@id": `https://yourdomain.com/blog/${slug}`
-      },
-      "description": excerpt
-    };
+      };
 
-    // Convert JS object to YAML
-    const frontmatter = yaml.dump(jsonld, {
-      lineWidth: -1,
-      forceQuotes: true,
-      quotingType: '"',
-    });
+      // 3. Call the server action with the correctly structured payload
+      const result = await createPost(payload);
 
-  const payload = {
-    title,
-    excerpt,
-    tags: tags.split(',').map((t) => t.trim()),
-    slug,
-    content: markdown,
-    jsonld: frontmatter,
+      // 4. Handle the response from the server action
+      if (result.success) {
+        setMessage({ text: result.message, type: 'success' });
+        // Optionally, you can reset the form here
+      } else {
+        setMessage({ text: result.error || 'An unknown error occurred.', type: 'error' });
+      }
+
+    } catch (error) {
+      setMessage({ text: error.message || 'Error saving the post.', type: 'error' });
+    } finally {
+      setSaving(false);
+    }
   };
 
-  const res = await fetch('/api/save-md', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
 
-  setSaving(false);
-  setMessage(res.ok ? '✅ Blog saved as markdown!' : '❌ Error saving blog.');
-};
-const addImage = () => {
-  const url = prompt('Enter image URL');
-  if (url) {
-    editor?.chain().focus().setImage({ src: url }).run();
-  }
-};
+  const handleInputChange = field => e => setFormData(prev => ({ ...prev, [field]: e.target.value }));
+  const handleTagsChange = e => setFormData(prev => ({ ...prev, tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean) }));
 
-const addLink = () => {
-  const previousUrl = editor?.getAttributes('link').href;
-  const url = prompt('Enter URL', previousUrl);
+  const addImage = () => {
+    const url = prompt('Enter image URL');
+    if (url) editor?.chain().focus().setImage({ src: url }).run();
+  };
 
-  if (url === null) return;
+  const addLink = () => {
+    const url = prompt('Enter URL', editor?.getAttributes('link').href);
+    if (url === null) return;
+    if (url === '') editor?.chain().focus().unsetLink().run();
+    else editor?.chain().focus().setLink({ href: url }).run();
+  };
 
-  if (url === '') {
-    editor?.chain().focus().unsetLink().run();
-    return;
-  }
+  const getPreviewHtml = md => {
+    try {
+      return marked.parse(md || '');
+    } catch {
+      return '<p>Error rendering preview</p>';
+    }
+  };
+  return (
+    <div className="max-w-6xl mx-auto py-10 px-4">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200">📝 Write a New Blog</h1>
+      <div className="grid md:grid-cols-2 gap-6">
+        <div>
+          <InputFields formData={formData} handleInputChange={handleInputChange} handleTagsChange={handleTagsChange} categories={CATEGORIES} />
+          <EditorToolbar editor={editor} addImage={addImage} addLink={addLink} />
+          {editorLoaded && (
+            <div className="border border-gray-300 dark:border-gray-700 p-4 rounded bg-white dark:bg-gray-900 min-h-[300px] max-w-none shadow-sm">
+              {editorLoaded && (
+                <div className="border ...">
+                  <EditorContent editor={editor} />
+                </div>
+              )}
 
-  editor?.chain().focus().setLink({ href: url }).run();
-
-  // 🔒 Optional: Remove link mark activation so typing doesn't stay in link mode
-  editor?.commands.unsetLink();
-};
-
-
-// Convert markdown to HTML with syntax highlighting
-const getPreviewHtml = () => {
-  marked.setOptions({
-    highlight: function (code, lang) {
-      return hljs.highlightAuto(code, [lang]).value;
-    },
-  });
-  return marked.parse(markdown || '');
-};
-
-return (
-  <div className="max-w-6xl mx-auto py-10 px-4">
-    <h1 className="text-3xl font-bold mb-6 text-gray-800">📝 Write a New Blog</h1>
-
-    <div className="grid md:grid-cols-2 gap-6">
-      {/* Left column: inputs and editor */}
-      <div className="space-y-4">
-        <input
-          type="text"
-          className="w-full p-3 border border-gray-300 bg-black rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Title"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-        />
-        <input
-          type="text"
-          className="w-full p-3 border border-gray-300 rounded bg-black focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Slug (e.g. ai-revolution)"
-          value={slug}
-          onChange={(e) => setSlug(e.target.value)}
-        />
-        <input
-          type="text"
-          className="w-full p-3 border border-gray-300 rounded bg-black focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Excerpt"
-          value={excerpt}
-          onChange={(e) => setExcerpt(e.target.value)}
-        />
-        <input
-          type="text"
-          className="w-full p-3 border border-gray-300 rounded bg-black focus:outline-none focus:ring-2 focus:ring-blue-500"
-          placeholder="Tags (comma separated)"
-          value={tags}
-          onChange={(e) => setTags(e.target.value)}
-        />
-
-        {/* Toolbar */}
-        <div className="flex flex-wrap gap-2 mt-4">
-          <ToolbarButton onClick={() => editor?.chain().focus().toggleBold().run()} label="Bold" />
-          <ToolbarButton onClick={() => editor?.chain().focus().toggleItalic().run()} label="Italic" />
-          <ToolbarButton onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()} label="H1" />
-          <ToolbarButton onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()} label="H2" />
-          <ToolbarButton onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()} label="H3" />
-          <ToolbarButton onClick={() => editor?.chain().focus().toggleBulletList().run()} label="Bullet List" />
-          <ToolbarButton onClick={() => editor?.chain().focus().toggleOrderedList().run()} label="Numbered List" />
-          <ToolbarButton onClick={() => editor?.chain().focus().toggleCodeBlock().run()} label="Code Block" />
-          <ToolbarButton onClick={addLink} label="Link 🔗" />
-          <ToolbarButton onClick={addImage} label="🖼️ Image" />
-
+            </div>
+          )}
+          <button
+            onClick={handleSave}
+            disabled={saving || !formData.title || !formData.authorName}
+            className={`mt-4 px-6 py-2 rounded flex items-center justify-center ${saving || !formData.title || !formData.authorName ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed' : 'bg-yellow-500 hover:bg-yellow-600 text-white'}`}
+          >
+            {saving ? 'Saving...' : '💾 Save Blog'}
+          </button>
+          {message && (
+            <p className={`text-sm mt-2 ${message.type === 'success' ? 'text-green-500' : 'text-red-500'}`}>
+              {message.type === 'success' ? '✅ ' : '❌ '}{message.text}
+            </p>
+          )}
         </div>
-
-        <div className="border border-gray-300 text-white p-4 rounded bg-black min-h-[300px]  max-w-none shadow-sm">
-          <EditorContent editor={editor} />
-        </div>
-
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
-        >
-          {saving ? 'Saving...' : '💾 Save as Markdown'}
-        </button>
-
-        {message && <p className="text-sm text-green-600 mt-2">{message}</p>}
-      </div>
-
-      {/* Right column: preview */}
-      <div className="bg-white border border-gray-200 rounded p-4 overflow-y-auto prose max-w-none min-h-[600px]">
-        <h2 className="text-xl font-semibold mb-3 text-white">📄 Live Preview</h2>
-        <div dangerouslySetInnerHTML={{ __html: getPreviewHtml() }} />
+        <LivePreview markdown={markdown} getPreviewHtml={getPreviewHtml} />
       </div>
     </div>
-  </div>
-);
-}
-
-function ToolbarButton({ onClick, label }) {
-  return (
-    <button
-      onClick={onClick}
-      className="px-3 py-1 text-sm bg-black border border-gray-300 rounded hover:bg-gray-200 transition"
-    >
-      {label}
-    </button>
   );
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// 'use client';
-
-// import yaml from 'js-yaml';
-// import { useState, useEffect } from 'react';
-// import { useEditor, EditorContent } from '@tiptap/react';
-// import StarterKit from '@tiptap/starter-kit';
-// import Link from '@tiptap/extension-link';
-// import CodeBlock from '@tiptap/extension-code-block';
-// import { Markdown } from 'tiptap-markdown';
-// import { marked } from 'marked';
-// import hljs from 'highlight.js';
-// import 'highlight.js/styles/github.css'; // You can choose other styles too
-// import Image from '@tiptap/extension-image';
-
-// export default function WritePage() {
-//   const [title, setTitle] = useState('');
-//   const [excerpt, setExcerpt] = useState('');
-//   const [tags, setTags] = useState('');
-//   const [slug, setSlug] = useState('');
-//   const [markdown, setMarkdown] = useState('');
-//   const [saving, setSaving] = useState(false);
-//   const [message, setMessage] = useState('');
-
-//   const editor = useEditor({
-//     extensions: [
-//       StarterKit.configure({ codeBlock: false }),
-//       CodeBlock,
-//       Link.configure({ openOnClick: false }),
-//       Markdown.configure({
-//         html: false,
-//         transformers: [
-//           {
-//             extensions: [Image],
-//             markdown: {
-//               match: node => node.type.name === 'image',
-//               runner: (state, node) => {
-//                 const alt = node.attrs.alt || '';
-//                 const src = node.attrs.src || '';
-//                 state.write(`![${alt}](${src})`);
-//               },
-//             },
-//           },
-//         ],
-//       }),
-//       Image.configure({
-//         allowBase64: true, // enables base64 or external URLs
-//       }),
-//     ],
-//     onUpdate({ editor }) {
-//       const md = editor.storage.markdown.getMarkdown();
-//       setMarkdown(md);
-//     },
-//     content: '',
-//     // 👇 Add this line to avoid SSR hydration mismatch
-//     editorProps: {
-//       attributes: {
-//         class: 'focus:outline-none prose dark:prose-invert', // Optional styling
-//       },
-//     },
-//     // 👇 This is the fix!
-//     immediatelyRender: false,
-//   });
-
-
-
-// const handleSave = async () => {
-//   if (!editor) return;
-//   setSaving(true);
-//   setMessage('');
-
-//   const dateNow = new Date().toISOString();
-
-//   const jsonld = {
-//     "@context": "https://schema.org",
-//     "@type": "Article",
-//     "headline": title,
-//     "image": "https://yourdomain.com/default-cover.jpg", // Optional: Replace or make dynamic
-//     "author": {
-//       "@type": "Person",
-//       "name": "Muhammad Usman"
-//     },
-//     "publisher": {
-//       "@type": "Organization",
-//       "name": "YourSiteName",
-//       "logo": {
-//         "@type": "ImageObject",
-//         "url": "https://yourdomain.com/logo.png"
-//       }
-//     },
-//     "datePublished": dateNow,
-//     "mainEntityOfPage": {
-//       "@type": "WebPage",
-//       "@id": `https://yourdomain.com/blog/${slug}`
-//     },
-//     "description": excerpt
-//   };
-
-//   // Build frontmatter safely
-//   const frontmatterObject = {
-//     title,
-//     excerpt,
-//     date: dateNow,
-//     slug,
-//     tags: tags.split(',').map((t) => t.trim()),
-//     jsonld,
-//   };
-
-//   // Convert JS object to YAML
-//   const frontmatter = yaml.dump(frontmatterObject);
-
-//   // Combine frontmatter + markdown body
-//   const mdContent = `---\n${frontmatter}---\n\n${markdown}`;
-
-//   // Send it to your API for saving
-//   const res = await fetch('/api/save-md', {
-//     method: 'POST',
-//     headers: { 'Content-Type': 'application/json' },
-//     body: JSON.stringify({
-//       filename: `${slug}.md`,
-//       content: mdContent,
-//     }),
-//   });
-
-//   setSaving(false);
-//   setMessage(res.ok ? '✅ Blog saved as markdown!' : '❌ Error saving blog.');
-// };
-
-//   const addImage = () => {
-//     const url = prompt('Enter image URL');
-//     if (url) {
-//       editor?.chain().focus().setImage({ src: url }).run();
-//     }
-//   };
-
-//   const addLink = () => {
-//     const previousUrl = editor?.getAttributes('link').href;
-//     const url = prompt('Enter URL', previousUrl);
-
-//     if (url === null) return;
-
-//     if (url === '') {
-//       editor?.chain().focus().unsetLink().run();
-//       return;
-//     }
-
-//     editor?.chain().focus().setLink({ href: url }).run();
-
-//     // 🔒 Optional: Remove link mark activation so typing doesn't stay in link mode
-//     editor?.commands.unsetLink();
-//   };
-
-
-//   // Convert markdown to HTML with syntax highlighting
-//   const getPreviewHtml = () => {
-//     marked.setOptions({
-//       highlight: function (code, lang) {
-//         return hljs.highlightAuto(code, [lang]).value;
-//       },
-//     });
-//     return marked.parse(markdown || '');
-//   };
-
-//   return (
-//     <div className="max-w-6xl mx-auto py-10 px-4">
-//       <h1 className="text-3xl font-bold mb-6 text-gray-800">📝 Write a New Blog</h1>
-
-//       <div className="grid md:grid-cols-2 gap-6">
-//         {/* Left column: inputs and editor */}
-//         <div className="space-y-4">
-//           <input
-//             type="text"
-//             className="w-full p-3 border border-gray-300 bg-black rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-//             placeholder="Title"
-//             value={title}
-//             onChange={(e) => setTitle(e.target.value)}
-//           />
-//           <input
-//             type="text"
-//             className="w-full p-3 border border-gray-300 rounded bg-black focus:outline-none focus:ring-2 focus:ring-blue-500"
-//             placeholder="Slug (e.g. ai-revolution)"
-//             value={slug}
-//             onChange={(e) => setSlug(e.target.value)}
-//           />
-//           <input
-//             type="text"
-//             className="w-full p-3 border border-gray-300 rounded bg-black focus:outline-none focus:ring-2 focus:ring-blue-500"
-//             placeholder="Excerpt"
-//             value={excerpt}
-//             onChange={(e) => setExcerpt(e.target.value)}
-//           />
-//           <input
-//             type="text"
-//             className="w-full p-3 border border-gray-300 rounded bg-black focus:outline-none focus:ring-2 focus:ring-blue-500"
-//             placeholder="Tags (comma separated)"
-//             value={tags}
-//             onChange={(e) => setTags(e.target.value)}
-//           />
-
-//           {/* Toolbar */}
-//           <div className="flex flex-wrap gap-2 mt-4">
-//             <ToolbarButton onClick={() => editor?.chain().focus().toggleBold().run()} label="Bold" />
-//             <ToolbarButton onClick={() => editor?.chain().focus().toggleItalic().run()} label="Italic" />
-//             <ToolbarButton onClick={() => editor?.chain().focus().toggleHeading({ level: 1 }).run()} label="H1" />
-//             <ToolbarButton onClick={() => editor?.chain().focus().toggleHeading({ level: 2 }).run()} label="H2" />
-//             <ToolbarButton onClick={() => editor?.chain().focus().toggleHeading({ level: 3 }).run()} label="H3" />
-//             <ToolbarButton onClick={() => editor?.chain().focus().toggleBulletList().run()} label="Bullet List" />
-//             <ToolbarButton onClick={() => editor?.chain().focus().toggleOrderedList().run()} label="Numbered List" />
-//             <ToolbarButton onClick={() => editor?.chain().focus().toggleCodeBlock().run()} label="Code Block" />
-//             <ToolbarButton onClick={addLink} label="Link 🔗" />
-//             <ToolbarButton onClick={addImage} label="🖼️ Image" />
-
-//           </div>
-
-//           <div className="border border-gray-300 text-white p-4 rounded bg-black min-h-[300px]  max-w-none shadow-sm">
-//             <EditorContent editor={editor} />
-//           </div>
-
-//           <button
-//             onClick={handleSave}
-//             disabled={saving}
-//             className="mt-4 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 transition"
-//           >
-//             {saving ? 'Saving...' : '💾 Save as Markdown'}
-//           </button>
-
-//           {message && <p className="text-sm text-green-600 mt-2">{message}</p>}
-//         </div>
-
-//         {/* Right column: preview */}
-//         <div className="bg-white border border-gray-200 rounded p-4 overflow-y-auto prose max-w-none min-h-[600px]">
-//           <h2 className="text-xl font-semibold mb-3 text-white">📄 Live Preview</h2>
-//           <div dangerouslySetInnerHTML={{ __html: getPreviewHtml() }} />
-//         </div>
-//       </div>
-//     </div>
-//   );
-// }
-
-// function ToolbarButton({ onClick, label }) {
-//   return (
-//     <button
-//       onClick={onClick}
-//       className="px-3 py-1 text-sm bg-black border border-gray-300 rounded hover:bg-gray-200 transition"
-//     >
-//       {label}
-//     </button>
-//   );
-// }
-
-//   const jsonld = {
-//     "@context": "https://schema.org",
-//     "@type": "Article",
-//     "headline": title,
-//     "image": "https://yourdomain.com/default-cover.jpg", // Optional: Replace or make dynamic
-//     "author": {
-//       "@type": "Person",
-//       "name": "Muhammad Usman"
-//     },
-//     "publisher": {
-//       "@type": "Organization",
-//       "name": "YourSiteName",
-//       "logo": {
-//         "@type": "ImageObject",
-//         "url": "https://yourdomain.com/logo.png"
-//       }
-//     },
-//     "datePublished": dateNow,
-//     "mainEntityOfPage": {
-//       "@type": "WebPage",
-//       "@id": `https://yourdomain.com/blog/${slug}`
-//     },
-//     "description": excerpt
-//   };
-
-//   // Build frontmatter safely
-//   const frontmatterObject = {
-//     title,
-//     excerpt,
-//     date: dateNow,
-//     slug,
-//     tags: tags.split(',').map((t) => t.trim()),
-//     jsonld,
-//   };
-
-//   // Convert JS object to YAML
-//   const frontmatter = yaml.dump(frontmatterObject);

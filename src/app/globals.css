@@ -24,6 +24,10 @@ body {
   width: 4l;
 }
 
+.inputStyle {
+  @apply w-full p-3 border border-gray-300 dark:border-gray-700 rounded focus:ring-2 focus:ring-yellow-400 bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100;
+}
+
 .g-px {
   @apply container mx-auto max-sm:px-2 max-md:px-4 lg:px-4;
   /* @apply max-xl:px-20 max-lg:px-16  max-sm:px-4 max-md:px-8 px-24; */
