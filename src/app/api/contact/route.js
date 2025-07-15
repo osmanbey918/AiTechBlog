@@ -1,6 +1,8 @@
 import nodemailer from 'nodemailer';
 import { NextResponse } from 'next/server';
 
+console.log("✅ Email:", process.env.MY_EMAIL);
+console.log("✅ Pass length:", process.env.MY_EMAIL_PASS?.length);
 export async function POST(req) {
   const { firstName, lastName, email, phoneNumber, message } = await req.json();
 
@@ -19,8 +21,6 @@ export async function POST(req) {
       { status: 400 }
     );
   }
-  console.log("✅ Email:", process.env.MY_EMAIL);
-  console.log("✅ Pass length:", process.env.MY_EMAIL_PASS?.length);
 
   try {
     const transporter = nodemailer.createTransport({
