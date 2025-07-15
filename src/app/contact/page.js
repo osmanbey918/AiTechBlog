@@ -1,5 +1,6 @@
 "use client";
-import React, { useState,useEffect,useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { FaArrowRight, FaXTwitter, FaLinkedin, FaGithub } from 'react-icons/fa6';
 
 // ContactButton Component
 const ContactButton = ({ children, onClick, className = "" }) => {
@@ -14,13 +15,13 @@ const ContactButton = ({ children, onClick, className = "" }) => {
 };
 
 // SocialButton Component
-const SocialButton = ({ onClick, className = "" }) => {
+const SocialButton = ({ onClick, className = "", icon }) => {
   return (
     <button
       onClick={onClick}
       className={`flex justify-center items-center gap-2.5 flex-[1_0_0] border border-neutral-800 cursor-pointer bg-[#1A1A1A] px-6 py-3.5 rounded-md border-solid hover:bg-neutral-700 transition-colors ${className}`}
     >
-      <span>+</span>
+      {icon}
     </button>
   );
 };
@@ -42,7 +43,7 @@ const ContactSection = ({ title, items = [], children }) => {
               <span className="text-[#98989A] text-sm font-normal leading-[21px] tracking-[-0.42px]">
                 {item.text}
               </span>
-              <span>+</span>
+              <span> <FaArrowRight style={{ transform: 'rotate(320deg)', color: 'yellow' }} /></span>
             </ContactButton>
           ))}
         </div>
@@ -55,6 +56,7 @@ const ContactSection = ({ title, items = [], children }) => {
 
 // ContactForm Component
 const ContactForm = () => {
+  const maxChars = 500;
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -64,19 +66,6 @@ const ContactForm = () => {
     agreeToTerms: false
   });
 
-  const handleInputChange = (field, value) => {
-    setFormData(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log('Form submitted:', formData);
-  };
-  const [message, setMessage] = useState('');
-  const maxChars = 500;
   const textareaRef = useRef(null);
 
   // Auto expand function
@@ -85,7 +74,61 @@ const ContactForm = () => {
       textareaRef.current.style.height = 'auto';
       textareaRef.current.style.height = textareaRef.current.scrollHeight + 'px';
     }
-  }, [message]);
+  }, [formData.message]);
+
+  const handleInputChange = (field, value) => {
+    setFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  // Contact form Submit handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validate terms agreement
+    if (!formData.agreeToTerms) {
+      alert('Please agree to Terms of Use and Privacy Policy');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          phoneNumber: formData.phoneNumber,
+          message: formData.message,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert('Message sent successfully!');
+        // Reset form
+        setFormData({
+          firstName: '',
+          lastName: '',
+          email: '',
+          phoneNumber: '',
+          message: '',
+          agreeToTerms: false,
+        });
+      } else {
+        throw new Error(data.message || 'Failed to send message');
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      alert(error.message || 'An error occurred. Please try again later.');
+    }
+  };
 
   return (
     <section className="flex flex-col items-start gap-[30px] flex-[1_0_0] self-stretch border-l-neutral-800 pl-[60px] pr-0 py-[60px] border-l border-solid max-md:border-t-neutral-800 max-md:px-0 max-md:py-10 max-md:border-l-[none] max-md:border-t max-md:border-solid max-sm:px-0 max-sm:py-[30px]">
@@ -102,6 +145,7 @@ const ContactForm = () => {
               onChange={(e) => handleInputChange('firstName', e.target.value)}
               placeholder="Enter First Name"
               className="flex-[1_0_0] text-[#666] text-sm font-normal leading-[21px] self-stretch border border-neutral-800 bg-[#1A1A1A] p-4 rounded-md border-solid focus:outline-none focus:ring-2 focus:ring-[#FFD11A] focus:border-transparent"
+              required
             />
           </div>
           <div className="flex flex-col items-start gap-3 flex-[1_0_0]">
@@ -115,6 +159,7 @@ const ContactForm = () => {
               onChange={(e) => handleInputChange('lastName', e.target.value)}
               placeholder="Enter Last Name"
               className="flex-[1_0_0] text-[#666] text-sm font-normal leading-[21px] self-stretch border border-neutral-800 bg-[#1A1A1A] p-4 rounded-md border-solid focus:outline-none focus:ring-2 focus:ring-[#FFD11A] focus:border-transparent"
+              required
             />
           </div>
         </div>
@@ -131,6 +176,7 @@ const ContactForm = () => {
               onChange={(e) => handleInputChange('email', e.target.value)}
               placeholder="Enter your Email"
               className="flex-[1_0_0] text-[#666] text-sm font-normal leading-[21px] self-stretch border border-neutral-800 bg-[#1A1A1A] p-4 rounded-md border-solid focus:outline-none focus:ring-2 focus:ring-[#FFD11A] focus:border-transparent"
+              required
             />
           </div>
           <div className="flex flex-col items-start gap-3 flex-[1_0_0]">
@@ -139,7 +185,7 @@ const ContactForm = () => {
             </label>
             <div className="flex items-center gap-3 self-stretch max-sm:flex-col max-sm:gap-2.5">
               <div className="flex items-center gap-1 border border-neutral-800 bg-[#1A1A1A] px-3 py-2.5 rounded-[7px] border-solid max-sm:self-stretch">
-                <span>+</span>
+                <span><FaArrowRight style={{ transform: 'rotate(320deg)', color: 'yellow' }} /></span>
               </div>
               <input
                 id="phoneNumber"
@@ -157,22 +203,21 @@ const ContactForm = () => {
           <label htmlFor="message" className="self-stretch text-white text-base font-medium leading-6">
             Message
           </label>
-          {/* <div className="w-full max-w-lg mx-auto"> */}
-            <textarea
-              id="message"
-              ref={textareaRef}
-              value={message}
-              maxLength={maxChars}
-              onChange={(e) => setMessage(e.target.value)}
-              placeholder="Enter your message..."
-              className="w-full text-[#e0e0e0] text-sm font-normal leading-[21px] min-h-[100px] self-stretch border border-neutral-800 bg-[#1A1A1A] p-4 rounded-md border-solid resize-none 
-        focus:outline-none focus:ring-2 focus:ring-[#FFD11A] focus:border-transparent transition-all duration-300"
-            />
-            <div className="text-right text-sm text-neutral-500 mt-1">
-              {message.length}/{maxChars} characters
-            </div>
+          <textarea
+            id="message"
+            ref={textareaRef}
+            value={formData.message}
+            maxLength={maxChars}
+            onChange={(e) => handleInputChange('message', e.target.value)}
+            placeholder="Enter your message..."
+            className="w-full text-[#e0e0e0] text-sm font-normal leading-[21px] min-h-[100px] self-stretch border border-neutral-800 bg-[#1A1A1A] p-4 rounded-md border-solid resize-none 
+                  focus:outline-none focus:ring-2 focus:ring-[#FFD11A] focus:border-transparent transition-all duration-300"
+            required
+          />
+          <div className="text-right text-sm text-neutral-500 mt-1">
+            {formData.message.length}/{maxChars} characters
           </div>
-        {/* </div> */}
+        </div>
 
         <div className="flex items-center gap-[70px] self-stretch max-sm:flex-col max-sm:gap-5 max-sm:items-start">
           <div className="flex items-center gap-1.5 flex-[1_0_0] max-sm:flex-col max-sm:items-start max-sm:gap-2.5">
@@ -182,6 +227,7 @@ const ContactForm = () => {
               checked={formData.agreeToTerms}
               onChange={(e) => handleInputChange('agreeToTerms', e.target.checked)}
               className="w-6 h-6 rounded border border-neutral-800 bg-[#1A1A1A] border-solid accent-[#FFD11A]"
+              required
             />
             <label htmlFor="agreeToTerms" className="flex-[1_0_0] text-white text-base font-normal leading-6">
               I agree with Terms of Use and Privacy Policy
@@ -266,7 +312,7 @@ const FAQSection = () => {
             className="p-1 hover:bg-neutral-600 rounded transition-colors"
             aria-label={openItems.has(index) ? "Collapse answer" : "Expand answer"}
           >
-            <span>+</span>
+            <span style={{ color: 'yellow' }}>+</span>
           </button>
         </article>
       ))}
@@ -346,9 +392,18 @@ const ContactPage = () => {
 
         <ContactSection title="Connect with Us">
           <div className="flex items-start gap-2.5 self-stretch max-sm:flex-col">
-            <SocialButton onClick={() => handleSocialClick('Twitter')} />
-            <SocialButton onClick={() => handleSocialClick('Medium')} />
-            <SocialButton onClick={() => handleSocialClick('LinkedIn')} />
+            <SocialButton
+              onClick={() => handleSocialClick('Twitter')}
+              icon={<FaXTwitter size={20} color="#FFD11A" />}
+            />
+            <SocialButton
+              onClick={() => handleSocialClick('LinkedIn')}
+              icon={<FaLinkedin size={20} color="#FFD11A" />}
+            />
+            <SocialButton
+              onClick={() => handleSocialClick('Github')}
+              icon={<FaGithub size={20} color="#FFD11A" />}
+            />
           </div>
         </ContactSection>
       </section>
@@ -356,7 +411,7 @@ const ContactPage = () => {
       {/* Contact Form Section */}
       <section className="flex items-center gap-[60px] self-stretch border-b-neutral-800 px-20 py-0 border-b border-solid max-md:flex-col max-md:gap-10 max-md:px-10 max-md:py-0 max-sm:px-5 max-sm:py-0">
         <div className="flex w-[412px] flex-col justify-center items-start gap-[30px] max-md:w-full">
-          <div className="text-4xl">+</div>
+          <div className="text-4xl"> <FaArrowRight style={{ transform: 'rotate(320deg)', color: 'yellow' }} /></div>
           <header>
             <h1 className="self-stretch text-white text-[44px] font-medium leading-[57.2px] tracking-[-1.32px] max-md:text-4xl max-sm:text-[28px]">
               Get in Touch with AI Podcasts
@@ -369,7 +424,7 @@ const ContactPage = () => {
       {/* FAQ Section */}
       <section className="flex items-center gap-[60px] self-stretch px-20 py-0 max-md:flex-col max-md:gap-10 max-md:px-10 max-md:py-0 max-sm:px-5 max-sm:py-0">
         <div className="flex w-[413px] flex-col justify-center items-start gap-[30px] max-md:w-full">
-          <div className="text-4xl">+</div>
+          <div className="text-4xl"><span> <FaArrowRight style={{ transform: 'rotate(320deg)', color: 'yellow' }} /></span></div>
           <div className="flex flex-col justify-center items-start gap-4 self-stretch">
             <header>
               <h2 className="self-stretch text-white text-[28px] font-semibold leading-[42px] tracking-[-0.84px] max-sm:text-2xl">
@@ -385,7 +440,7 @@ const ContactPage = () => {
             <span className="text-[#98989A] text-sm font-normal leading-[21px] tracking-[-0.42px]">
               Ask Question
             </span>
-            <span>+</span>
+            <span style={{ color: 'yellow' }}> +</span>
           </ContactButton>
         </div>
         <FAQSection />
