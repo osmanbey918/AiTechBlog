@@ -5,62 +5,33 @@ import NewsSection from "@/components/news/NewsSection";
 import VideoSection from "@/components/news/VideoSection";
 import NewsLetter from "@/components/NewsLetter";
 import SectionHeader from "@/components/sectionHeader/SectionHeader";
-import { getAllPostSlugs, getPostBySlug } from '@/lib/markdown';
-import { Metadata } from "next";
+import { postService } from '@/services/posts';
+import { POST_SECTIONS, REVALIDATION_TIME } from '@/constants';
 
 export const metadata = {
     title: "AI News Hub - Curated Research and Insights",
     description: "Explore the latest AI insights, curated blogs, and trending topics.",
 };
 
-export const revalidate = 1800; // revalidate every 30 minutes
+export const revalidate = REVALIDATION_TIME;
 
 export default async function Page() {
     try {
-        // Fetch all slugs and posts
-        const slugs = await getAllPostSlugs();
-        const posts = await Promise.all(
-            slugs.map(async (slug) => {
-                const post = await getPostBySlug(slug);
-                return {
-                    slug,
-                    title: post.meta.title,
-                    image: post.meta.coverImage || '/assets/default-cover.jpg',
-                    description: post.meta.excerpt,
-                    category: post.meta.category || "AI",
-                    author: post.meta.jsonld?.author?.name || "Anonymous",
-                    authorImage: post.meta.authorImage || `https://api.dicebear.com/7.x/avataaars/svg?seed=${post.meta.jsonld?.author?.name || 'anonymous'}`,
-                    authorSpecialty: post.meta.category || "Technology",
-                    date: post.meta.jsonld?.datePublished || new Date().toISOString(),
-                    metrics: {
-                        views: Math.floor(Math.random() * 1000),
-                        comments: Math.floor(Math.random() * 50),
-                        shares: Math.floor(Math.random() * 100)
-                    },
-                    stats: {
-                        views: Math.floor(Math.random() * 1000),
-                        comments: Math.floor(Math.random() * 50),
-                        shares: Math.floor(Math.random() * 100)
-                    },
-                    publishDate: post.meta.jsonld?.datePublished || new Date().toISOString()
-                };
-            })
-        );
+        // Fetch and sort all posts
+        const posts = await postService.getAllPosts();
+        console.log(posts);
 
-        // Sort posts by date
-        const sortedPosts = posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-        // Get different sections of posts
-        const mainPosts = sortedPosts.slice(0, 7);
-        const popularPosts = sortedPosts.slice(12, 16);
-        const mostRead = sortedPosts[18] || sortedPosts[0]; // Fallback to first post if 18th doesn't exist
-        const morePosts = sortedPosts.slice(7, 13);
+        // Get different sections of posts using constants
+        const mainPosts = posts.slice(POST_SECTIONS.MAIN.start, POST_SECTIONS.MAIN.end);
+        const popularPosts = posts.slice(POST_SECTIONS.POPULAR.start, POST_SECTIONS.POPULAR.end);
+        const mostRead = posts[18] || posts[0]; // Fallback to first post if 18th doesn't exist
+        const morePosts = posts.slice(POST_SECTIONS.MORE.start, POST_SECTIONS.MORE.end);
 
         return (
             <>
                 <NewsHero />
                 <NewsSection />
-                
+
                 {/* Featured Articles */}
                 <section className="mb-16">
                     <SectionHeader
@@ -69,10 +40,16 @@ export default async function Page() {
                         buttonText="View All"
                     />
                     <div className="g-px px-4 py-12 grid grid-cols-1 gap-8">
-                        {mainPosts.map((blog, i) => (
-                            <BlogPostCardVergeStyle 
-                                key={blog.slug} 
-                                {...blog}
+                        {mainPosts.map((blog) => (
+                            <BlogPostCardVergeStyle
+                                key={blog.slug}
+                                title={blog.title}
+                                description={blog.description}
+                                datePublished={blog.datePublished}
+                                category={blog.category}
+                                author={blog.author}
+                                image={blog.image}
+                                slug={blog.slug}
                             />
                         ))}
                     </div>
@@ -106,7 +83,15 @@ export default async function Page() {
                     <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
                         {morePosts.map((post) => (
                             <div key={post.slug} className="lg:col-span-4">
-                                <BlogPostCard {...post} />
+                                <BlogPostCard
+                                    title={post.title}
+                                    description={post.description}
+                                    datePublished={post.datePublished}
+                                    category={post.category}
+                                    author={post.author}
+                                    image={post.image}
+                                    slug={post.slug}
+                                />
                             </div>
                         ))}
                     </div>

@@ -1,30 +1,26 @@
 import nodemailer from 'nodemailer';
+import { NextResponse } from 'next/server';
 
 export async function POST(req) {
   const { firstName, lastName, email, phoneNumber, message } = await req.json();
 
-  // Server-side validation
+  // ✅ Server-side validation
   if (!firstName || !lastName || !email || !message) {
-    return Response.json(
-      { 
-        success: false, 
-        message: 'Missing required fields' 
-      }, 
+    return NextResponse.json(
+      { success: false, message: 'Missing required fields' },
       { status: 400 }
     );
   }
 
-  // Email format validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(email)) {
-    return Response.json(
-      { 
-        success: false, 
-        message: 'Invalid email format' 
-      }, 
+    return NextResponse.json(
+      { success: false, message: 'Invalid email format' },
       { status: 400 }
     );
   }
+  console.log("✅ Email:", process.env.MY_EMAIL);
+  console.log("✅ Pass length:", process.env.MY_EMAIL_PASS?.length);
 
   try {
     const transporter = nodemailer.createTransport({
@@ -36,9 +32,9 @@ export async function POST(req) {
     });
 
     const mailOptions = {
-      from: process.env.MY_EMAIL, // Use your own email as sender
-      to: process.env.MY_EMAIL, // Send to yourself
-      replyTo: email, // Set reply-to as user's email
+      from: process.env.MY_EMAIL,
+      to: process.env.MY_EMAIL,
+      replyTo: email,
       subject: `New Contact from ${firstName} ${lastName}`,
       text: `
 Name: ${firstName} ${lastName}
@@ -59,19 +55,12 @@ ${message}
 
     await transporter.sendMail(mailOptions);
 
-    return Response.json({ 
-      success: true,
-      message: 'Email sent successfully' 
-    });
+    return NextResponse.json({ success: true, message: 'Email sent successfully' });
 
   } catch (err) {
     console.error('Email send error:', err);
-    return Response.json(
-      { 
-        success: false, 
-        message: 'Failed to send email',
-        error: err.message 
-      }, 
+    return NextResponse.json(
+      { success: false, message: 'Failed to send email', error: err.message },
       { status: 500 }
     );
   }
