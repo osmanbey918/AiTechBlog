@@ -1,5 +1,4 @@
 import Image from 'next/image';
-import Link from 'next/link';
 import PopularArticles from './blog/PopularArticles';
 
 export default function BlogLayout({ meta, contentHtml }) {
@@ -59,10 +58,10 @@ export default function BlogLayout({ meta, contentHtml }) {
               )} */}
             </div>
 
-            {meta.coverImage && (
+            {meta.imageUrl && (
               <div className="rounded-xl overflow-hidden mb-8 shadow-lg hover:shadow-xl transition-shadow duration-300">
                 <Image
-                  src={meta.coverImage}
+                  src={meta.imageUrl}
                   alt={meta.title}
                   width={1280}
                   height={720}

@@ -1,26 +1,22 @@
 'use client';
 import { EditorContent } from '@tiptap/react';
-
-
 import { useState, useCallback } from 'react';
 import yaml from 'js-yaml';
 import { marked } from 'marked';
-import { createPost} from './actions';
+import { createPost } from './actions';
 import InputFields from '@/components/write/InputFields';
 import EditorToolbar from '@/components/write/EditorToolbar';
 import { useEditorSetup } from '@/components/write/useEditorSetup';
 import LivePreview from '@/components/write/LivePreview';
 
-const CATEGORIES = ['Technology', 'AI', 'Programming', 'Science', 'Other'];
+const CATEGORIES = ['Tech', 'AI', 'Programming', 'AI Tools', 'Reviews'];
 export default function Page() {
   // ... inside your component
   const [formData, setFormData] = useState({
     title: '',
-    // 'excerpt' will be used as the 'description' in the meta object
     excerpt: '',
-    tags: [],
+    tags: "",
     slug: '',
-    // 'image' will be used as 'imageUrl'
     coverImage: '',
     category: CATEGORIES[0],
     authorName: ''
@@ -51,45 +47,19 @@ export default function Page() {
         .replace(/[^\w\s-]/g, '') // Remove non-word chars
         .replace(/\s+/g, '-');      // Replace spaces with -
 
-      // 1. Construct the JSON-LD object (as a plain object)
-      const jsonldObject = {
-        "@context": "https://schema.org",
-        "@type": "Article",
-        "headline": formData.title,
-        "image": formData.image || "https://yourdomain.com/default-cover.jpg",
-        "author": {
-          "@type": "Person",
-          "name": formData.authorName
-        },
-        "publisher": {
-          "@type": "Organization",
-          "name": "YourAppName", // Replace with your app's name
-          "logo": {
-            "@type": "ImageObject",
-            "url": "https://yourdomain.com/logo.png"
-          }
-        },
-        "datePublished": dateNow,
-        "mainEntityOfPage": {
-          "@type": "WebPage",
-          "@id": "https:yourdomain.com/blog/${cleanSlug}"
-        },
-        "description": formData.excerpt,
-        "articleSection": formData.category
-      };
-
       // 2. Construct the payload matching the server action's expectation
       const payload = {
         mdxContent: markdown,
-        jsonLd: jsonldObject, // Pass it as an object
         meta: {
           title: formData.title,
           description: formData.excerpt,
           slug: cleanSlug,
           author: formData.authorName,
-          // Convert the tags array to a comma-separated string
-          keywords: formData.tags.join(', '),
+          category: formData.category,
+          keywords: formData.tags,
           imageUrl: formData.coverImage,
+          publishedAt: dateNow,
+
         }
       };
 
@@ -113,7 +83,8 @@ export default function Page() {
 
 
   const handleInputChange = field => e => setFormData(prev => ({ ...prev, [field]: e.target.value }));
-  const handleTagsChange = e => setFormData(prev => ({ ...prev, tags: e.target.value.split(',').map(t => t.trim()).filter(Boolean) }));
+  console.log(formData.tags);
+
 
   const addImage = () => {
     const url = prompt('Enter image URL');
@@ -139,7 +110,7 @@ export default function Page() {
       <h1 className="text-3xl font-bold mb-6 text-gray-800 dark:text-gray-200">📝 Write a New Blog</h1>
       <div className="grid md:grid-cols-2 gap-6">
         <div>
-          <InputFields formData={formData} handleInputChange={handleInputChange} handleTagsChange={handleTagsChange} categories={CATEGORIES} />
+          <InputFields formData={formData} handleInputChange={handleInputChange} categories={CATEGORIES} />
           <EditorToolbar editor={editor} addImage={addImage} addLink={addLink} />
           {editorLoaded && (
             <div className="border border-gray-300 dark:border-gray-700 p-4 rounded bg-white dark:bg-gray-900 min-h-[300px] max-w-none shadow-sm">

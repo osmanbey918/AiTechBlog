@@ -5,10 +5,6 @@ const blogSchema = new mongoose.Schema({
     type: String,
     required: [true, 'MDX content is required.'],
   },
-  jsonLd: {
-    type: Object,
-    required: [true, 'JSON-LD is required.'],
-  },
   meta: {
     title: { type: String, required: true },
     description: { type: String, required: true },
@@ -16,7 +12,9 @@ const blogSchema = new mongoose.Schema({
     author: { type: String, required: true },
     keywords: { type: String },
     imageUrl: { type: String },
+    category: { type: String },
+    publishedAt: { type: String, required: true }
   },
 }, { timestamps: true });
 
-export default mongoose.models.blog || mongoose.model('blog', blogSchema);
+export default mongoose.models.blog || mongoose.model('blog', blogSchema);

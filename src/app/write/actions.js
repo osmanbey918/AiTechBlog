@@ -2,12 +2,11 @@
 
 import connectDB from '@/lib/mongodb';
 import Blog from '@/models/Blog';
-import { revalidatePath } from 'next/cache';
 
 export async function createPost(formData) {
-    const { mdxContent, jsonLd, meta } = formData;
+    const { mdxContent, meta } = formData;
 
-    if (!mdxContent || !jsonLd || !meta) {
+    if (!mdxContent || !meta) {
         return {
             success: false,
             error: 'Missing required fields.',
@@ -16,20 +15,15 @@ export async function createPost(formData) {
 
     try {
         await connectDB();
-
         const newPost = new Blog({
             mdxContent,
-            jsonLd,
             meta,
         });
-
         await newPost.save();
         console.log(JSON.parse(JSON.stringify(newPost)));
 
         // After successfully saving, you might want to revalidate a path
         // to reflect the new data immediately on your site.
-        revalidatePath('/blog'); // Example path
-
         return {
             success: true,
             message: 'Post created successfully!',

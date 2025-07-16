@@ -1,7 +1,6 @@
-import FeaturedCard, { BlogCard, BlogCardInvert, FeaturedCardan, FeaturedCardInvert } from "@/components/ai/FeaturedCard";
 import JsonLdBlogList from "@/components/JsonLdBlogList";
 import Search from "@/components/search";
-import { getAllPostSlugs, getPostBySlug } from "@/lib/markdown";
+import { getAllPostSlugs, getLatestPostsAi, getPostBySlug } from "@/lib/markdown";
 import Image from "next/image";
 import Link from "next/link";
 import React, { Suspense } from "react";
@@ -10,39 +9,12 @@ import PromptGrid from '@/components/ai/PromptGrid';
 import BlogPostCard, { BlogPostCardVergeStyle } from "@/components/home/blogPost/BlogPostCard";
 import MostRead from "@/components/mostread/MostRead";
 import NewsLetter from "@/components/NewsLetter";
+import { FeaturedCard, FeaturedCardan } from "@/components/ai/FeaturedCard";
 
-export default async function Page({ searchParams }) {
-  const page = Number(searchParams?.page) || 1;
-  const pageSize = 20;
-  const slugs = getAllPostSlugs();
+export default async function Page() {
+  const posts = await getLatestPostsAi();
+  const featuredPost = posts[0].meta;
 
-  const totalPages = Math.ceil(slugs.length / pageSize);
-  const startIdx = (page - 1) * pageSize;
-  const endIdx = startIdx + pageSize;
-
-  const posts = await Promise.all(
-    slugs.slice(startIdx, endIdx).map(async (slug) => {
-      const post = await getPostBySlug(slug);
-      return {
-        slug,
-        title: post.meta.title,
-        image: post.meta.coverImage || null,
-        description: post.meta.excerpt,
-        category: post.meta.category || "AI",
-        author: post.meta.jsonld?.author?.name || "Anonymous",
-        date: post.meta.jsonld?.datePublished,
-        // Add additional metadata for different card types
-        metrics: {
-          views: Math.floor(Math.random() * 1000),
-          comments: Math.floor(Math.random() * 50),
-          shares: Math.floor(Math.random() * 100)
-        }
-      };
-    })
-  );
-
-  // Organize posts for different sections
-  const featuredPost = posts[3];
   const mainPosts = posts.slice(1, 11).map(post => ({
     ...post,
     authorName: post.author, // For BlogPostCard
@@ -55,18 +27,11 @@ export default async function Page({ searchParams }) {
     authorImage: `https://api.dicebear.com/7.x/avataaars/svg?seed=${post.author}`
   }));
 
-  const popularPosts = posts.slice(15, 19).map(post => ({
-    ...post,
-    stats: post.metrics, // For BlogCardInvert
-    publishDate: post.date
-  }));
-
-  const mostRead = posts[18];
-  const prompts = await getAllAiPrompts();
+  // const prompts = await getAllAiPrompts();
 
   return (
     <>
-      <JsonLdBlogList posts={posts} />
+      {/* <JsonLdBlogList posts={posts} /> */}
 
       {/* Hero Section */}
       <section className="w-full text-white py-20 text-center">
@@ -94,7 +59,7 @@ export default async function Page({ searchParams }) {
             Featured
             <span className="flex-1 h-px bg-gray-200"></span>
           </h2>
-          <FeaturedCard {...featuredPost} />
+          <FeaturedCard title={featuredPost.title} slug={featuredPost.slug} image={featuredPost.imageUrl} description={featuredPost.description} author={featuredPost.author} date={featuredPost.createdAt} />
         </section>
       )}
 
@@ -109,8 +74,8 @@ export default async function Page({ searchParams }) {
           {/* Left Column - BlogPostCards */}
           <div className="w-full flex flex-col gap-4 lg:col-start-1 lg:col-end-7 lg:row-start-1 lg:row-end-11">
             {mainPosts.map((post) => (
-              <div key={post.slug}>
-                <BlogPostCard {...post} />
+              <div key={post.meta.slug}>
+                <BlogPostCard key={`latest-${post.meta.slug}`} title={post.meta.title} slug={post.meta.slug} image={post.meta.imageUrl} description={post.meta.description} category={post.meta.category} author={post.meta.author} date={post.createdAt} />
               </div>
             ))}
           </div>
@@ -118,8 +83,8 @@ export default async function Page({ searchParams }) {
           {/* Right Column - Grid Posts */}
           <div className="w-full flex gap-20 flex-col max-lg:grid max-lg:gap-4 max-md:grid-cols-1 max-lg:grid-cols-2 lg:grid-cols-4 lg:col-start-7 lg:col-end-11 lg:row-start-1 lg:row-end-11">
             {gridPosts.map((post) => (
-              <div key={post.slug} className="min-h-96 gap-8">
-                <FeaturedCardan {...post} />
+              <div key={post.meta.slug} className="min-h-96 gap-8">
+                <FeaturedCardan key={`latest-${post.meta.slug}`} title={post.meta.title} slug={post.meta.slug} image={post.meta.imageUrl} description={post.meta.description} author={post.meta.author} date={post.createdAt} />
               </div>
             ))}
           </div>
@@ -129,8 +94,9 @@ export default async function Page({ searchParams }) {
       {/* Secondary Grid Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 g-px">
         {gridPosts.slice(0, 2).map((post) => (
-          <div key={post.slug} className="min-h-96 col-span-1">
-            <FeaturedCardan {...post} />
+          <div key={post.meta.slug} className="min-h-96 col-span-1">
+            <FeaturedCardan key={`latest-${post.meta.slug}`} title={post.meta.title} slug={post.meta.slug} image={post.meta.imageUrl} description={post.meta.description} author={post.meta.author} date={post.createdAt} />
+
           </div>
         ))}
       </div>
@@ -138,14 +104,14 @@ export default async function Page({ searchParams }) {
       {/* Verge Style Cards */}
       <div className="g-px mt-20 flex flex-col max-w-[200px] gap-4">
         {mainPosts.slice(0, 4).map((post) => (
-          <div key={post.slug}>
-            <BlogPostCardVergeStyle {...post} />
+          <div key={post.meta.slug}>
+            <BlogPostCardVergeStyle key={`latest-${post.meta.slug}`} title={post.meta.title} slug={post.meta.slug} image={post.meta.imageUrl} description={post.meta.description} author={post.meta.author} date={post.createdAt} />
           </div>
         ))}
       </div>
 
       {/* Pagination */}
-      <div className="w-full flex justify-center items-center gap-4 py-8 text-white">
+      {/* <div className="w-full flex justify-center items-center gap-4 py-8 text-white">
         {page > 1 && (
           <Link
             href={{ query: { page: page - 1 } }}
@@ -176,13 +142,13 @@ export default async function Page({ searchParams }) {
             Next
           </Link>
         )}
-      </div>
+      </div> */}
 
       {/* Most Read Section */}
-      <MostRead mostRead={mostRead} popularPosts={popularPosts} />
+      <MostRead />
       {/* Prompts Grid */}
       <main className="min-h-screen py-16">
-        <PromptGrid prompts={prompts} />
+        {/* <PromptGrid prompts={prompts} /> */}
       </main>
 
       {/* Newsletter */}

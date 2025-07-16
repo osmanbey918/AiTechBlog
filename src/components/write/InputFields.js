@@ -1,6 +1,6 @@
 'use client';
 
-export default function InputFields({ formData, handleInputChange, handleTagsChange, categories }) {
+export default function InputFields({ formData, handleInputChange, categories }) {
   return (
     <div className="space-y-4">
       <input
@@ -47,8 +47,8 @@ export default function InputFields({ formData, handleInputChange, handleTagsCha
       />
       <input
         placeholder="Tags (comma separated)"
-        value={formData.tags.join(', ')}
-        onChange={handleTagsChange}
+        value={formData.tags}  // Join array into string for display
+        onChange={handleInputChange('tags')}
         className="inputStyle"
       />
     </div>
