@@ -1,7 +1,7 @@
 import Image from 'next/image';
-import NewsCard, { NewsSecondCard } from './NewsCard';
 import Articlesss from '../Articlesss';
-import FeaturedCard from '../ai/FeaturedCard';
+import { FeaturedCard } from '../ai/FeaturedCard';
+import NewsCard, { NewsSecondCard } from './NewsCard';
 
 const NewsSection = async () => {
   const res = await fetch(`${process.env.APP_URL}/api/news`, {
@@ -9,7 +9,6 @@ const NewsSection = async () => {
   });
   const data = await res.json();
   const articles = data.articles
-  console.log(articles);
   // const carouselArticles = articles.slice(0, 12);
   // const gridArticles = articles.slice(18);
   const featured = articles[7]
@@ -25,6 +24,7 @@ const NewsSection = async () => {
         datePublished={featured.publishedAt}
         slug={featured.url}
         image={featured.image}
+        author={featured.source.name}
         altText="News Image" />
       </section>
       <h2 className="flex mt-20 w-full border-b font-bold text-6xl max-sm:text-4xl border-neutral-800 g-px">

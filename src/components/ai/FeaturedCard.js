@@ -55,57 +55,58 @@ const Eye = () => {
   </svg>)
 }
 
-// export function BlogCardVergeStyle({
-//     title,
-//     category = "News",
-//     author = "Anonymous",
-//     time = "5:00 PM GMT+5",
-//     comments = 0,
-//     image = "/assets/default-cover.jpg",
-//     slug = "#"
-// }) {
-//     return (
-//         <Link href={`/blogopen/${slug}`} className="group w-full border-b border-neutral-800 py-6 flex justify-between items-start gap-4 hover:bg-neutral-900/50 transition">
-//             {/* Left Content */}
-//             <div className="flex flex-1 flex-col md:flex-row items-start gap-4">
-//                 {/* Vertical Category Label */}
-//                 {/* <div className="text-xs font-medium tracking-widest text-neutral-500 rotate-180 writing-vertical-lr hidden sm:block">
-//           {category}
-//         </div> */}
+export function BlogCardVergeStyle({
+  title,
+  category = "News",
+  author = "Anonymous",
+  time = "5:00 PM GMT+5",
+  comments = 0,
+  imageUrl = "/assets/default-cover.jpg",
+  slug = "#"
+}) {
+  return (
+    <Link href={`/blogopen/${slug}`} className="group w-full border-b border-neutral-800 py-2 flex justify-between items-start gap-4 hover:bg-neutral-900/50 transition">
+      {/* Left Content */}
+      <div className="flex flex-1 flex-col md:flex-row items-start gap-4">
+        {/* Vertical Category Label */}
+        {/* <div className="text-xs font-medium tracking-widest text-neutral-500 rotate-180 writing-vertical-lr hidden sm:block">
+          {category}
+        </div> */}
 
-//                 {/* Main Content */}
-//                 <div className="flex-1">
-//                     <h2 className="text-white text-lg md:text-xl font-bold leading-snug group-hover:text-yellow-400 transition">
-//                         {title}
-//                     </h2>
-//                     <div className="flex items-center text-xs text-neutral-500 mt-2 gap-3 flex-wrap">
-//                         <span className="text-blue-400 font-semibold uppercase">{author}</span>
-//                         <span>{time}</span>
-//                         <span className="text-neutral-600">|</span>
-//                         <span>💬 {comments}</span>
-//                     </div>
-//                 </div>
-//             </div>
+        {/* Main Content */}
+        <div className="flex-1">
+          <h2 className="text-white text-sm font-medium leading-snug transition group-hover:underline group-hover:decoration-yellow-400 underline-offset-2">
+            {title}
+          </h2>
 
-//             {/* Right Image */}
-//             <div className="min-w-[100px] w-[120px] h-[80px] relative rounded-md overflow-hidden shrink-0">
-//                 <Image
-//                     src={image}
-//                     alt={title}
-//                     fill
-//                     className="object-cover group-hover:scale-105 transition-transform duration-300"
-//                 />
-//             </div>
-//         </Link>
-//     );
-// }
+          <div className="flex items-center text-xs text-neutral-500 mt-2 gap-3 flex-wrap">
+            <span className="text-yellow-400 text-[10px] uppercase">{author}</span>
+            <span>{time}</span>
+            {/* <span className="text-neutral-600">|</span>
+                        <span>💬 {comments}</span> */}
+          </div>
+        </div>
+      </div>
 
-
-
+      {/* Right Image */}
+      <div className="min-w-[100px] w-[120px] h-[80px] relative rounded-md overflow-hidden shrink-0">
+        <Image
+          src={imageUrl}
+          alt={title}
+          fill
+          className="object-cover group-hover:scale-105 transition-transform duration-300"
+        />
+      </div>
+    </Link>
+  );
+}
 
 
 
-export function BlogPostCardVergeStyle({ title, description, date, category = "Tech", author = "Anonymous", image, slug, }) {
+
+
+
+export function BlogPostCardVergeStyle({ slug, image, title, description, isVideo, author = "Anonymous", category = "AI", date = new Date().toISOString(), readTimeText }) {
   const views = getRandomViews(); // fixed per render
 
   return (
@@ -140,15 +141,13 @@ export function BlogPostCardVergeStyle({ title, description, date, category = "T
   );
 }
 
-export function BlogPostCard({ title, description, date, category = "Tech", author = "Anonymous", image, slug, }) {
-  const views = getRandomViews();
-
+export function BlogPostCard({ slug, image, title, description, isVideo, author = "Anonymous", category = "AI", date = new Date().toISOString(), readTimeText }) {
   return (
-    <Link href={`/blogopen/${slug}`}>
-      <article className="group flex flex-col pr-2 md:flex-row items-start w-full border-b border-r border-neutral-800 py-6 gap-6 hover:bg-neutral-900/40 transition rounded-xl hover:shadow-md">
+    <Link href={`/blogopen/${slug}`} className="col-span-6">
+      <article className="group flex flex-col md:flex-row items-center justify-start w-full border-b border-r border-neutral-800 py-6 gap-6 hover:bg-neutral-900/40 transition rounded-sm hover:shadow-md pr-2">
 
         {/* Left Image */}
-        <div className="relative w-full md:w-64 h-44 md:h-40 rounded-md overflow-hidden border border-neutral-700 shadow-inner shrink-0">
+        <div className="relative w-full md:w-64 h-44 md:h-40 rounded-sm overflow-hidden border border-neutral-700 shadow-inner shrink-0">
           <Image
             src={image || "/assets/default-cover.jpg"}
             alt={title}
@@ -158,7 +157,7 @@ export function BlogPostCard({ title, description, date, category = "Tech", auth
         </div>
 
         {/* Right Content */}
-        <div className="flex flex-col gap-3 flex-1">
+        <div className="flex flex-col justify-center gap-3 flex-1">
           <div className="flex items-center gap-2">
             <CategoryBadge category={category} />
           </div>
@@ -167,16 +166,14 @@ export function BlogPostCard({ title, description, date, category = "Tech", auth
             {title}
           </h2>
 
-
           <p className="text-sm text-neutral-400 line-clamp-3 group-hover:underline group-hover:decoration-yellow-400 group-hover:drop-shadow-md transition">
             {description}
           </p>
 
-          <div className="flex items-center text-xs text-neutral-500 gap-3 mt-2 flex-wrap">
-            <span className="text-gray-400 font-medium">{author}</span>
-            <span>{formatDate(date)}</span>
+          <div className="flex items-center text-[9px] text-neutral-500 gap-3 mt-2 flex-wrap">
+            <span className="text-neutral-400 uppercase">{author}</span>
             <span className="text-neutral-600">|</span>
-            <span className="flex items-center gap-1"><Eye className="w-4 h-4" /> {views}</span>
+            <span>{formatDate(date)}</span>
           </div>
         </div>
       </article>
@@ -186,7 +183,7 @@ export function BlogPostCard({ title, description, date, category = "Tech", auth
 
 
 
-export function FeaturedCard({ slug, image, title, description, isVideo, author = "Anonymous", category = "AI", date, readTimeText }) {
+export function FeaturedCard({ slug, image, title, description, isVideo, author = "Anonymous", category = "AI", date = new Date().toISOString(), readTimeText }) {
   const readTime = readTimeText || calculateReadTime(description);
 
   return (
@@ -251,7 +248,7 @@ export function FeaturedCard({ slug, image, title, description, isVideo, author 
 }
 
 
-export function BlogCard({ slug, image, title, description, author = "Unknown", date = new Date().toISOString() }) {
+export function BlogCard({ slug, image, title, description, isVideo, author = "Anonymous", category = "AI", date = new Date().toISOString(), readTimeText }) {
   return (
     <Link
       href={`/blogopen/${slug}`}
@@ -360,7 +357,7 @@ export function FeaturedCardInvert({ slug, image, title, description, isVideo, a
     </Link>
   );
 }
-export function BlogCardInvert({ slug, image, title, description }) {
+export function BlogCardInvert({ slug, image, title, description, isVideo, author = "Anonymous", category = "AI", date = new Date().toISOString(), readTimeText }) {
   return (
     <Link
       href={`/blogopen/${slug}`}
@@ -387,11 +384,11 @@ export function BlogCardInvert({ slug, image, title, description }) {
   );
 }
 
-export function FeaturedCardan({ slug, image, title, description, isVideo }) {
+export function FeaturedCardan({ slug, image, title, description, isVideo, author = "Anonymous", category = "AI", date = new Date().toISOString(), readTimeText }) {
   return (
     <Link
       href={`/blogopen/${slug}`}
-      className="group relative flex flex-col justify-end h-[500px] rounded-2xl overflow-hidden border border-neutral-800 hover:border-yellow-400 transition-all duration-500 shadow-xl hover:shadow-yellow-400/20"
+      className="group relative flex flex-col min-h-96 col-span-1 justify-end h-[500px] rounded-2xl overflow-hidden border border-neutral-800 hover:border-yellow-400 transition-all duration-500 shadow-xl hover:shadow-yellow-400/20"
     >
       {/* Background Image - Covers the entire card */}
       <Image
@@ -411,7 +408,7 @@ export function FeaturedCardan({ slug, image, title, description, isVideo }) {
 
       {/* Content Overlay - Initially subtle, reveals on hover */}
       <div className="relative z-10 p-8 pt-24 bg-gradient-to-t from-black via-black/70 to-transparent opacity-100 group-hover:from-black/90 group-hover:via-black/95 group-hover:to-black/30 transition-all duration-500">
-        <h3 className="text-4xl font-extrabold text-white leading-tight mb-2">
+        <h3 className="text-4xl font-extrabold text-white leading-tight mb-2 line-clamp-3">
           {title}
         </h3>
         <p className="text-neutral-300 text-base leading-relaxed line-clamp-3 opacity-0 group-hover:opacity-100 max-h-0 group-hover:max-h-24 transition-all duration-500 overflow-hidden">

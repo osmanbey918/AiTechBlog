@@ -12,21 +12,7 @@ rating: 4.7
 uses: 78000
 category: "Testing"
 coverImage: "https://ai-tech-blog-26p6.vercel.app/assets/trending-up-outline.svg"
-jsonld:
-  "@context": "https://schema.org"
-  "@type": "TechArticle"
-  headline: "🧪 AI-Powered Testing & QA Expert Prompt (2025)"
-  description: "A comprehensive prompt for generating test plans, QA strategies, and automation frameworks. Perfect for ensuring high-quality software delivery."
-  author:
-    "@type": "Person"
-    name: "Muhammad Usman"
-  datePublished: "2025-07-12T12:00:00.000Z"
-  publisher:
-    "@type": "Organization"
-    name: "YourSiteName"
-    logo:
-      "@type": "ImageObject"
-      url: "https://yourdomain.com/logo.png"
+
 ---
 
 ## 🎯 Prompt Purpose

@@ -2,12 +2,11 @@ import nodemailer from 'nodemailer';
 import { NextResponse } from 'next/server';
 
 export async function POST(req) {
-  const { firstName, lastName, email, phoneNumber, message } = await req.json();
+  const { email } = await req.json();
 
-  // ✅ Server-side validation
-  if (!firstName || !lastName || !email || !message) {
+  if (!email) {
     return NextResponse.json(
-      { success: false, message: 'Missing required fields' },
+      { success: false, message: 'Email is required' },
       { status: 400 }
     );
   }
@@ -33,32 +32,22 @@ export async function POST(req) {
       from: process.env.MY_EMAIL,
       to: process.env.MY_EMAIL,
       replyTo: email,
-      subject: `New Contact from ${firstName} ${lastName}`,
-      text: `
-Name: ${firstName} ${lastName}
-Email: ${email}
-Phone: ${phoneNumber || 'N/A'}
-Message: 
-${message}
-      `,
+      subject: `New Newsletter Subscription`,
+      text: `New subscriber email: ${email}`,
       html: `
-        <h3>New Contact Form Submission</h3>
-        <p><strong>Name:</strong> ${firstName} ${lastName}</p>
+        <h3>New Newsletter Subscriber</h3>
         <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Phone:</strong> ${phoneNumber || 'N/A'}</p>
-        <p><strong>Message:</strong></p>
-        <p>${message.replace(/\n/g, '<br>')}</p>
       `
     };
 
     await transporter.sendMail(mailOptions);
 
-    return NextResponse.json({ success: true, message: 'Email sent successfully' });
+    return NextResponse.json({ success: true, message: 'Subscribed successfully' });
 
   } catch (err) {
-    console.error('Email send error:', err);
+    console.error('Newsletter email error:', err);
     return NextResponse.json(
-      { success: false, message: 'Failed to send email', error: err.message },
+      { success: false, message: 'Failed to send subscription email', error: err.message },
       { status: 500 }
     );
   }

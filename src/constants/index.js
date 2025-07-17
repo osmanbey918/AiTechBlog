@@ -9,7 +9,7 @@ export const CATEGORIES = {
 export const POST_SECTIONS = {
     MAIN: {
         start: 0,
-        end: 7
+        end: 10
     },
     POPULAR: {
         start: 12,
@@ -17,7 +17,7 @@ export const POST_SECTIONS = {
     },
     MORE: {
         start: 7,
-        end: 13
+        end: 16
     }
 };
 

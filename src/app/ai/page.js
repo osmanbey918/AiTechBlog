@@ -1,18 +1,18 @@
-import JsonLdBlogList from "@/components/JsonLdBlogList";
-import Search from "@/components/search";
-import { getAllPostSlugs, getLatestPostsAi, getPostBySlug } from "@/lib/markdown";
-import Image from "next/image";
-import Link from "next/link";
-import React, { Suspense } from "react";
-import { getAllAiPrompts } from '@/lib/markdown';
+
+import { getLatestPostsAi, getLatestPrompt } from "@/lib/markdown";
 import PromptGrid from '@/components/ai/PromptGrid';
-import BlogPostCard, { BlogPostCardVergeStyle } from "@/components/home/blogPost/BlogPostCard";
-import MostRead from "@/components/mostread/MostRead";
-import NewsLetter from "@/components/NewsLetter";
-import { FeaturedCard, FeaturedCardan } from "@/components/ai/FeaturedCard";
+import dynamic from "next/dynamic";
+const MostRead = dynamic(() => import("@/components/mostread/MostRead"));
+const NewsLetter = dynamic(() => import('@/components/NewsLetter'), {
+  loading: () => <p className="text-center py-4">Loading Newsletter...</p>,
+});
+import { BlogPostCard, BlogPostCardVergeStyle, FeaturedCard, FeaturedCardan } from "@/components/ai/FeaturedCard";
+import PopularArticles from "@/components/blog/PopularArticles";
 
 export default async function Page() {
-  const posts = await getLatestPostsAi();
+  const posts = await getLatestPostsAi({
+    next: { revalidate: 3600 }
+  });
   const featuredPost = posts[0].meta;
 
   const mainPosts = posts.slice(1, 11).map(post => ({
@@ -27,14 +27,15 @@ export default async function Page() {
     authorImage: `https://api.dicebear.com/7.x/avataaars/svg?seed=${post.author}`
   }));
 
-  // const prompts = await getAllAiPrompts();
+  const prompts = await getLatestPrompt({
+    next: { revalidate: 8600 }
+  });
 
   return (
     <>
-      {/* <JsonLdBlogList posts={posts} /> */}
 
       {/* Hero Section */}
-      <section className="w-full text-white py-20 text-center">
+      <section className="w-full text-white py-16 text-center">
         <div className="g-px max-w-4xl">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             Explore the World of AI & Tech
@@ -42,13 +43,6 @@ export default async function Page() {
           <p className="text-lg text-neutral-300 mb-6">
             Stay ahead with in-depth blogs, tutorials, and industry updates.
           </p>
-          {/* <Suspense
-            fallback={
-              <div className="w-full max-w-[60%] mx-auto h-[42px] bg-black/50 animate-pulse rounded-md border border-gray-200"></div>
-            }
-          >
-            <Search />
-          </Suspense> */}
         </div>
       </section>
 
@@ -70,43 +64,38 @@ export default async function Page() {
           <span className="flex-1 h-px bg-gray-200"></span>
         </h2>
 
-        <div className="grid lg:grid-cols-10 lg:grid-rows-10 gap-12 flex flex-col-reverse lg:grid w-full h-full">
+        <div className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 lg:gap-12">
           {/* Left Column - BlogPostCards */}
-          <div className="w-full flex flex-col gap-4 lg:col-start-1 lg:col-end-7 lg:row-start-1 lg:row-end-11">
+          <div className="w-full lg:w-2/3">
             {mainPosts.map((post) => (
-              <div key={post.meta.slug}>
-                <BlogPostCard key={`latest-${post.meta.slug}`} title={post.meta.title} slug={post.meta.slug} image={post.meta.imageUrl} description={post.meta.description} category={post.meta.category} author={post.meta.author} date={post.createdAt} />
-              </div>
+              <BlogPostCard key={`latest-${post.meta.slug}`} title={post.meta.title} slug={post.meta.slug} image={post.meta.imageUrl} description={post.meta.description} category={post.meta.category} author={post.meta.author} date={post.createdAt} />
             ))}
           </div>
+          <aside className="w-full lg:w-1/3 mt-8 lg:mt-0">
+            <PopularArticles />
+          </aside>
+        </div>
+      </section>
 
-          {/* Right Column - Grid Posts */}
-          <div className="w-full flex gap-20 flex-col max-lg:grid max-lg:gap-4 max-md:grid-cols-1 max-lg:grid-cols-2 lg:grid-cols-4 lg:col-start-7 lg:col-end-11 lg:row-start-1 lg:row-end-11">
+      {/* <div className="w-full flex gap-20 flex-col max-lg:grid max-lg:gap-4 max-md:grid-cols-1 max-lg:grid-cols-2 lg:grid-cols-4 lg:col-start-7 lg:col-end-11 lg:row-start-1 lg:row-end-11">
             {gridPosts.map((post) => (
               <div key={post.meta.slug} className="min-h-96 gap-8">
                 <FeaturedCardan key={`latest-${post.meta.slug}`} title={post.meta.title} slug={post.meta.slug} image={post.meta.imageUrl} description={post.meta.description} author={post.meta.author} date={post.createdAt} />
               </div>
             ))}
-          </div>
-        </div>
-      </section>
-
+          </div> */}
       {/* Secondary Grid Section */}
+      
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 g-px">
         {gridPosts.slice(0, 2).map((post) => (
-          <div key={post.meta.slug} className="min-h-96 col-span-1">
-            <FeaturedCardan key={`latest-${post.meta.slug}`} title={post.meta.title} slug={post.meta.slug} image={post.meta.imageUrl} description={post.meta.description} author={post.meta.author} date={post.createdAt} />
-
-          </div>
+          <FeaturedCardan key={`latest-${post.meta.slug}`} title={post.meta.title} slug={post.meta.slug} image={post.meta.imageUrl} description={post.meta.description} author={post.meta.author} date={post.createdAt} />
         ))}
       </div>
 
       {/* Verge Style Cards */}
       <div className="g-px mt-20 flex flex-col max-w-[200px] gap-4">
         {mainPosts.slice(0, 4).map((post) => (
-          <div key={post.meta.slug}>
-            <BlogPostCardVergeStyle key={`latest-${post.meta.slug}`} title={post.meta.title} slug={post.meta.slug} image={post.meta.imageUrl} description={post.meta.description} author={post.meta.author} date={post.createdAt} />
-          </div>
+          <BlogPostCardVergeStyle key={`latest-${post.meta.slug}`} title={post.meta.title} slug={post.meta.slug} image={post.meta.imageUrl} description={post.meta.description} author={post.meta.author} date={post.createdAt} />
         ))}
       </div>
 
@@ -148,7 +137,7 @@ export default async function Page() {
       <MostRead />
       {/* Prompts Grid */}
       <main className="min-h-screen py-16">
-        {/* <PromptGrid prompts={prompts} /> */}
+        <PromptGrid prompts={prompts} />
       </main>
 
       {/* Newsletter */}

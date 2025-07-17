@@ -5,7 +5,6 @@ export default async function MostRead() {
     const mostRead = posts[0].meta;
     const mostReadd = posts[0];
     const popularPosts = posts.slice(1, 5)
-console.log(popularPosts)
 
     return (
         <div>

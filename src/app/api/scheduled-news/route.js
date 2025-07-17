@@ -23,7 +23,7 @@ async function fetchAndStoreNews() {
     console.log('🔄 Starting news fetch:', new Date().toISOString());
     await connectDB();
 
-    const categories = ['technology', 'science'];
+    const categories = ['technology', 'science','ai'];
     let allArticles = [];
 
     for (const category of categories) {

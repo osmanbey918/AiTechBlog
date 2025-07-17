@@ -3,7 +3,7 @@ import PopularArticles from './blog/PopularArticles';
 
 export default function BlogLayout({ meta, contentHtml }) {
   return (
-    <main className="min-h-screen bg-black text-gray-100 px-4 sm:px-6 py-8 sm:py-12">
+    <main className="min-h-screen text-gray-100 px-4 sm:px-6 py-8 sm:py-12">
       <article className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 lg:gap-12">
         {/* Blog Content */}
         <section className="w-full lg:w-2/3">

@@ -1,5 +1,31 @@
+'use client';
+
+import { useState } from 'react';
 
 export default function NewsLetter() {
+    const [email, setEmail] = useState('');
+    const [success, setSuccess] = useState('');
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        setSuccess('');
+
+        const res = await fetch('/api/newsletter', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email }),
+        });
+
+        if (res.ok) {
+            setSuccess('Thank you for subscribing!');
+            setEmail('');
+        } else {
+            setSuccess('Something went wrong. Please try again.');
+        }
+    };
+
     return (
         <section className="py-16 px-4 text-white text-center">
             <div className="g-px max-w-64">
@@ -7,11 +33,17 @@ export default function NewsLetter() {
                 <p className="text-neutral-300 mb-6">
                     Get the latest updates and curated articles delivered to your inbox.
                 </p>
-                <form className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                <form
+                    onSubmit={handleSubmit}
+                    className="flex flex-col sm:flex-row items-center justify-center gap-4"
+                >
                     <input
                         type="email"
                         placeholder="Enter your email"
                         className="px-4 py-2 w-full max-w-md sm:w-2/3 rounded bg-neutral-100 text-black"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        required
                     />
                     <button
                         type="submit"
@@ -20,7 +52,8 @@ export default function NewsLetter() {
                         Subscribe
                     </button>
                 </form>
+                {success && <p className="text-green-400 mt-4">{success}</p>}
             </div>
         </section>
-    )
+    );
 }

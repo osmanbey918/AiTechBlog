@@ -32,9 +32,9 @@ function Navbar() {
   const navItems = [
     { path: '/', label: 'Home' },
     { path: '/ai', label: 'AI' },
-    { path: '/tech', label: 'Tech' },
-    { path: '/reviews', label: 'reviews' },
-    { path: '/resources', label: 'Resources' },
+    // { path: '/tech', label: 'Tech' },
+    // { path: '/reviews', label: 'reviews' },
+    // { path: '/resources', label: 'Resources' },
     { path: '/about', label: 'About us' },
   ];
 
@@ -52,13 +52,13 @@ function Navbar() {
             onClick={() => navigate('/')}
           >
             <Image 
-              src="/assets/Logo.svg" 
+              src="/assets/l.svg" 
               alt="AI Tech Blog Logo" 
               width={32} 
               height={32} 
               className="mr-2"
             />
-            <span className="text-white font-bold text-xl">AI Tech Blog</span>
+            <span className="text-white font-bold text-xl leading-tight tracking-wide drop-shadow-lg">Techolyze</span>
           </div>
 
           {/* Desktop Navigation */}
