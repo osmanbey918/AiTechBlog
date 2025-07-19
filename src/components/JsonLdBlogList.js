@@ -6,13 +6,13 @@ export default function JsonLdBlogList({ posts }) {
     "@context": "https://schema.org",
     "@type": "Blog",
     "name": "AI Tech Blog",
-    "url": "https://yourdomain.com/blogopen",
+    "url": "https://yourdomain.com/open",
     "description": "Explore the latest AI tools and trends through in-depth blogs.",
     "blogPost": posts.map(post => ({
       "@type": "Articles",
       "headline": post.title,
       "image": post.image,
-      "url": `https://yourdomain.com/blogopen/${post.slug}`,
+      "url": `https://yourdomain.com/open/blog/${post.slug}`,
       "description": post.des,
       "author": {
         "@type": "Person",

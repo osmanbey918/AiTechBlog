@@ -55,7 +55,7 @@
 // ];
 
 // // ✅ Use PascalCase for your page component
-// const BlogOpenPage = () => {
+// const openPage = () => {
 //     return (
 //         <div className="flex w-full flex-col items-start text-white bg-black">
 //             <BlogHero
@@ -83,7 +83,7 @@
 //     );
 // };
 
-// export default BlogOpenPage;
+// export default openPage;
 
 
 
@@ -101,7 +101,7 @@
 // import Link from 'next/link';
 // import { MDXRemote } from 'next-mdx-remote/rsc';
 
-// export default function BlogOpenPage({ meta, content }) {
+// export default function openPage({ meta, content }) {
 //   return (
 //     <main className="min-h-screen bg-gray-950 text-gray-100">
 //       <BlogHero 

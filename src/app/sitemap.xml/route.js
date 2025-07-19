@@ -6,7 +6,7 @@ export async function GET() {
 
   const urls = posts.map(({ slug }) => `
     <url>
-      <loc>${siteUrl}/blogopen/${slug}</loc>
+      <loc>${siteUrl}/open/blog/${slug}</loc>
       <changefreq>daily</changefreq>
       <priority>0.8</priority>
     </url>

@@ -1,4 +1,4 @@
-import BlogPostCard from "./BlogPostCard";
+import { BlogPostCard } from "@/components/ai/FeaturedCard";
 import SectionHeader from "../../sectionHeader/SectionHeader";
 import React from "react";
 export default function BlogPostSection() {

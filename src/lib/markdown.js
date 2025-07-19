@@ -2,7 +2,6 @@ import Blog from "@/models/Blog";
 import connectDB from "./mongodb";
 import Prompt from "@/models/Prompt";
 import { startOfDay, endOfDay } from 'date-fns';
-import News from "@/models/News";
 
 
 export async function getPostBySlugdb(slug) {
@@ -31,6 +30,7 @@ export async function getPostBySlugdb(slug) {
     return null;
   }
 }
+
 export async function getPromptBySlug(slug) {
   try {
     await connectDB();
@@ -62,19 +62,18 @@ export async function getPromptBySlug(slug) {
 export async function getAllPostSlugs() {
   try {
     await connectDB();
-    // Only fetch slugs from meta
     const posts = await Blog.find({}, { "meta.slug": 1 }).lean();
-    // Filter out missing slugs and convert to simple array
-    const slugs = posts
-      .map(post => post?.meta?.slug)
-      .filter(Boolean);
 
-    return slugs;
+    return posts
+      .map(post => post?.meta?.slug)
+      .filter(Boolean)
+      .map(slug => ({ slug }));  // ✅ convert to array of objects
   } catch (error) {
     console.error("Failed to fetch blog slugs:", error);
     return [];
   }
 }
+
 
 export async function getLatestPosts() {
   try {
@@ -84,8 +83,6 @@ export async function getLatestPosts() {
       .sort({ publishedAt: -1 })
       .limit(20)
       .lean();
-    console.log(articles);
-
     return articles;
   } catch (error) {
     console.error("Error fetching latest posts:", error);
@@ -93,6 +90,20 @@ export async function getLatestPosts() {
   }
 }
 
+export async function getLatestSevenBlogs() {
+  try {
+    await connectDB();
+    // Fetch latest 20 blogs
+    let articles = await Blog.find({})
+      .sort({ publishedAt: -1 })
+      .limit(9)
+      .lean();
+    return articles;
+  } catch (error) {
+    console.error("Error fetching latest posts:", error);
+    return [];
+  }
+}
 
 export async function getLatestPostsAi() {
   try {
@@ -154,7 +165,8 @@ export async function getTodayFirstFive() {
     const end = endOfDay(new Date());
 
     const articles = await Blog.find(
-      { createdAt: { $gte: start, $lte: end } }
+      // { createdAt: { $gte: start, $lte: end } }
+      {  }
     )
       .sort({ createdAt: 1 })
       .limit(5)
@@ -168,20 +180,3 @@ export async function getTodayFirstFive() {
   }
 }
 
-export async function getAllPost() {
-  try {
-    await connectDB();
-
-    const articles = await News.find({})
-      .sort({ createdAt: -1 })
-      .limit(25)
-      .select()
-      .lean();
-    console.log(articles);
-    
-    return articles;
-  } catch (error) {
-    console.error("Error fetching today's first five posts:", error);
-    return [];
-  }
-}

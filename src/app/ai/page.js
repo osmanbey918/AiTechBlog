@@ -87,13 +87,13 @@ export default async function Page() {
       {/* Secondary Grid Section */}
       
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-12 g-px">
-        {gridPosts.slice(0, 2).map((post) => (
+        {gridPosts.map((post) => (
           <FeaturedCardan key={`latest-${post.meta.slug}`} title={post.meta.title} slug={post.meta.slug} image={post.meta.imageUrl} description={post.meta.description} author={post.meta.author} date={post.createdAt} />
         ))}
       </div>
 
       {/* Verge Style Cards */}
-      <div className="g-px mt-20 flex flex-col max-w-[200px] gap-4">
+      <div className="g-px mt-20 flex flex-col gap-4">
         {mainPosts.slice(0, 4).map((post) => (
           <BlogPostCardVergeStyle key={`latest-${post.meta.slug}`} title={post.meta.title} slug={post.meta.slug} image={post.meta.imageUrl} description={post.meta.description} author={post.meta.author} date={post.createdAt} />
         ))}

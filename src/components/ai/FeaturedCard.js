@@ -65,7 +65,7 @@ export function BlogCardVergeStyle({
   slug = "#"
 }) {
   return (
-    <Link href={`/blogopen/${slug}`} className="group w-full border-b border-neutral-800 py-2 flex justify-between items-start gap-4 hover:bg-neutral-900/50 transition">
+    <Link href={`/open/blog/${slug}`} className="group w-full border-b border-neutral-800 py-2 flex justify-between items-start gap-4 hover:bg-neutral-900/50 transition">
       {/* Left Content */}
       <div className="flex flex-1 flex-col md:flex-row items-start gap-4">
         {/* Vertical Category Label */}
@@ -75,7 +75,7 @@ export function BlogCardVergeStyle({
 
         {/* Main Content */}
         <div className="flex-1">
-          <h2 className="text-white text-sm font-medium leading-snug transition group-hover:underline group-hover:decoration-yellow-400 underline-offset-2">
+          <h2 className="text-white text-sm  leading-snug transition group-hover:underline group-hover:decoration-yellow-400 underline-offset-2">
             {title}
           </h2>
 
@@ -106,19 +106,19 @@ export function BlogCardVergeStyle({
 
 
 
-export function BlogPostCardVergeStyle({ slug, image, title, description, isVideo, author = "Anonymous", category = "AI", date = new Date().toISOString(), readTimeText }) {
+export function BlogPostCardVergeStyle({ slug,type, image, title, description, isVideo, author = "Anonymous", category = "AI", date = new Date().toISOString(), readTimeText }) {
   const views = getRandomViews(); // fixed per render
 
   return (
-    <Link href={`/blogopen/${slug}`}>
-      <article className="group flex justify-between items-start w-full max-w-4xl  border-b border-zinc-600 py-6 gap-6 hover:bg-neutral-900/50 transition rounded-xs ">
+    <Link href={`/open/${type}/${slug}`}>
+      <article className="group flex justify-between items-start w-full max-w-4xl  border-b border-zinc-600 py-6 gap-4 hover:bg-neutral-900/50 transition rounded-xs ">
         {/* Left Content */}
         <div className="flex flex-col gap-2 flex-1">
           <CategoryBadge category={category} />
-          <h2 className="text-white text-lg md:text-xl font-serif font-semibold leading-tight group-hover:underline group-hover:decoration-yellow-400 group-hover:drop-shadow-md transition">
+          <h2 className="text-white text-lg md:text-xl max-sm:text-sm line-clamp-3 font-semibold leading-tight group-hover:underline group-hover:decoration-yellow-400 group-hover:drop-shadow-md transition">
             {title}
           </h2>
-          <div className="flex items-center text-xs text-neutral-500 gap-3 flex-wrap">
+          <div className="flex items-center text-[9px] text-neutral-500 gap-3 flex-wrap">
             <span className="text-gray-400 font-medium">{author}</span>
             <span>{formatDate(date)}</span>
             <span className="text-neutral-600 ">|</span>
@@ -143,7 +143,7 @@ export function BlogPostCardVergeStyle({ slug, image, title, description, isVide
 
 export function BlogPostCard({ slug, image, title, description, isVideo, author = "Anonymous", category = "AI", date = new Date().toISOString(), readTimeText }) {
   return (
-    <Link href={`/blogopen/${slug}`} className="col-span-6">
+    <Link href={`/open/blog/${slug}`} className="col-span-6">
       <article className="group flex flex-col md:flex-row items-center justify-start w-full border-b border-r border-neutral-800 py-6 gap-6 hover:bg-neutral-900/40 transition rounded-sm hover:shadow-md pr-2">
 
         {/* Left Image */}
@@ -162,7 +162,7 @@ export function BlogPostCard({ slug, image, title, description, isVideo, author 
             <CategoryBadge category={category} />
           </div>
 
-          <h2 className="text-white text-lg md:text-xl font-serif font-semibold leading-tight group-hover:underline group-hover:decoration-yellow-400 group-hover:drop-shadow-md transition">
+          <h2 className="text-white text-lg md:text-xl font-semibold leading-tight group-hover:underline group-hover:decoration-yellow-400 group-hover:drop-shadow-md transition">
             {title}
           </h2>
 
@@ -183,12 +183,12 @@ export function BlogPostCard({ slug, image, title, description, isVideo, author 
 
 
 
-export function FeaturedCard({ slug, image, title, description, isVideo, author = "Anonymous", category = "AI", date = new Date().toISOString(), readTimeText }) {
+export function FeaturedCard({ slug,type, image, title, description, isVideo, author = "Anonymous", category = "AI", date = new Date().toISOString(), readTimeText }) {
   const readTime = readTimeText || calculateReadTime(description);
 
   return (
     <Link
-      href={`/blogopen/${slug}`}
+      href={`/open/${type}/${slug}`}
       className="group grid grid-cols-1 md:grid-cols-2 w-full h-[500px] rounded-sm overflow-hidden "
     >
       {/* Left Image Side (visible only on md+) */}
@@ -251,7 +251,7 @@ export function FeaturedCard({ slug, image, title, description, isVideo, author 
 export function BlogCard({ slug, image, title, description, isVideo, author = "Anonymous", category = "AI", date = new Date().toISOString(), readTimeText }) {
   return (
     <Link
-      href={`/blogopen/${slug}`}
+      href={`/open/blog/${slug}`}
       className="w-full group overflow-hidden rounded-xl bg-neutral-900 border border-neutral-800 hover:border-yellow-500 transition-all duration-300 hover:shadow-xl flex flex-col md:flex-row"
     >
       {/* Left Side Image */}
@@ -297,7 +297,7 @@ export function FeaturedCardInvert({ slug, image, title, description, isVideo, a
 
   return (
     <Link
-      href={`/blogopen/${slug}`}
+      href={`/open/blog/${slug}`}
       className="group grid grid-cols-1 md:grid-cols-2 w-full h-[500px] rounded-sm overflow-hidden"
     >
       {/* Left Content Area (Text) */}
@@ -360,7 +360,7 @@ export function FeaturedCardInvert({ slug, image, title, description, isVideo, a
 export function BlogCardInvert({ slug, image, title, description, isVideo, author = "Anonymous", category = "AI", date = new Date().toISOString(), readTimeText }) {
   return (
     <Link
-      href={`/blogopen/${slug}`}
+      href={`/open/blog/${slug}`}
       className=" rounded-sm overflow-hidden shadow hover:shadow-lg transition-transform hover:-translate-y-1 "
     >
       {image && (
@@ -384,10 +384,10 @@ export function BlogCardInvert({ slug, image, title, description, isVideo, autho
   );
 }
 
-export function FeaturedCardan({ slug, image, title, description, isVideo, author = "Anonymous", category = "AI", date = new Date().toISOString(), readTimeText }) {
+export function FeaturedCardan({ slug, type,image, title, description, isVideo, author = "Anonymous", category = "AI", date = new Date().toISOString(), readTimeText }) {
   return (
     <Link
-      href={`/blogopen/${slug}`}
+      href={`/open/${type}/${slug}`}
       className="group relative flex flex-col min-h-96 col-span-1 justify-end h-[500px] rounded-2xl overflow-hidden border border-neutral-800 hover:border-yellow-400 transition-all duration-500 shadow-xl hover:shadow-yellow-400/20"
     >
       {/* Background Image - Covers the entire card */}

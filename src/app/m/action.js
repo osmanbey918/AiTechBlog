@@ -27,7 +27,6 @@ export async function getPopularPosts() {
             .sort({ publishedAt: 1 })
             .limit(5)
             .lean();
-        console.log(articles);
 
         return articles;
     } catch (error) {

@@ -1,39 +1,39 @@
 'use server';
-
 import connectDB from '@/lib/mongodb';
 import Blog from '@/models/Blog';
+import News from '@/models/News';
 import Prompt from '@/models/Prompt';
 
 export async function createPost(formData) {
-    const { mdxContent, meta } = formData;
+  const { mdxContent, meta } = formData;
 
-    if (!mdxContent || !meta) {
-        return {
-            success: false,
-            error: 'Missing required fields.',
-        };
-    }
+  if (!mdxContent || !meta) {
+    return {
+      success: false,
+      error: 'Missing required fields.',
+    };
+  }
 
-    try {
-        await connectDB();
-        const newPost = new Blog({
-            mdxContent,
-            meta,
-        });
-        await newPost.save();
-        console.log(JSON.parse(JSON.stringify(newPost)));
-        return {
-            success: true,
-            message: 'Post created successfully!',
-            data: JSON.parse(JSON.stringify(newPost)),
-        };
-    } catch (error) {
-        console.error('Error creating post:', error);
-        return {
-            success: false,
-            error: 'Failed to create post. Please try again.',
-        };
-    }
+  try {
+    await connectDB();
+    const newPost = new Blog({
+      mdxContent,
+      meta,
+    });
+    await newPost.save();
+    console.log(JSON.parse(JSON.stringify(newPost)));
+    return {
+      success: true,
+      message: 'Post created successfully!',
+      data: JSON.parse(JSON.stringify(newPost)),
+    };
+  } catch (error) {
+    console.error('Error creating post:', error);
+    return {
+      success: false,
+      error: 'Failed to create post. Please try again.',
+    };
+  }
 }
 
 export async function createPrompt(formData) {
@@ -75,6 +75,41 @@ export async function createPrompt(formData) {
   }
 }
 
+export async function createNews(formData) {
+  const { mdxContent, meta } = formData;
+
+  if (!mdxContent || !meta) {
+    return {
+      success: false,
+      error: 'Missing required fields.',
+    };
+  }
+
+  try {
+    await connectDB();
+
+    const newNews = new News({
+      mdxContent,
+      meta,
+    });
+    console.log(newNews);
+
+    await newNews.save();
+    console.log(JSON.parse(JSON.stringify(newNews)));
+
+    return {
+      success: true,
+      message: 'News created successfully!',
+      data: JSON.parse(JSON.stringify(newNews)),
+    };
+  } catch (error) {
+    console.error('Error creating News:', error);
+    return {
+      success: false,
+      error: 'Failed to create News. Please try again.',
+    };
+  }
+}
 
 function getRandomRating() {
   return (Math.random() * (5 - 3.6) + 3.6).toFixed(1);  // string like '4.2'

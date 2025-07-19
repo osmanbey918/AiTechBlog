@@ -7,7 +7,8 @@ import VideoSection from "@/components/news/VideoSection";
 import NewsLetter from "@/components/NewsLetter";
 import SectionHeader from "@/components/sectionHeader/SectionHeader";
 import { POST_SECTIONS } from "@/constants";
-import { getAllPost } from "@/lib/markdown";
+import { getLatestSevenBlogs } from "@/lib/markdown";
+import { getAllNews } from "@/lib/news";
 
 
 export const metadata = {
@@ -18,27 +19,23 @@ export const metadata = {
 export const revalidate = 1800;
 
 export default async function Page() {
+    const blogs = await getLatestSevenBlogs();
+    const posts = await getAllNews();
 
-    // Fetch and sort all posts
-    const posts = await getAllPost();
-    console.log(posts);
-
-    // Get different sections of posts using constants
-    const mainPosts = posts.slice(POST_SECTIONS.MAIN.start, POST_SECTIONS.MAIN.end);
     const popularPosts = posts.slice(POST_SECTIONS.POPULAR.start, POST_SECTIONS.POPULAR.end);
     const morePosts = posts.slice(POST_SECTIONS.MORE.start, POST_SECTIONS.MORE.end);
 
     return (
         <>
             <NewsHero />
-            <NewsSection />
+            <NewsSection posts={posts.slice(0,9)}/>
 
             {/* Featured Articles */}
             <SectionHeader badge="Welcome to Our Knowledge Hub" heading="Explore Curated, Research-Backed Articles" buttonText="View All" />
-            <section className="max-w-7xl mx-auto flex flex-col lg:flex-row gap-8 lg:gap-12 g-px">
+            <section className="max-w-7xl flex flex-col lg:flex-row gap-8 lg:gap-12 g-px">
                 <div className="w-full lg:w-2/3">
-                    {mainPosts.map((blog) => (
-                        <BlogPostCard key={blog.title} title={blog.title} description={blog.description} date={blog.datePublished} category={blog.category} author={blog.source.name} image={blog.urlToImage} slug={blog.slug} />
+                    {blogs.map((blog) => (
+                        <BlogPostCard key={blog._id} title={blog.meta.title} description={blog.meta.description} date={blog.meta.datePublished} category={blog.meta.category} author={blog.meta.author} image={blog.meta.imageUrl} slug={blog.meta.slug} />
                     ))}
                 </div>
                 <aside className="w-full lg:w-1/3 mt-8 lg:mt-0">
@@ -65,9 +62,9 @@ export default async function Page() {
                     <span className="flex-1 h-px bg-neutral-800"></span>
                 </div>
                 <div className="grid grid-cols-1 lg:grid-cols-5 gap-6">
-                    {morePosts.map((post) => (
-                        <div key={post.title} className="lg:col-span-4">
-                            <BlogPostCardVergeStyle title={post.title} description={post.description} datePublished={post.datePublished} category={post.category} author={post.source.name} image={post.urlToImage} slug={post.slug} />
+                    {posts.map((post) => (
+                        <div key={post._id} className="lg:col-span-4">
+                            <BlogPostCardVergeStyle type="news" title={post.meta.title} description={post.meta.description} datePublished={post.meta.datePublished} category={post.meta.category} author={post.meta.source} image={post.meta.urlToImage} slug={post.meta.slug} />
                         </div>
                     ))}
                 </div>
@@ -75,8 +72,8 @@ export default async function Page() {
             <SectionHeader heading="Explore More" />
 
             <section className="g-px grid grid-cols-1 gap-6 py-8 lg:grid-cols-2">
-                {popularPosts && popularPosts.map(post => (
-                    <FeaturedCardan key={post.title} title={post.title} description={post.description} datePublished={post.datePublished} category={post.category} author={post.source.name} image={post.urlToImage} slug={post.slug} />
+                {posts && posts.slice(0,4).map(post => (
+                    <FeaturedCardan key={post.meta.title} type="news" title={post.meta.title} description={post.meta.description} datePublished={post.meta.datePublished} category={post.meta.category} author={post.meta.source} image={post.meta.urlToImage} slug={post.meta.slug} />
                 ))}
             </section>
 

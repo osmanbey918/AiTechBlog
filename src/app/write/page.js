@@ -3,13 +3,13 @@ import { EditorContent } from '@tiptap/react';
 import { useState, useCallback } from 'react';
 import yaml from 'js-yaml';
 import { marked } from 'marked';
-import { createPost, createPrompt } from './actions';
+import { createNews, createPost, createPrompt } from './actions';
 import InputFields from '@/components/write/InputFields';
 import EditorToolbar from '@/components/write/EditorToolbar';
 import { useEditorSetup } from '@/components/write/useEditorSetup';
 import LivePreview from '@/components/write/LivePreview';
 
-const CATEGORIES = ['Tech', 'AI', 'Dev', 'AI Tools', 'Reviews',"Prompt",'science'];
+const CATEGORIES = ['Tech', 'AI', 'Dev', 'AI Tools', 'Reviews', "Prompt", 'science','news'];
 export default function Page() {
   // ... inside your component
   const [formData, setFormData] = useState({
@@ -133,9 +133,59 @@ export default function Page() {
       setSaving(false);
     }
   }
+  const handleNewsSave = async () => {
+
+    if (!formData.title || !formData.authorName || !markdown) {
+      setMessage({ text: 'Title, Author Name, and Content are required.', type: 'error' });
+      return;
+    }
+
+    setSaving(true);
+    setMessage(null);
+
+    try {
+      const dateNow = new Date().toISOString();
+
+      // Sanitize the slug from either the slug field or the title
+      const cleanSlug = (formData.slug || formData.title)
+        .toLowerCase()
+        .trim()
+        .replace(/[^\w\s-]/g, '') // Remove non-word chars
+        .replace(/\s+/g, '-');      // Replace spaces with -
+
+      // 2. Construct the payload matching the server action's expectation
+      const payload = {
+        mdxContent: markdown,
+        meta: {
+          title: formData.title,
+          description: formData.excerpt,
+          slug: cleanSlug,
+          source: formData.authorName,
+          category: formData.category,
+          keywords: formData.tags,
+          urlToImage: formData.coverImage,
+          publishedAt: dateNow,
+        }
+      };
+
+      // 3. Call the server action with the correctly structured payload
+      const result = await createNews(payload);
+
+      if (result.success) {
+        setMessage({ text: result.message, type: 'success' });
+      } else {
+        setMessage({ text: result.error || 'An unknown error occurred.', type: 'error' });
+      }
+
+    } catch (error) {
+      setMessage({ text: error.message || 'Error saving the post.', type: 'error' });
+    } finally {
+      setSaving(false);
+    }
+
+  }
   const handleInputChange = field => e => setFormData(prev => ({ ...prev, [field]: e.target.value }));
   console.log(formData.tags);
-
 
   const addImage = () => {
     const url = prompt('Enter image URL');
@@ -179,6 +229,13 @@ export default function Page() {
             className={`mt-4 px-6 py-2 rounded flex items-center justify-center ${saving || !formData.title || !formData.authorName ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed' : 'bg-yellow-500 hover:bg-yellow-600 text-white'}`}
           >
             {saving ? 'Saving...' : '💾 Save Blog'}
+          </button>
+          <button
+            onClick={handleNewsSave}
+            disabled={saving || !formData.title || !formData.authorName}
+            className={`mt-4 px-6 py-2 rounded flex items-center justify-center ${saving || !formData.title || !formData.authorName ? 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed' : 'bg-yellow-500 hover:bg-yellow-600 text-white'}`}
+          >
+            {saving ? 'Saving...' : '💾 Save News'}
           </button>
 
           <button

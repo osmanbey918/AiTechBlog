@@ -1,7 +1,5 @@
 import { getTodayFirstFive } from '@/lib/markdown';
-import Image from 'next/image';
-import Link from 'next/link';
-import { BlogCardVergeStyle, BlogPostCardVergeStyle } from '../ai/FeaturedCard';
+import { BlogCardVergeStyle } from '../ai/FeaturedCard';
 
 async function PopularArticles() {
   const popularPostToday = await getTodayFirstFive({ next: { revalidate: 86000 } });
@@ -17,14 +15,14 @@ async function PopularArticles() {
 
   return (
     <div className="sticky top-6 space-y-6">
-      <div className="backdrop-blur-sm p-6 shadow-lg hover:shadow-xl transition-shadow">
+      <div className="backdrop-blur-sm py-6 shadow-lg hover:shadow-xl transition-shadow">
         <h3 className="text-xl md:text-2xl font-semibold mb-6 relative pb-3 text-white after:content-[''] after:absolute after:bottom-0 after:left-0 after:w-10 after:h-[3px] after:bg-gradient-to-r after:from-yellow-500 after:to-yellow-500">
           Popular Today
         </h3>
-        <div className="flex flex-col gap-5">
+        <div className="flex flex-col gap-4">
           {popularPostToday &&
             popularPostToday.map((article, index) => (
-              <BlogCardVergeStyle key={article.slug} title={article.title} imageUrl={article.imageUrl} time={formatDate(article.publishedAt)} author={article.author} />
+              <BlogCardVergeStyle key={article.slug} slug={article.slug} title={article.title} imageUrl={article.imageUrl} time={formatDate(article.publishedAt)} author={article.author} />
             ))}
         </div>
       </div>
@@ -45,7 +43,7 @@ export default PopularArticles;
 //                 </div>
 //                 <div className="flex-1 min-w-0">
 //                   <h4 className="text-[0.95rem] md:text-base mb-1.5 leading-snug text-gray-200 group-hover:text-yellow-400 transition-colors line-clamp-2">
-//                     <Link href={`/blogopen/${article.slug}`} className="hover:underline underline-offset-2">
+//                     <Link href={`/open/blog/${article.slug}`} className="hover:underline underline-offset-2">
 //                       {article.title}
 //                     </Link>
 //                   </h4>

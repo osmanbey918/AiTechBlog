@@ -13,7 +13,7 @@ export default async function HomePage() {
 
                 {posts.map((post) => (
                     <article key={post._id} className="p-4 border rounded shadow">
-                        <Link href={`/blogopen/${post.meta.slug}`}>
+                        <Link href={`/open/blog/${post.meta.slug}`}>
                             <h2 className="text-2xl font-semibold hover:underline">
                                 {post.meta.title}
                             </h2>

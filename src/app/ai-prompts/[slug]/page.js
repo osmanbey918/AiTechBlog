@@ -1,5 +1,5 @@
-import { getPromptBySlug } from '@/lib/markdown';
 import PromptDetails from '@/components/ai/PromptDetails';
+import { getPromptBySlug } from '@/lib/markdown';
 import Link from 'next/link';
 
 export async function generateMetadata({ params }) {
