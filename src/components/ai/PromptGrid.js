@@ -27,7 +27,7 @@ export default function PromptGrid({ prompts }) {
       <ClientPromptGrid prompts={prompts} />
 
       {/* Bottom CTA */}
-      <div className="text-center mt-16 pt-16 border-t border-neutral-800">
+      {/* <div className="text-center mt-16 pt-16 border-t border-neutral-800">
         <div className="flex flex-col items-center gap-6">
           <h3 className="text-2xl font-semibold text-white">
             Want to Contribute?
@@ -39,7 +39,7 @@ export default function PromptGrid({ prompts }) {
             Submit a Prompt
           </button>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

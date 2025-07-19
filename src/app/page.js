@@ -11,11 +11,6 @@ import { getLatestSevenBlogs } from "@/lib/markdown";
 import { getAllNews } from "@/lib/news";
 
 
-export const metadata = {
-    title: "AI News Hub - Curated Research and Insights",
-    description: "Explore the latest AI insights, curated blogs, and trending topics.",
-};
-
 export const revalidate = 1800;
 
 export default async function Page() {

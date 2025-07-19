@@ -2,7 +2,7 @@ import React from "react";
 
 const NewsHero = () => {
     return (
-        <section className="bg-[#101010] flex items-center py-16">
+        <section className="flex items-center py-16">
             <div className="w-full flex flex-col md:flex-row gap-12">
                 <header className="flex-1 g-px">
                     <h1 className="text-white text-[4rem] max-lg:text-[2.4rem] leading-[1.4] max-md:text-[1.8rem]">

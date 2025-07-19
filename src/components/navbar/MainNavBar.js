@@ -41,7 +41,7 @@ function Navbar() {
   return (
     <nav 
       className={` py-2 w-full transition-all duration-300 ${
-        scrolled ? 'bg-zinc-900/95 backdrop-blur-sm shadow-lg' : 'bg-zinc-900'
+        scrolled ? ' backdrop-blur-sm shadow-lg' : ''
       }`}
     >
       <div className="max-w g-px">

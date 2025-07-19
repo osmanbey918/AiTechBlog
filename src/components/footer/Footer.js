@@ -119,8 +119,8 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="bg-black py-12 px-4 sm:px-6 lg:px-8 border-t border-neutral-800">
-      <div className="max-w-7xl mx-auto">
+    <footer className="py-12 px-4 sm:px-6 lg:px-8 border-t border-neutral-800">
+      <div className="max-w-7xl g-px">
         <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
           {sections.map((section, index) => (
             <NavigationSection

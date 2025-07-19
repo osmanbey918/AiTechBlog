@@ -19,40 +19,43 @@ const ConnectSection = () => {
   ];
 
   return (
-    <section className="box-border flex flex-col gap-12 justify-center items-start py-20 w-full border-t border-b border-solid bg-zinc-900 border-b-neutral-800 border-t-neutral-800 max-md:gap-10 max-md:py-16 max-sm:gap-8 max-sm:py-10">
-      <div className="flex gap-16 g-px items-center w-full max-md:flex-col max-md:gap-10 max-md:text-center max-sm:gap-8">
-        <Image src={"/assets/Logo.svg"} alt="Logo" width={50} height={50} className="w-12 h-12" />
-        <div className="flex flex-col flex-1 gap-5 justify-center items-start">
-          <header className="flex flex-col gap-2.5 justify-center items-start w-full">
-            <div className="gap-2.5 px-2 py-1 text-base font-medium tracking-tight leading-6 text-white rounded bg-zinc-800 max-sm:text-sm">
-              Learn, Connect, and Innovate
-            </div>
-            <h1 className="w-full text-5xl font-medium tracking-tighter text-white leading-[57.2px] max-md:text-4xl max-sm:text-3xl max-sm:leading-8">
-              Be Part of the Future Tech Revolution
-            </h1>
-          </header>
-          <p className="w-full text-base tracking-tight leading-6 text-zinc-500 max-sm:text-sm">
-            Immerse yourself in the world of future technology. Explore our comprehensive resources.
-          </p>
+    <section className="box-border flex flex-col gap-12 justify-center items-start py-20 w-full border-t border-b border-solid border-b-neutral-800 border-t-neutral-800 max-md:gap-10 max-md:py-16 max-sm:gap-8 max-sm:py-10">
+      <section className='g-px'>
+        <div className="flex gap-16 items-center w-full max-md:flex-col max-md:gap-10 max-md:text-center max-sm:gap-8">
+          <Image src={"/assets/Logo.svg"} alt="Logo" width={50} height={50} className="w-12 h-12" />
+          <div className="flex flex-col flex-1 gap-5 justify-center items-start">
+            <header className="flex flex-col gap-2.5 justify-center items-start w-full">
+              <div className="gap-2.5 px-2 py-1 text-base font-medium tracking-tight leading-6 text-white rounded bg-zinc-800 max-sm:text-sm">
+                Learn, Connect, and Innovate
+              </div>
+              <h1 className="w-full text-5xl font-medium tracking-tighter text-white leading-[57.2px] max-md:text-4xl max-sm:text-3xl max-sm:leading-8">
+                Be Part of the Future Tech Revolution
+              </h1>
+            </header>
+            <p className="w-full text-base tracking-tight leading-6 text-zinc-500 max-sm:text-sm">
+              Immerse yourself in the world of future technology. Explore our comprehensive resources.
+            </p>
+          </div>
         </div>
-      </div>
-      <div className="box-border g-px flex gap-2.5 items-start p-2.5 w-full rounded-xl border border-solid bg-neutral-900 border-neutral-800 max-md:flex-col max-md:gap-5 max-sm:p-1.5">
-        {features.map((feature, index) => (
-          <FeatureCard
-            key={index}
-            title={feature.title}
-            description={feature.description}
-          />
-        ))}
-      </div>
-      {/* <Footer/> */}
+        <div className="box-border flex gap-2.5 p-2.5 w-full rounded-xl border border-solid border-neutral-800 max-md:flex-col max-md:gap-5 max-sm:p-1.5">
+          {features.map((feature, index) => (
+            <FeatureCard
+              key={index}
+              title={feature.title}
+              description={feature.description}
+            />
+          ))}
+        </div>
+        {/* <Footer/> */}
+
+      </section>
     </section>
   );
 };
 
 const FeatureCard = ({ title, description }) => {
   return (
-    <article className="flex flex-col flex-1 gap-4 items-start p-8 rounded-xl border border-solid bg-zinc-900 border-neutral-800 max-md:p-6 max-sm:p-5">
+    <article className="flex flex-col flex-1 gap-4 items-start p-8 rounded-xl border border-solid border-neutral-800 max-md:p-6 max-sm:p-5">
       <header className="flex gap-4 items-center w-full">
         <h3 className="flex-1 text-lg font-semibold tracking-tight leading-7 text-white max-sm:text-base">
           {title}

@@ -13,7 +13,7 @@ const NewsCard = ({
   if (!image || image.trim() === "") return null;
 
   return (
-    <article className="flex flex-col mx-auto max-sm:row-span-2 col-span-1 max-w-[430px] rounded-sm overflow-hidden shadow-md hover:shadow-xl transition duration-300">
+    <article className="flex flex-col mx-auto max-sm:row-span-3 col-span-1 max-w-[430px] rounded-md overflow-hidden shadow-md hover:shadow-xl transition duration-300">
       <div className="relative aspect-video">
         <a href={`open/news/${url}`} rel="noopener noreferrer" >
           <Image
@@ -135,7 +135,7 @@ export const NewsSecondCard = ({
   }).format(new Date(publishedAt));
 
   return (
-    <article className="relative w-full max-sm:mx-auto col-span-2 max-sm:col-span-1 row-span-1 max-sm:max-w-[430px] aspect-[16/9] rounded-md overflow-hidden shadow-md hover:shadow-xl transition duration-300">
+    <article className="relative w-full max-sm:mx-auto col-span-2 max-sm:col-span-1 max-sm:row-span-2 row-span-1 h-full max-sm:max-w-[430px] aspect-[16/9] rounded-md overflow-hidden shadow-md hover:shadow-xl transition duration-300">
 
       {/* Full Image */}
       <Link href={`open/news/${url}`} rel="noopener noreferrer">
@@ -153,7 +153,7 @@ export const NewsSecondCard = ({
       <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/50 to-transparent" />
 
       {/* Text Over Image */}
-      <div className="absolute bottom-0 left-0 right-0 p-4 z-10 flex flex-col gap-2">
+      <div className="absolute bottom-0 left-0 right-0 py-4 px-2 z-10 flex flex-col gap-2">
         <div className="flex justify-between text-xs text-neutral-300">
           <span className="capitalize">{category}</span>
           <span>{formattedDate}</span>

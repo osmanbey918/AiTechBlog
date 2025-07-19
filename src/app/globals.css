@@ -8,20 +8,18 @@
 }
 
 *{
+  padding: 0;
+  margin: 0;
   box-sizing: border-box;
-}
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #131313;
-    /* --foreground: #ededed; */
-  }
+  
 }
 
 body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
-  width: 4l;
+  
+  /* width: 4l; */
 }
 
 .inputStyle {
@@ -29,7 +27,10 @@ body {
 }
 
 .g-px {
-  @apply container mx-auto max-sm:px-2 max-md:px-4 lg:px-4;
+  @apply container xl:max-w-screen-xl mx-auto lg:max-w-screen-lg lg:px-16 xl:px-20 md:px-12 px-2 w-full
+
+;
+  /* @apply container mx-auto max-sm:px-2 max-md:px-4 lg:px-4; */
   /* @apply max-xl:px-20 max-lg:px-16  max-sm:px-4 max-md:px-8 px-24; */
 }
 
@@ -72,32 +73,4 @@ body {
 
 .prose p {
   @apply leading-relaxed;
-}
-
-@keyframes fade-in {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.animate-fade-in {
-  animation: fade-in 0.5s ease-out forwards;
-}
-
-@keyframes pulse {
-  0%, 100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: .5;
-  }
-}
-
-.animate-pulse {
-  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
 }
